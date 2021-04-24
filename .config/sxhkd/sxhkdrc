@@ -1,0 +1,29 @@
+# The Simple X Hotkey Daemon is the program used by LARBS to map most of the
+# dwm-independent commands.  This file is pretty readable, so I'll let you read
+# it.
+
+# The keys NOT bound here by sxhkd, but by dwm or i3 are:
+# The t thru p keys on the top row
+# The f thru ; keys on the home row
+# The b key on the bottom row (hides the bar in either case)
+# Function Keys
+XF86AudioMute
+	amixer -q sset Master toggle; pkill -RTMIN+10 blocks
+XF86Audio{Raise,Lower}Volume
+	amixer -q sset Master 5%{+,-} unmute; pkill -RTMIN+10 blocks
+XF86AudioMicMute
+	amixer -q sset Capture toggle; pkill -RTMIN+10 blocks
+XF86MonBrightness{Down,Up}
+	xbacklight -{dec,inc} 5
+#XF86Display
+#termite -e nmtui-connect?
+#XF86WLAN
+#
+XF86Tools
+	pkill -USR1 '^redshift$'
+alt + Tab
+	rofi -show window
+#XF86Bluetooth
+#
+#XF86Favorites
+# emacs config?

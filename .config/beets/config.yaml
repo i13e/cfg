@@ -1,0 +1,86 @@
+# Main beets config
+directory: ~/music
+library: ~/music/musiclibrary.db
+threaded: yes
+artist_credit: yes
+ui:
+  color: yes
+  #colors:
+          #    text_success: green
+          #text_warning: yellow
+          #text_error: red
+          #text_highlight: red
+          #text_highlight_minor: lightgray
+          #action_default: turquoise
+          #action: blue
+original_date: yes
+#per_disc_numbering: yes
+
+# Plugins and config
+plugins: acousticbrainz embedart duplicates edit export fetchart fromfilename ftintitle fuzzy info lastgenre lyrics mbsync play rewrite replaygain scrub 
+# bpd lastimport smartplaylist EMBEDART THE 
+
+#chroma:
+#auto: no
+#embedart:
+  #remove_art_file: yes
+fetchart:
+  auto: yes
+  maxwidth: 1200
+  enforce_ratio: 10px
+#lastfm:
+  #user:
+lastgenre:
+  auto: yes
+  canonical: yes
+lyrics:
+  auto: yes
+play:
+  command: mpv $args --no-video --no-audio-display --force-window=no --no-resume-playback --pause=no 
+replaygain:
+  backend: gstreamer
+# Really ugly way of keeping folders correct but if it works it works i guess 
+rewrite:
+  albumartist Viktor Vaughn: MF DOOM
+  albumartist King Geedorah: MF DOOM
+  albumartist Quasimoto: Madlib
+  albumartist Makaveli: 2Pac
+  artist .*jimi hendrix.*: Jimi Hendrix
+  albumartist .*masta ace.*: Masta Ace
+  albumartist .*natalia lafourcade.*: Natalia Lafourcade
+  albumartist .*black thought.*: Black Thought
+  albumartist .*kanye west.*: Kanye West
+  artist .*sun ra.*: Sun Ra
+  albumartist .*scarface.*: Scarface
+  albumartist .*marvin gaye.*: Marvin Gaye
+  albumartist Underground Kingz: UGK
+  albumartist .*ravel.*: Maurice Ravel
+  albumartist .*brahms.*: Johannes Brahms
+  albumartist .*gershwin.*: George Gershwin
+  albumartist .*snoop dogg.*: Snoop Dogg
+  albumartist .*kool g. rap.*: Kool G Rap
+  albumartist .*Prince and the Revolution.*: Prince
+  #smartplaylist:
+  #relative_to: ~/music
+  #playlist_dir: ~/music/playlists
+  #playlists:
+    #- name: all.m3u
+       #query: ""
+
+# DELETE? the, 
+#paths:
+  #default: %the{$albumartist}/($year) - $album%aunique{}$myAlbumType/%if{$isMultidisc,$disc - }$track - $mySongartist$title
+  #singleton: "Singles/$artist/$title"
+  #comp: Compilations/%the{$albumartist}/($year) - $album%aunique{}/$myDisc$track - $artist - $title
+  #albumtype:soundtrack: Soundtracks/%the{$albumartist}/$album%aunique ($year)/$myDisc$track - $artist - $title
+#item_fields:
+# 'Nine Inch Nails - ' or '' depending if the artist differs from the album artist
+#  mySongartist: artist + ' - ' if artist != albumartist and artist != '' else ''
+# Release with multiple discs? For boolean operations
+#  isMultidisc: 1 if disctotal > 1 else 0
+# Changes the case of the album type
+#  myAlbumType: ('' if albumtype == '' else ' [' + ('EP' if albumtype == 'ep' else albumtype.capitalize()) + ']')
+# '1 - ' or '' depending if there are multiple discs or not
+#  myDisc: ('' if disctotal <= 1 else str(disc) + ' - ')
+
+#id3v23: yes
