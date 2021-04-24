@@ -1,0 +1,18 @@
+#!/bin/sh
+if [ -x /usr/bin/paru ] && [ -x /usr/bin/checkupdates ] ; then
+    x="$(( $(paru -Qua | wc -l) + $(checkupdates | wc -l) ))"
+    if [ "$x" = 1 ] ; then
+	echo "$x upstream update available" >&2
+    elif [ -n "$x" ] ; then
+        echo "$x upstream updates available" >&2
+        #echo "$updates" | sed 's|^|    |' >&2
+    else
+        echo "no upstream updates available" >&2
+    fi
+elif [ -x /usr/bin/checkupdates ] ; then
+    echo "warning: /usr/bin/paru does not exist." >&2
+elif [ -x /usr/bin/paru ] ; then
+    echo "warning: /usr/bin/checkupdates does not exist, install pacman-contrib." >&2
+else 
+    echo "warning: please install pacman-contrib and paru to use this function." >&2
+fi
