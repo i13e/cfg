@@ -9,16 +9,10 @@
 (setq user-full-name "Ian Breckenridge"
       user-mail-address "ianb@ianb.io")
 
-(setq-default
- delete-by-moving-to-trash t                      ; Delete files to trash
- tab-width 4                                      ; Set width for tabs
- uniquify-buffer-name-style 'forward              ; Uniquify buffer names
- window-combination-resize t                      ; take new window space from all other windows (not just current)
- x-stretch-cursor t)                              ; Stretch cursor to the glyph width
 
 (setq auto-save-default t
-      make-backup-files t)
-(setq undo-limit 80000000                         ; Raise undo-limit to 80Mb
+      make-backup-files t
+      undo-limit 80000000                         ; Raise undo-limit to 80Mb
       evil-want-fine-undo t                       ; By default while in insert all changes are one big blob. Be more granular
       auto-save-default t                         ; Nobody likes to loose work, I certainly don't
       make-backup-files t                         ;
