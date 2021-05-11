@@ -17,8 +17,8 @@ original_date: yes
 #per_disc_numbering: yes
 
 # Plugins and config
-plugins: acousticbrainz embedart duplicates edit export fetchart fromfilename fuzzy info lastgenre lyrics mbsync play rewrite replaygain scrub 
-# bpd lastimport smartplaylist EMBEDART THE FTINTITLE
+plugins: acousticbrainz bpd duplicates edit embedart export fetchart fromfilename fuzzy info lastgenre lyrics mbsync play rewrite replaygain scrub 
+# lastimport smartplaylist THE FTINTITLE
 
 #chroma:
 #auto: no

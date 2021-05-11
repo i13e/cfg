@@ -122,8 +122,9 @@ function ssh() { z4h ssh "$@" }
 
 # Define aliases.
 alias sync='syncthing -browser-only'
-alias jctl='journalctl -p3 -xb'
 alias build='rm -f ~/docs/code/sites/ianb/dst/.files && ssg6 ~/docs/code/sites/ianb/src ~/docs/code/sites/ianb/dst "Ian B." "https://ianb.io"'
+alias sctl='sudo systemctl'
+alias jctl='sudo journalctl -p3 -xe'
 # Nav
 alias ...='../..'
 alias .3='../../..'
