@@ -170,6 +170,10 @@ alias miccheck='arecord -vvv -f dat /dev/null'
 setopt glob_dots     # no special treatment for file names with a leading dot
 setopt no_auto_menu  # require an extra TAB press to open the completion menu
 
+# Use Nord dircolors theme
+#test -r "~/.config/dircolors" && eval $(dircolors ~/.config/dircolors)
+
+# Integrate FZF with terminal color scheme
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS='
     --exact
@@ -185,6 +189,7 @@ export FZF_DEFAULT_OPTS='
     --color=marker:11
     --color=spinner:6
     --color=info:6'
+
 # Color Man Pages
 export LESS_TERMCAP_mb=$'\E[1;34m'     # begin bold
 export LESS_TERMCAP_md=$'\E[1;34m'     # begin blink
@@ -194,3 +199,16 @@ export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
+# Syntax Highlighting 
+typeset -A ZSH_HIGHLIGHT_STYLES
+
+ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[function]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=white,bold'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=white,bold'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=white,bold'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=white,bold'

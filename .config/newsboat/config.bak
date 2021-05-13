@@ -1,0 +1,77 @@
+prepopulate-query-feeds yes
+
+urls-source "ocnews"
+ocnews-url "https://nextcloud.yourdomain.com" # Domain of your Nextcloud
+ocnews-login "username" # Desired nextcloud user to log in as
+ocnews-password "password" # Nextcloud password (app password if using 2Fa)
+
+# -- display -------------------------------------------------------------------
+
+#show-read-feeds no
+auto-reload yes
+feed-sort-order unreadarticlecount-asc
+
+color background          default   default
+color listnormal          white     default
+color listfocus           blue      black     bold
+color listnormal_unread   white     default    
+color listfocus_unread    blue      black     bold
+color info                magenta   black     bold
+color article             default   default
+
+text-width 80
+
+articlelist-format "%4i %f %D  %?T?|%-17T| ?%t"
+
+# -- navigation ----------------------------------------------------------------
+
+goto-next-feed no
+
+browser "xdg-open" # This will open the browser defined by xdg-settings
+
+# Below bindings apply vim like keybindings in most places
+
+bind-key h quit articlelist
+bind-key h quit article
+bind-key h quit tagselection
+bind-key h quit feedlist
+bind-key j next articlelist
+bind-key j down article
+bind-key j down tagselection
+bind-key j down feedlist
+bind-key J next-feed articlelist
+bind-key k prev articlelist
+bind-key k up article
+bind-key k up tagselection
+bind-key k up feedlist
+bind-key K prev-feed articlelist
+bind-key l open articlelist
+bind-key l open feedlist
+bind-key l open tagselection
+
+bind-key G end
+bind-key g home
+
+bind-key d pagedown
+bind-key u pageup
+
+bind-key a toggle-article-read
+bind-key n next-unread
+bind-key N prev-unread
+bind-key D pb-download
+bind-key U show-urls
+bind-key x pb-delete
+
+
+#external-url-viewer "urlscan -dc -r 'linkhandler {}'"
+#browser linkhandler
+#macro , open-in-browser
+#macro t set browser "qndl" ; open-in-browser ; set browser linkhandler
+#macro a set browser "tsp youtube-dl --add-metadata -xic -f bestaudio/best" ; open-in-browser ; set browser linkhandler
+#macro v set browser "setsid -f mpv" ; open-in-browser ; set browser linkhandler
+#macro w set browser "lynx" ; open-in-browser ; set browser linkhandler
+#macro d set browser "dmenuhandler" ; open-in-browser ; set browser linkhandler
+#macro c set browser "echo %u | xclip -r -sel c" ; open-in-browser ; set browser linkhandler
+#macro C set browser "youtube-viewer --comments=%u" ; open-in-browser ; set browser linkhandler
+#macro p set browser "peertubetorrent %u 480" ; open-in-browser ; set browser linkhandler
+#macro P set browser "peertubetorrent %u 1080" ; open-in-browser ; set browser linkhandler

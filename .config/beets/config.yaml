@@ -19,7 +19,6 @@ original_date: yes
 # Plugins and config
 plugins: acousticbrainz bpd duplicates edit embedart export fetchart fromfilename fuzzy info lastgenre lyrics mbsync play rewrite replaygain scrub 
 # lastimport smartplaylist THE FTINTITLE
-
 #chroma:
 #auto: no
 #embedart:

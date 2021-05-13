@@ -3,3 +3,4 @@ xrdb ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources &
 ~/.local/bin/remaps &
 dunst & 
 unclutter & 
+beet bpd &
