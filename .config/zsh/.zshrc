@@ -118,6 +118,7 @@ function ssh() { z4h ssh "$@" }
 # Define aliases.
 source $ZDOTDIR/aliases.zsh
 source $ZDOTDIR/config.zsh
+source $XDG_CONFIG_HOME/git/aliases.zsh
 # Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
 # Use Nord dircolors theme
 #test -r "~/.config/dircolors" && eval $(dircolors ~/.config/dircolors)
