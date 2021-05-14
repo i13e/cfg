@@ -1,0 +1,55 @@
+[user]
+	name = Ian Breckenridge
+	email = 62034540+i13e@users.noreply.github.com
+[core]
+	editor = nvim
+	whitespace = trailing-space
+[github]
+	user = i13e
+[rebase]
+	autosquash = true
+[push]
+	default = current
+[alias]
+	git = noglob git
+	ga= git add
+	gap='git add --patch'
+	gb='git branch -av'
+	gop='git open'
+	gbl='git blame'
+	gc='git commit'
+	gcm='git commit -m'
+	gca='git commit --amend'
+	gcf='git commit --fixup'
+	gcl='git clone'
+	gco='git checkout'
+	gcoo='git checkout --'
+	gf='git fetch'
+	gi='git init'
+	gl='git log --graph --pretty="format:%C(yellow)%h%Creset %C(red)%G?%Creset%C(green)%d%Creset %s %Cblue(%cr) %C(bold blue)<%aN>%Creset"'
+	gll='git log --pretty="format:%C(yellow)%h%Creset %C(red)%G?%Creset%C(green)%d%Creset %s %Cblue(%cr) %C(bold blue)<%aN>%Creset"'
+	gL='gl --stat'
+	gp='git push'
+	gpl='git pull --rebase --autostash'
+	gs='git status --short .'
+	gss='git status'
+	gst='git stash'
+	gr='git reset HEAD'
+	grv='git rev-parse'
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[url "https://github.com/"]
+    insteadOf = gh:
+[url "git@github.com:i13e/"]
+    insteadOf = gh:/
+[url "https://gitlab.com/"]
+    insteadOf = gl:
+[url "https://gist.github.com/"]
+    insteadOf = gist:
+[url "https://bitbucket.org/"]
+    insteadOf = bb:
+[init]
+	defaultBranch = master

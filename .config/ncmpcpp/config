@@ -352,7 +352,7 @@ media_library_primary_tag = album_artist
 #
 #header_text_scrolling = yes
 #
-cyclic_scrolling = yes
+cyclic_scrolling = no
 #
 #lines_scrolled = 2
 #
