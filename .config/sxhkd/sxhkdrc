@@ -6,23 +6,64 @@
 # The t thru p keys on the top row
 # The f thru ; keys on the home row
 # The b key on the bottom row (hides the bar in either case)
+
+# Basic binds
+super + Return
+	$TERMINAL
+#super + shift + Return
+#	samedir
+#super + shift + x
+#	kill -9 `xdotool getwindowfocus getwindowpid`
+#super + d
+#	dmenu_run
+#super + r
+#	$TERMINAL -e $FILE
+#super + e
+#	$TERMINAL -e neomutt; pkill -RTMIN+12 $STATUSBAR
+super + m
+	$TERMINAL -e ncmpcpp
+super + n
+	$TERMINAL -e newsboat
+#super + c
+#	$TERMINAL -e calcurse -D ~/.config/calcurse
+#super + v
+#	$TERMINAL -c VimwikiIndex -e nvim
+#super + shift + a
+#	$TERMINAL -e alsamixer; pkill -RTMIN+10 $STATUSBAR
+#super + shift + c
+#	mpv --no-osc --no-input-default-bindings --input-conf=/dev/null --title='mpvfloat' /dev/video0
+#super + shift + e
+#	tutorialvids
+#super + w
+#	$TERMINAL -e sudo nmtui
+super + shift + b
+	$BROWSER
+
+### Audio notifications ###
+#   ponymix increase 5 | notify audio
+#   ponymix decrease 5 | notify audio
+#   pulsemixer --toggle-mute --get-mute | notify muted
+### Brightness notifications ###
+#   xbacklight -inc 5  && xbacklight -get | notify brightness
+#   xbacklight -dec 5  && xbacklight -get | notify brightness
+
 # Function Keys
-XF86AudioMute
-	amixer -q sset Master toggle; pkill -RTMIN+10 blocks
-XF86Audio{Raise,Lower}Volume
-	amixer -q sset Master 5%{+,-} unmute; pkill -RTMIN+10 blocks
 XF86AudioMicMute
-	amixer -q sset Capture toggle; pkill -RTMIN+10 blocks
-XF86MonBrightness{Down,Up}
-	xbacklight -{dec,inc} 5
+	pactl set-source-mute 0 toggle
+XF86MonBrightness{Up,Down}
+	xbacklight -{inc,dec} 5 && xbacklight -get | cut -d "." -f 1 | notify.sh brightness
+XF86Audio{Raise,Lower}Volume
+	ponymix {increase,decrease} 5 | notify.sh audio
+XF86AudioMute
+	pulsemixer --toggle-mute --get-mute | notify.sh muted
 #XF86Display
 #termite -e nmtui-connect?
 #XF86WLAN
 #
 XF86Tools
 	pkill -USR1 '^redshift$'
-alt + Tab
-	rofi -show window
+#alt + Tab
+#	rofi -show window
 #XF86Bluetooth
 #
 #XF86Favorites

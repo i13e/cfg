@@ -20,7 +20,7 @@ alias ports='sudo ss -tulanp'
 alias mk=make
 alias gurl='curl --compressed'
 alias unlock='sudo rm /var/lib/pacman/db.lck' # remove pacman lock
-alias cleanup'paru -Rns $(paru -Qtdq)'
+alias cleanup='paru -Rns $(paru -Qtdq)'
 alias sha='shasum -a 256'
 alias sync='syncthing -browser-only'
 alias build='rm -f ~/docs/code/sites/ianb/dst/.files && ssg6 ~/docs/code/sites/ianb/src ~/docs/code/sites/ianb/dst "Ian B." "https://ianb.io"'
@@ -44,7 +44,23 @@ alias yta='yt -x -f bestaudio/best'
 #alias miccheck='arecord -vvv -f dat /dev/null'
 # Add flags to existing aliases.
 #alias ls="${aliases[ls]:-ls} -A"
-
+# dfc & ncdu aliases
+alias df='dfc -s'
+alias du='ncdu --color dark'
+# broot
+alias br='br -dhp'
+alias bs='br --sizes'
+# gpg encryption
+# verify signature for isos
+alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+# receive the key of a developer
+alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+## get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+## get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias shutdown='sudo shutdown'
 alias reboot='sudo reboot'
 

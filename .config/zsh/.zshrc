@@ -53,9 +53,10 @@ export GOPATH="$XDG_DATA_HOME/go"
 
 # Defaults
 export TERM=xterm-256color 
-export VISUAL="nvim"
-export EDITOR=$VISUAL
-export BROWSER="brave"
+#export VISUAL="nvim"
+#export EDITOR=$VISUAL
+#export BROWSER="brave"
+#export TERMINAL"alacritty"
 export OPENER="xdg-open"
 export PAGER="less"
 export GPG_TTY=$TTY
@@ -71,7 +72,7 @@ export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
 # Extend PATH.
-path=(~/.local/bin $path)
+#path=(~/.local/bin $path)
 
 # Use additional Git repositories pulled in with `z4h install`.
 #

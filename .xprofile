@@ -1,6 +1,16 @@
 #!/bin/sh
+
+# Defaults
+export PATH="/home/ianb/.local/bin:$PATH"
+export VISUAL='/usr/bin/nvim'
+export EDITOR=$VISUAL
+export TERMINAL='/usr/bin/alacritty'
+export BROWSER='/usr/bin/brave'
+
+# Autostart
 xrdb ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources &
 ~/.local/bin/remaps &
 dunst & 
 unclutter & 
+sxhkd &
 beet bpd &
