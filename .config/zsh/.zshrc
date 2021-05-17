@@ -53,10 +53,6 @@ export GOPATH="$XDG_DATA_HOME/go"
 
 # Defaults
 export TERM=xterm-256color 
-#export VISUAL="nvim"
-#export EDITOR=$VISUAL
-#export BROWSER="brave"
-#export TERMINAL"alacritty"
 export OPENER="xdg-open"
 export PAGER="less"
 export GPG_TTY=$TTY

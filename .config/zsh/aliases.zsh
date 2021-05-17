@@ -27,6 +27,9 @@ alias build='rm -f ~/docs/code/sites/ianb/dst/.files && ssg6 ~/docs/code/sites/i
 alias deploy='chmod -R 755 ~/docs/code/sites/ianb && rsync -vruP --delete-after ~/docs/code/sites/ianb/dst/ munchlax:/var/www/ianb'
 alias cfg='/usr/bin/git --git-dir=$HOME/.config/cfg/ --work-tree=$HOME'
 alias mount='mount |column -t'
+alias pacfind='pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S'
+
+
 # Editor 
 #alias vim='nvim'
 alias em='/usr/bin/emacs -nw'

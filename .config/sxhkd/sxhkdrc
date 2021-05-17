@@ -51,7 +51,7 @@ super + shift + b
 XF86AudioMicMute
 	pactl set-source-mute 0 toggle
 XF86MonBrightness{Up,Down}
-	xbacklight -{inc,dec} 5 && xbacklight -get | cut -d "." -f 1 | notify.sh brightness
+	xbacklight -{inc,dec} 10 && xbacklight -get | cut -d "." -f 1 | notify.sh brightness
 XF86Audio{Raise,Lower}Volume
 	ponymix {increase,decrease} 5 | notify.sh audio
 XF86AudioMute
