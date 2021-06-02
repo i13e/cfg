@@ -18,16 +18,16 @@
 
 notifyMuted() {
         volume="$1"
-        dunstify -h string:x-canonical-private-synchronous:audio "󰝟 Muted" -h int:value:"$volume" -t 1500
+        dunstify -h string:x-canonical-private-synchronous:audio "󰖁 Muted" -h int:value:"$volume" -t 1500
 }
 
 notifyAudio() {
         volume="$1"
         ponymix is-muted && notifyMuted "$volume" && return
 
-        if [ $volume -le 30 ]; then
+        if [ $volume -le 25 ]; then
                 dunstify -h string:x-canonical-private-synchronous:audio "󰕿 Volume: " -h int:value:"$volume" -t 1500 
-        elif [ $volume -le 70 ]; then
+        elif [ $volume -le 75 ]; then
                 dunstify -h string:x-canonical-private-synchronous:audio "󰖀 Volume: " -h int:value:"$volume" -t 1500 
         else
                 dunstify -h string:x-canonical-private-synchronous:audio "󰕾 Volume: " -h int:value:"$volume" -t 1500 
@@ -36,9 +36,9 @@ notifyAudio() {
 
 notifyBrightness() {
         brightness="$1"
-        if [ $brightness -le 30 ]; then
+        if [ $brightness -le 25 ]; then
                 dunstify -h string:x-canonical-private-synchronous:brightness "󰃞 Brightness: " -h int:value:"$brightness" -t 1500 
-        elif [ $brightness -le 70 ]; then
+        elif [ $brightness -le 75 ]; then
                 dunstify -h string:x-canonical-private-synchronous:brightness "󰃟 Brightness: " -h int:value:"$brightness" -t 1500 
         else
                 dunstify -h string:x-canonical-private-synchronous:brightness "󰃠 Brightness: " -h int:value:"$brightness" -t 1500 

@@ -115,6 +115,13 @@ let g:startify_lists = [
           \ { 'type': 'bookmarks', 'header': ['                    Dotfiles']       },
           \ ]
 
+" Automatically deletes all trailing whitespace on save.
+	autocmd BufWritePre * %s/\s\+$//e
+" Run xrdb whenever Xdefaults or Xresources are updated.
+	autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
+" Update binds when sxhkdrc is updated.
+	autocmd BufWritePost *sxhkdrc !pkill -USR1 sxhkd
+
 " startify header
 let g:startify_custom_header = startify#center([
         \ ' .__   __.  _______   ______   ____    ____  __  .___  ___. ',

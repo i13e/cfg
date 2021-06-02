@@ -45,7 +45,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export WGET="$XDG_CONFIG_HOME/wgetrc"
-export HISTFILE="$XDG_DATA_HOME/bash/history"
+export HISTFILE="$XDG_DATA_HOME/history"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export LESSHISTFILE=-
@@ -53,7 +53,6 @@ export GOPATH="$XDG_DATA_HOME/go"
 
 # Defaults
 export TERM=xterm-256color 
-export OPENER="xdg-open"
 export PAGER="less"
 export GPG_TTY=$TTY
 export LESS='-rsiF --mouse --wheel-lines=3'
@@ -116,6 +115,7 @@ function ssh() { z4h ssh "$@" }
 source $ZDOTDIR/aliases.zsh
 source $ZDOTDIR/config.zsh
 source $XDG_CONFIG_HOME/git/aliases.zsh
+source $ZDOTDIR/completion.zsh
 # Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
 # Use Nord dircolors theme
 #test -r "~/.config/dircolors" && eval $(dircolors ~/.config/dircolors)
