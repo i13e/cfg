@@ -1,19 +1,20 @@
 #!/bin/sh
 
-# Defaults
+# Export Variables
 export PATH="$HOME/.local/bin:$PATH"
 export VISUAL='/usr/bin/nvim'
 export EDITOR=$VISUAL
 export TERMINAL='/usr/bin/alacritty'
 export BROWSER='/usr/bin/brave'
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
-# Autostart
-xwallpaper --zoom /usr/share/backgrounds/norddesktop.png
-xrdb ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources # Uncomment to use Xresources colors/settings on startup
-pgrep -a beet || beet bpd &
+# Run startup scripts
+setbg
+xrdb ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources
 remaps
-dunst & 
+# Autostart
+pgrep -a beet || beet bpd &
+dunst &
 pgrep -a redshift || redshift &
 pgrep -a emacs || emacs --daemon
 sxhkd &
-unclutter & 
+unclutter &
