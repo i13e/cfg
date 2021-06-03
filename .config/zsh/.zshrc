@@ -1,49 +1,61 @@
-# https://github.com/romkatv/zsh4humans
 # Ian's config for the Zoomer Shell. It is strongly recommended to keep all
 # shell customization and configuration (including exported environment
-# variables such as PATH) in this file or in files sourced by it.
-# Documentation: https://github.com/romkatv/zsh4humans/blob/v4/README.md.
+# variables such as PATH) in this file or in files source by it.
 #
+# Documentation: https://github.com/romkatv/zsh4humans/blob/v5/README.md.
+
 # Periodic auto-update on Zsh startup: 'ask' or 'no'.
-zstyle ':z4h:'                auto-update      'ask'
+# You can manually run `z4h update` to update everything.
+zstyle ':z4h:' auto-update      'ask'
 # Ask whether to auto-update this often; has no effect if auto-update is 'no'.
-zstyle ':z4h:'                auto-update-days '28'
+zstyle ':z4h:' auto-update-days '28'
+
+# Automaticaly wrap TTY with a transparent tmux ('integrated'), or start a
+# full-fledged tmux ('system'), or disable features that require tmux ('no').
+zstyle ':z4h:' start-tmux       'no'
+# Move prompt to the bottom when zsh starts up so that it's always in the
+# same position. Has no effect if start-tmux is 'no'.
+zstyle ':z4h:' prompt-at-bottom 'no'
+
 # Keyboard type: 'mac' or 'pc'.
-zstyle ':z4h:bindkey'         keyboard         'pc'
-# When fzf menu opens on TAB, another TAB moves the cursor down ('tab:down')
-# or accepts the selection and triggers another TAB-completion ('tab:repeat')?
-zstyle ':z4h:fzf-complete'    fzf-bindings     'tab:down'
-# When fzf menu opens on Alt+Down, TAB moves the cursor down ('tab:down')
-# or accepts the selection and triggers another Alt+Down ('tab:repeat')?
-zstyle ':z4h:cd-down'         fzf-bindings     'tab:down'
+zstyle ':z4h:bindkey' keyboard  'pc'
+
 # Right-arrow key accepts one character ('partial-accept') from
 # command autosuggestions or the whole thing ('accept')?
-zstyle ':z4h:autosuggestions' forward-char     'accept'
+zstyle ':z4h:autosuggestions' forward-char 'accept'
 
-# Send these files over to the remote host when connecting over ssh.
-# Multiple files can be listed here.
-#zstyle ':z4h:ssh:*'           send-extra-files '~/.iterm2_shell_integration.zsh'
-# Disable automatic teleportation of z4h over ssh when connecting to some-host.
-# This makes `ssh some-host` equivalent to `command ssh some-host`.
-zstyle ':z4h:ssh:some-host'   passthrough      'yes'
+# Recursively traverse directories when TAB-completing files.
+zstyle ':z4h:fzf-complete' recurse-dirs 'yes'
 
-# Move the cursor to the end when Up/Down fetches a command from history?
-zstyle ':zle:up-line-or-beginning-search'   leave-cursor 'yes'
-zstyle ':zle:down-line-or-beginning-search' leave-cursor 'yes'
+# Enable ('yes') or disable ('no') automatic teleportation of z4h over
+# ssh when connecting to these hosts.
+zstyle ':z4h:ssh:example-hostname1'   enable 'yes'
+zstyle ':z4h:ssh:*.example-hostname2' enable 'no'
+# The default value if none of the overrides above match the hostname.
+zstyle ':z4h:ssh:*'                   enable 'no'
+
+# Send these files over to the remote host when connecting over ssh to the
+# enabled hosts.
+#zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
 
 # Clone additional Git repositories from GitHub.
 #
+# This doesn't do anything apart from cloning the repository and keeping it
+# up-to-date. Cloned files can be used after `z4h init`. This is just an
+# example. If you don't plan to use Oh My Zsh, delete this line.
+#z4h install ohmyzsh/ohmyzsh || return
+
 # Install or update core components (fzf, zsh-autosuggestions, etc.) and
 # initialize Zsh. After this point console I/O is unavailable until Zsh
 # is fully initialized. Everything that requires user interaction or can
 # perform network I/O must be done above. Everything else is best done below.
 z4h init || return
 
-# Export environmental variables.
-# ~/ Clean-up:
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
+# Extend PATH.
+#path=(~/bin $path)
+
+# Export environment variables.
+#export GPG_TTY=$TTY
 export WGET="$XDG_CONFIG_HOME/wgetrc"
 export HISTFILE="$XDG_DATA_HOME/history"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
@@ -52,7 +64,7 @@ export LESSHISTFILE=-
 export GOPATH="$XDG_DATA_HOME/go"
 
 # Defaults
-export TERM=xterm-256color 
+export TERM=xterm-256color
 export PAGER="less"
 export GPG_TTY=$TTY
 export LESS='-rsiF --mouse --wheel-lines=3'
@@ -66,8 +78,12 @@ export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
-# Extend PATH.
-#path=(~/.local/bin $path)
+# Source additional local files if they exist.
+#z4h source ~/.env.zsh
+source $ZDOTDIR/aliases.zsh
+source $ZDOTDIR/config.zsh
+source $XDG_CONFIG_HOME/git/aliases.zsh
+source $ZDOTDIR/completion.zsh
 
 # Use additional Git repositories pulled in with `z4h install`.
 #
@@ -76,11 +92,8 @@ export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 #z4h source $Z4H/ohmyzsh/ohmyzsh/plugins/emoji-clock/emoji-clock.plugin.zsh
 #fpath+=($Z4H/ohmyzsh/ohmyzsh/plugins/supervisor)
 
-# Source additional local files if they exist.
-#z4h source ~/.iterm2_shell_integration.zsh
-
 # Define key bindings.
-z4h bindkey z4h-backward-kill-word  Ctrl+Backspace 
+z4h bindkey z4h-backward-kill-word  Ctrl+Backspace Ctrl+H
 z4h bindkey z4h-backward-kill-zword Ctrl+Alt+Backspace
 
 z4h bindkey undo Ctrl+/  # undo the last command line change
@@ -98,24 +111,26 @@ autoload -Uz zmv
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
+# Define named directories: ~w <=> Windows home directory on WSL.
+#[[ -n $z4h_win_home ]] && hash -d w=$z4h_win_home
+
+# Define aliases.
+#alias tree='tree -a -I .git'
+
+# Add flags to existing aliases.
+#alias ls="${aliases[ls]:-ls} -A"
+
+# Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
+#setopt glob_dots     # no special treatment for file names with a leading dot
+#setopt no_auto_menu  # require an extra TAB press to open the completion menu
+
 # Curl gitignore templates
 # Usage: gi <template>
-gi() {curl -Ls https://gitignore.io/api/$@;}
+#gi() {curl -Ls https://gitignore.io/api/$@}
 
 # Backup
 bak() { cp $1 $1.bak }
 
-# Replace `ssh` with `z4h ssh` to automatically teleport z4h to remote hosts.
-function ssh() { z4h ssh "$@" }
-
-# Define named directories: ~w <=> Windows home directory on WSL.
-[[ -n $z4h_win_home ]] && hash -d w=$z4h_win_home
-
-# Define aliases.
-source $ZDOTDIR/aliases.zsh
-source $ZDOTDIR/config.zsh
-source $XDG_CONFIG_HOME/git/aliases.zsh
-source $ZDOTDIR/completion.zsh
 # Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
 # Use Nord dircolors theme
 #test -r "~/.config/dircolors" && eval $(dircolors ~/.config/dircolors)
@@ -127,7 +142,7 @@ export FZF_DEFAULT_OPTS='
     --reverse
     --ansi
     --no-bold
-    --prompt=❯\ 
+    --prompt=❯\
     --color=16
     --color=bg:-1,bg+:8
     --color=fg:-1,fg+:-1
