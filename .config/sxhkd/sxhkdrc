@@ -33,7 +33,7 @@ super + v
 #super + shift + a
 #	$TERMINAL -e alsamixer || pulsemixer; pkill -RTMIN+10 $STATUSBAR
 #super + shift + c
-#	mpv --no-osc --no-input-default-bindings --input-conf=/dev/null --title='mpvfloat' /dev/video0
+#	mpv --no-osc --no-config --no-input-default-bindings --input-conf=/dev/null --title='mpvfloat' /dev/video0
 #super + w
 #	$TERMINAL -e sudo nmtui
 super + shift + b
@@ -46,12 +46,10 @@ super + shift + b
 #	killall screenkey || screenkey
 #super + Insert
 #	showclip
-super + shift + Escape
-	prompt "Shutdown computer?" "sudo -A shutdown now"
 super + shift + BackSpace
-	prompt "Reboot computer?" "sudo -A reboot"
+	sysact
 super + shift + q
-	prompt 'Leave Xorg?' 'sudo -A killall Xorg'
+	sysact
 #super + x
 #	ifinstalled light-locker && ( light-locker-command -l & xset dpms force off ; mpc pause ; pauseallmpv )
 #XF86Launch1
