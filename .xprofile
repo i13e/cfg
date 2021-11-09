@@ -5,19 +5,23 @@ export PATH="$HOME/.local/bin:$PATH"
 export VISUAL='/usr/bin/nvim'
 export EDITOR=$VISUAL
 export TERMINAL='/usr/bin/alacritty'
-export BROWSER='/usr/bin/brave'
+export BROWSER='/usr/bin/brave-beta'
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
+# Set defaults
+xset s 300 0
+xset dpms 0 0 0
 # Run startup scripts
-xwallpaper --zoom $XDG_DATA_HOME/bg
-xrdb $XDG_CONFIG_HOME/x11/xresources
-remaps
+layout
+xrdb "$XDG_CONFIG_HOME"/x11/xresources
 # Autostart
 pgrep -a beet || beet bpd &
-dunst &
-pgrep -a redshift || redshift &
-pgrep -a emacs || emacs --daemon
-sxhkd &
+lxpolkit &
+sxhkd & remaps
 unclutter &
+pgrep -a syncthing || syncthing -no-browser &
+pkill redshift ; redshift &
+pgrep -a emacs || emacs --daemon &
+light-locker --late-locking --lock-on-suspend --no-idle-hint &

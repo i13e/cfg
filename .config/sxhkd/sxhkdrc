@@ -14,14 +14,18 @@ super + x
 	kill `xdotool getwindowfocus getwindowpid`
 super + shift + x
 	kill -9 `xdotool getwindowfocus getwindowpid`
-#super + d
-#	dmenu_run
+super + shift + f
+	pcmanfm
+super + Caps_Lock
+	remaps
+super + shift + Return
+	dmenu_run -p 'Run: '
 #super + r
 #	$TERMINAL -e $FILE
 #super + e
 #	$TERMINAL -e neomutt; pkill -RTMIN+12 $STATUSBAR
 super + m
-	$TERMINAL -e ncmpcpp
+	$TERMINAL -e ncmpcpp 2>~/.config/ncmpcpp/ncmpcpp.log
 super + n
 	$TERMINAL -e newsboat
 #super + c
@@ -38,7 +42,8 @@ super + v
 #	$TERMINAL -e sudo nmtui
 super + shift + b
 	$BROWSER
-
+super + BackSpace
+	rofi -show run drun
 # Et cetera...
 #super + grave
 #	dmenuunicode
@@ -58,10 +63,6 @@ super + shift + q
 #	(synclient | grep "TouchpadOff.*1" && synclient TouchpadOff=0) || synclient TouchpadOff=1
 #XF86Touchpad{Off,On}
 #	synclient TouchpadOff={1,0}
-#XF86MonBrightnessDown
-#	xbacklight -dec 15
-#XF86MonBrightnessUp
-#	xbacklight -inc 15
 
 # Recording
 # Take screenshot
@@ -103,21 +104,16 @@ super + {_,shift +} bracketleft
 #	amixer sset Master toggle; pkill -RTMIN+10 dwmblocks
 
 # Audiokeys
-#XF86AudioMute
-#	amixer sset Master toggle; pkill -RTMIN+10 dwmblocks
-#XF86Audio{Raise,Lower}Volume
-#	amixer sset Master 5%{+,-}; pkill -RTMIN+10 dwmblocks
-#XF86Audio{Next,Prev}
-#	mpc {next,prev}
-#XF86Audio{Pause,Play,Stop}
-#	mpc {pause,play,stop}
-#XF86Audio{Rewind,Forward}
-#	mpc seek {-,+}10
+XF86Audio{Next,Prev}
+	mpc {next,prev}
+XF86AudioPlay
+	mpc toggle
+XF86AudioStop
+	mpc pause ; pauseallmpv
 #XF86AudioRecord
 #	dmenurecord
 #XF86AudioMedia
 #	$TERMINAL -e ncmpcpp
-
 #XF86PowerOff
 #	prompt "Shutdown computer?" "sudo -A shutdown -h now"
 #XF86Calculator
@@ -177,7 +173,7 @@ XF86Audio{Raise,Lower}Volume
 XF86AudioMicMute
 	pactl set-source-mute 0 toggle
 XF86MonBrightness{Up,Down}
-	xbacklight -{inc,dec} 5 && xbacklight -get | cut -d "." -f 1 | notify.sh brightness
+	xbacklight -{inc,dec} 10 && xbacklight -get | cut -d "." -f 1 | notify.sh brightness
 # Change display
 XF86Display
 	displayselect
@@ -185,7 +181,56 @@ XF86Display
 XF86Tools
 	pkill -USR1 '^redshift$'
 #XF86Bluetooth
-#XF86Favorites
+#Move Play Pause
+#PRTSCR
+#
+#TP Exclusive
+#XF86Favorites?
+#
+# KB
+#Explorer
+#HomePage
+#Mail
+#Calculator
+#
 #alt + Tab
 #	rofi -show window
 #
+#
+# Emacs programs
+Control + e ; e
+  	emacsclient -c -a 'emacs'
+Control + e ; b
+	emacsclient -c -a 'emacs' --eval '(ibuffer)'
+Control + e ; d
+	emacsclient -c -a 'emacs' --eval '(dired nil)'
+Control + e ; i
+	emacsclient -c -a 'emacs' --eval '(erc)'
+Control + e ; m
+	emacsclient -c -a 'emacs' --eval '(mu4e)'
+Control + e ; n
+	emacsclient -c -a 'emacs' --eval '(elfeed)'
+Control + e ; s
+	emacsclient -c -a 'emacs' --eval '(eshell)'
+Control + e ; v
+	emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'
+
+# Dmenu scripts
+super + p ; e
+	./dmscripts/dm-confedit"
+super + p ; i
+	./dmscripts/dm-maim"
+super + p ; k
+	./dmscripts/dm-kill
+super + p ; l
+	./dmscripts/dm-logout
+super + p ; m
+	./dmscripts/dm-man
+super + p ; o
+	./dmscripts/dm-bookman
+super + p ; r
+	./dmscripts/dm-reddit
+super + p ; s
+	./dmscripts/dm-websearch
+super + p ; p
+	passmenu

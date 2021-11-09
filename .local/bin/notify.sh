@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/sh
 
 # progress-notify - Send audio and brightness notifications for dunst
 
@@ -25,31 +25,31 @@ notifyAudio() {
         volume="$1"
         ponymix is-muted && notifyMuted "$volume" && return
 
-        if [ $volume -le 25 ]; then
-                dunstify -h string:x-canonical-private-synchronous:audio "󰕿 Volume: " -h int:value:"$volume" -t 1500 
-        elif [ $volume -le 75 ]; then
-                dunstify -h string:x-canonical-private-synchronous:audio "󰖀 Volume: " -h int:value:"$volume" -t 1500 
+        if [ "$volume" -le 25 ]; then
+                dunstify -h string:x-canonical-private-synchronous:audio "󰕿 Volume: " -h int:value:"$volume" -t 1500
+        elif [ "$volume" -le 75 ]; then
+                dunstify -h string:x-canonical-private-synchronous:audio "󰖀 Volume: " -h int:value:"$volume" -t 1500
         else
-                dunstify -h string:x-canonical-private-synchronous:audio "󰕾 Volume: " -h int:value:"$volume" -t 1500 
+                dunstify -h string:x-canonical-private-synchronous:audio "󰕾 Volume: " -h int:value:"$volume" -t 1500
         fi
 }
 
 notifyBrightness() {
         brightness="$1"
-        if [ $brightness -le 25 ]; then
-                dunstify -h string:x-canonical-private-synchronous:brightness "󰃞 Brightness: " -h int:value:"$brightness" -t 1500 
-        elif [ $brightness -le 75 ]; then
-                dunstify -h string:x-canonical-private-synchronous:brightness "󰃟 Brightness: " -h int:value:"$brightness" -t 1500 
+        if [ "$brightness" -le 25 ]; then
+                dunstify -h string:x-canonical-private-synchronous:brightness "󰃞 Brightness: " -h int:value:"$brightness" -t 1500
+        elif [ "$brightness" -le 75 ]; then
+                dunstify -h string:x-canonical-private-synchronous:brightness "󰃟 Brightness: " -h int:value:"$brightness" -t 1500
         else
-                dunstify -h string:x-canonical-private-synchronous:brightness "󰃠 Brightness: " -h int:value:"$brightness" -t 1500 
+                dunstify -h string:x-canonical-private-synchronous:brightness "󰃠 Brightness: " -h int:value:"$brightness" -t 1500
         fi
 }
 
-input=`cat /dev/stdin`
+input=$(cat /dev/stdin)
 
 case "$1" in
         muted)
-                volume=`ponymix get-volume`
+		volume=$(ponymix get-volume)
                 if [ "$input" -eq 0 ]
                 then
                         notifyAudio "$volume"

@@ -14,5 +14,8 @@ text/html=brave-browser.desktop;
 text/xml=brave.desktop
 application/pdf=org.pwmt.zathura.desktop
 x-scheme-handler/magnet=brave-browser.desktop
+x-scheme-handler/discord-455712169795780630=discord-455712169795780630.desktop
+
 [Added Associations]
 text/plain=nvim.desktop;
+application/x-shellscript=net.lutris.Lutris.desktop;

@@ -87,11 +87,9 @@
   ;(centaur-tabs-change-fonts "monospace" 160))
 ;; (setq x-underline-at-descent-line t)
 
-
-;; Fonts
-(setq doom-font (font-spec :family "monospace" :size 16)
-      doom-variable-pitch-font (font-spec :family "sans" :size 16 :weight 'semi-light)
-      doom-big-font (font-spec :family "monospace" :size 24)) ;; used for `doom-big-font-mode'
+(setq doom-font (font-spec :family "monospace" :size 15)
+      doom-variable-pitch-font (font-spec :family "sans" :size 15)
+      doom-big-font (font-spec :family "monospace" :size 24))
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))

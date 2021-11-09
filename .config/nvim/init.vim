@@ -16,9 +16,9 @@ Plug 'junegunn/fzf.vim'			" fzf integration with vim
 Plug 'machakann/vim-sandwich'		" surround text objects
 Plug 'junegunn/goyo.vim'		" distraction free writing
 Plug 'junegunn/limelight.vim'		" hyperfocused writing
-Plug 'mhinz/vim-startify'		" start page
 Plug 'ap/vim-css-color'			" css colors highlighted
-
+Plug 'glepnir/dashboard-nvim'
+Plug 'ryanoasis/vim-devicons'
 " Finish initialization of vim-plug
 call plug#end()
 
@@ -36,14 +36,12 @@ hi Normal guibg=NONE ctermbg=NONE
 set scrolloff=7				" Show 7 lines around the cursorline
 let g:netrw_banner = 0			" Hide banner shown in the file explorer
 let g:netrw_liststyle = 3		" Use tree view in file explorer
+set encoding=utf-8
 set number number			" Enable line numbers
 set hidden  				" allow buffer switching without saving
 set cursorline				" Show cursor line
 set mouse=a
 set showtabline =2			" Show tabline always
-set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-		  \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-		  \,sm:block-blinkwait175-blinkoff150-blinkon175
 set clipboard+=unnamedplus		" Enable copy to system clipboard
 
 " ====================================================================
@@ -103,18 +101,6 @@ if has('nvim') || has('gui_running')
   autocmd  FileType fzf set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
 endif
 
-" startify bookmarks
-let g:startify_bookmarks = [ '~/.config/nvim/init.vim', '~/.config/zsh/.zshrc', '~/.config/polybar/config', '~/.config/rofi/config.rasi', '~/.local/rofi/nord.rasi', '~/.config/sxhkd/sxhkdrc']
-"let g:startify_bookmarks = [ '~/sync/my-notes/QuickNote.md', '~/sync/my-notes/database', '~/sync/my-notes/diary', '~/sync/my-notes/lists', '~/sync/my-notes/messages', '~/sync/my-notes/notes', '~/sync/my-notes/people', '~/sync/my-notes/practise', '~/sync/my-notes/research', '~/sync/my-notes/writings']
-" startify padding
-let g:startify_padding_left = 20
-
-" startify lists
-let g:startify_lists = [
-          \ { 'type': 'files',     'header': ['                    Recents']        },
-          \ { 'type': 'bookmarks', 'header': ['                    Dotfiles']       },
-          \ ]
-
 " Automatically deletes all trailing whitespace on save.
 	autocmd BufWritePre * %s/\s\+$//e
 " Run xrdb whenever Xdefaults or Xresources are updated.
@@ -122,13 +108,23 @@ let g:startify_lists = [
 " Update binds when sxhkdrc is updated.
 	autocmd BufWritePost *sxhkdrc !pkill -USR1 sxhkd
 
-" startify header
-let g:startify_custom_header = startify#center([
-        \ ' .__   __.  _______   ______   ____    ____  __  .___  ___. ',
-	\ ' |  \ |  | |   ____| /  __  \  \   \  /   / |  | |   \/   | ',
-	\ ' |   \|  | |  |__   |  |  |  |  \   \/   /  |  | |  \  /  | ',
-	\ ' |  . `  | |   __|  |  |  |  |   \      /   |  | |  |\/|  | ',
-	\ ' |  |\   | |  |____ |  `--`  |    \    /    |  | |  |  |  | ',
-	\ ' |__| \__| |_______| \______/      \__/     |__| |__|  |__| ',
-	\ ])
-                           
+" Dashboard options
+let g:dashboard_custom_header = [
+            \ ' ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗',
+            \ ' ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║',
+            \ ' ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║',
+            \ ' ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║',
+            \ ' ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║',
+            \ ' ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝',
+            \]
+
+let g:mapleader="\<Space>"
+let g:dashboard_default_executive ='fzf'
+nmap <Leader>ss :<C-u>SessionSave<CR>
+nmap <Leader>sl :<C-u>SessionLoad<CR>
+nnoremap <silent> <Leader>fr :DashboardFindHistory<CR>
+nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
+nnoremap <silent> <Leader>cc :DashboardChangeColorscheme<CR>
+nnoremap <silent> <Leader>fw :DashboardFindWord<CR>
+nnoremap <silent> <Leader>jb :DashboardJumpMark<CR>
+nnoremap <silent> <Leader>cn :DashboardNewFile<CR>

@@ -5,7 +5,7 @@ alias -- -='cd -'
 alias cdg='cd `git rev-parse --show-toplevel`'
 alias ydl='youtube-dl -o "./%(title)s.%(ext)s"'
 alias yhd='youtube-dl -f "[height<=720]" -o "~/Videos/%(uploader)s/%(title)s.%(ext)s" --no-playlist '
-alias ymp3='youtube-dl -f "bestaudio" -o "~/Music/%(uploader)s/%(title)s.%(ext)s" --no-playlist -x --audio-format mp3 --embed-thumbnail ' 
+alias ymp3='youtube-dl -f "bestaudio" -o "~/Music/%(uploader)s/%(title)s.%(ext)s" --no-playlist -x --audio-format mp3 --embed-thumbnail '
 alias ypl3='youtube-dl -f "bestaudio" -o "~/Music/%(uploader)s/%(playlist)s/%(title)s.%(ext)s" -x --audio-format mp3 --embed-thumbnail'
 alias q=exit
 alias clr=clear
@@ -24,13 +24,13 @@ alias cleanup='paru -Rns $(paru -Qtdq)'
 alias sha='shasum -a 256'
 alias sync='syncthing -browser-only'
 alias build='rm -f ~/docs/code/sites/ianb/dst/.files && ssg6 ~/docs/code/sites/ianb/src ~/docs/code/sites/ianb/dst "Ian B." "https://ianb.io"'
-alias deploy='chmod -R 755 ~/docs/code/sites/ianb && rsync -vruP --delete-after ~/docs/code/sites/ianb/dst/ munchlax:/var/www/ianb'
+alias deploy='rsync -avzhP --delete-after --chmod=755 ~/docs/code/sites/ianb/dst/ munchlax:/var/www/ianb'
 alias cfg='/usr/bin/git --git-dir=$HOME/.config/cfg/ --work-tree=$HOME'
 alias mount='mount |column -t'
 alias pacfind='pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S'
+alias btm='btm --battery'
 
-
-# Editor 
+# Editor
 #alias vim='nvim'
 alias em='/usr/bin/emacs -nw'
 alias e="emacsclient -c -a 'emacs'"

@@ -17,12 +17,13 @@ original_date: yes
 #per_disc_numbering: yes
 
 # Plugins and config
-plugins: acousticbrainz bpd duplicates edit embedart export fetchart fromfilename fuzzy info lastgenre lyrics mbsync play rewrite replaygain scrub 
+plugins: acousticbrainz bpd duplicates edit embedart export fetchart fromfilename fuzzy info lastgenre lyrics mbsync play rewrite replaygain scrub
 # lastimport smartplaylist THE FTINTITLE
 #chroma:
 #auto: no
-#embedart:
-  #remove_art_file: yes
+embedart:
+  remove_art_file: yes
+  ifempty: yes
 fetchart:
   auto: yes
   maxwidth: 1200
@@ -35,10 +36,10 @@ lastgenre:
 lyrics:
   auto: yes
 play:
-  command: mpv $args --no-video --no-audio-display --force-window=no --no-resume-playback --pause=no 
+  command: mpv $args --no-video --no-audio-display --force-window=no --no-resume-playback --pause=no
 replaygain:
   backend: gstreamer
-# Really ugly way of keeping folders correct but if it works it works i guess 
+# Really ugly way of keeping folders correct but if it works it works i guess
 rewrite:
   albumartist Viktor Vaughn: MF DOOM
   albumartist King Geedorah: MF DOOM
@@ -66,7 +67,7 @@ rewrite:
     #- name: all.m3u
        #query: ""
 
-# DELETE? the, 
+# DELETE? the,
 #paths:
   #default: %the{$albumartist}/($year) - $album%aunique{}$myAlbumType/%if{$isMultidisc,$disc - }$track - $mySongartist$title
   #singleton: "Singles/$artist/$title"

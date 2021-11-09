@@ -6,13 +6,13 @@
 
 # Periodic auto-update on Zsh startup: 'ask' or 'no'.
 # You can manually run `z4h update` to update everything.
-zstyle ':z4h:' auto-update      'ask'
+zstyle ':z4h:' auto-update      'no'
 # Ask whether to auto-update this often; has no effect if auto-update is 'no'.
 zstyle ':z4h:' auto-update-days '28'
 
 # Automaticaly wrap TTY with a transparent tmux ('integrated'), or start a
 # full-fledged tmux ('system'), or disable features that require tmux ('no').
-zstyle ':z4h:' start-tmux       'no'
+zstyle ':z4h:' start-tmux       'integrated'
 # Move prompt to the bottom when zsh starts up so that it's always in the
 # same position. Has no effect if start-tmux is 'no'.
 zstyle ':z4h:' prompt-at-bottom 'no'
@@ -55,7 +55,6 @@ z4h init || return
 #path=(~/bin $path)
 
 # Export environment variables.
-#export GPG_TTY=$TTY
 export WGET="$XDG_CONFIG_HOME/wgetrc"
 export HISTFILE="$XDG_DATA_HOME/history"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
@@ -64,7 +63,6 @@ export LESSHISTFILE=-
 export GOPATH="$XDG_DATA_HOME/go"
 
 # Defaults
-export TERM=xterm-256color
 export PAGER="less"
 export GPG_TTY=$TTY
 export LESS='-rsiF --mouse --wheel-lines=3'
@@ -153,8 +151,8 @@ export FZF_DEFAULT_OPTS='
     --color=spinner:6
     --color=info:6'
 
-if command -v fd >/dev/null; then
-    export FZF_DEFAULT_COMMAND="fd ."
-    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-    export FZF_ALT_C_COMMAND="fd -t d . $HOME"
-fi
+#if command -v fd >/dev/null; then
+#    export FZF_DEFAULT_COMMAND="fd ."
+#    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+#    export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+#fi
