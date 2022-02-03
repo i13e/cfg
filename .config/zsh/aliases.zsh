@@ -1,3 +1,5 @@
+alias jctl='sudo journalctl'
+alias sctl='sudo systemctl'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -14,7 +16,6 @@ alias rm='rm -Iv'
 alias cp='cp -iv'
 alias mv='mv -iv'
 alias mkdir='mkdir -pv'
-alias wget='wget -c'
 alias path='echo -e ${PATH//:/\\n}'
 alias ports='sudo ss -tulanp'
 alias mk=make
@@ -36,7 +37,7 @@ alias em='/usr/bin/emacs -nw'
 alias e="emacsclient -c -a 'emacs'"
 #alias em='devour emacsclient -c -a emacs'
 #alias et='emacsclient -t -a emacs'
-alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
+alias wget='wget -c --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias doom='~/.config/emacs/bin/doom'
 alias moshlax='mosh munchlax -- tmux a'
 alias ipp='curl ipinfo.io/ip'
@@ -111,7 +112,7 @@ if command -v exa >/dev/null; then
 fi
 
 if command -v paru >/dev/null; then
-	alias upd='checkupd && paru -Syu && hostupd && z4h update';
+	alias upd='checkupd && paru-wrapper.sh && hostupd && z4h update';
 fi
 
 autoload -U zmv

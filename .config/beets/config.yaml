@@ -39,7 +39,7 @@ play:
   command: mpv $args --no-video --no-audio-display --force-window=no --no-resume-playback --pause=no
 replaygain:
   backend: gstreamer
-# Really ugly way of keeping folders correct but if it works it works i guess
+# Really ugly way of keeping folders correct but if it works it works
 rewrite:
   albumartist Viktor Vaughn: MF DOOM
   albumartist King Geedorah: MF DOOM
@@ -60,6 +60,7 @@ rewrite:
   albumartist .*snoop dogg.*: Snoop Dogg
   albumartist .*kool g. rap.*: Kool G Rap
   albumartist .*Prince and the Revolution.*: Prince
+  albumartist Jaÿ‐Z: Jay-Z
   #smartplaylist:
   #relative_to: ~/music
   #playlist_dir: ~/music/playlists

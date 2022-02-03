@@ -1,18 +1,28 @@
 #!/bin/sh
+# see https://unix.stackexchange.com/a/295652/332452
+source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
 
+# see https://wiki.archlinux.org/title/GNOME/Keyring#xinitrc
+eval $(/usr/bin/gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
+
+# see https://github.com/NixOS/nixpkgs/issues/14966#issuecomment-520083836
+mkdir -p "$HOME"/.local/share/keyrings
 # Export Variables
+export AUR_HELPER='paru'
 export PATH="$HOME/.local/bin:$PATH"
 export VISUAL='/usr/bin/nvim'
 export EDITOR=$VISUAL
 export TERMINAL='/usr/bin/alacritty'
+# see https://github.com/brave/brave-browser/issues/19238#issuecomment-1008056778
 export BROWSER='/usr/bin/brave-beta'
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
-# Set defaults
-xset s 300 0
-xset dpms 0 0 0
+export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+#export FLAG="--enable-features=VaapiVideoDecoder"
+#export ERRFILE="$XDG_DATA_HOME/X11/xsession-errors"
 # Run startup scripts
 layout
 xrdb "$XDG_CONFIG_HOME"/x11/xresources
@@ -23,5 +33,5 @@ sxhkd & remaps
 unclutter &
 pgrep -a syncthing || syncthing -no-browser &
 pkill redshift ; redshift &
-pgrep -a emacs || emacs --daemon &
-light-locker --late-locking --lock-on-suspend --no-idle-hint &
+pgrep -a emacs || emacs --daemon && emacsclient -c --eval "(delete-frame)" &
+#light-locker --late-locking --lock-on-suspend --no-idle-hint &

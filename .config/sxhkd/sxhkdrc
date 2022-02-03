@@ -169,7 +169,7 @@ XF86AudioStop
 XF86AudioMute
 	pulsemixer --toggle-mute --get-mute | notify.sh muted
 XF86Audio{Raise,Lower}Volume
-	ponymix {increase,decrease} 5 | notify.sh audio
+	pulsemixer --max-volume 100 --change-volume {+,-}5 --get-volume | notify.sh audio
 XF86AudioMicMute
 	pactl set-source-mute 0 toggle
 XF86MonBrightness{Up,Down}
@@ -198,21 +198,21 @@ XF86Tools
 #
 #
 # Emacs programs
-Control + e ; e
+control + e ; e
   	emacsclient -c -a 'emacs'
-Control + e ; b
+control + e ; b
 	emacsclient -c -a 'emacs' --eval '(ibuffer)'
-Control + e ; d
+control + e ; d
 	emacsclient -c -a 'emacs' --eval '(dired nil)'
-Control + e ; i
+control + e ; i
 	emacsclient -c -a 'emacs' --eval '(erc)'
-Control + e ; m
+control + e ; m
 	emacsclient -c -a 'emacs' --eval '(mu4e)'
-Control + e ; n
+control + e ; n
 	emacsclient -c -a 'emacs' --eval '(elfeed)'
-Control + e ; s
+control + e ; s
 	emacsclient -c -a 'emacs' --eval '(eshell)'
-Control + e ; v
+control + e ; v
 	emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'
 
 # Dmenu scripts
@@ -232,5 +232,5 @@ super + p ; r
 	./dmscripts/dm-reddit
 super + p ; s
 	./dmscripts/dm-websearch
-super + p ; p
-	passmenu
+control + e; p
+	/usr/bin/rofi-rbw

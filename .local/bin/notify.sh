@@ -2,7 +2,7 @@
 
 # progress-notify - Send audio and brightness notifications for dunst
 
-# dependencies: dunstify, ponymix
+# dependencies: dunstify, pulsemixer
 
 ### How to use: ###
 # Pass the values via stdin and provide the notification type
@@ -23,7 +23,7 @@ notifyMuted() {
 
 notifyAudio() {
         volume="$1"
-        ponymix is-muted && notifyMuted "$volume" && return
+        pulsemixer --get-muted && notifyMuted "$volume" && return
 
         if [ "$volume" -le 25 ]; then
                 dunstify -h string:x-canonical-private-synchronous:audio "󰕿 Volume: " -h int:value:"$volume" -t 1500
@@ -49,7 +49,7 @@ input=$(cat /dev/stdin)
 
 case "$1" in
         muted)
-		volume=$(ponymix get-volume)
+		volume=$(pulsemixer --get-volume)
                 if [ "$input" -eq 0 ]
                 then
                         notifyAudio "$volume"

@@ -10,7 +10,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'arcticicestudio/nord-vim'		" color scheme
 Plug 'reedes/vim-pencil'		" improved writing experience
 Plug 'itchyny/lightline.vim'		" status bar
-Plug 'tpope/vim-fugitive'		" git branch in status line
+"Plug 'tpope/vim-fugitive'		" git branch in status line
 Plug 'mgee/lightline-bufferline'	" buffers in tabline
 Plug 'junegunn/fzf.vim'			" fzf integration with vim
 Plug 'machakann/vim-sandwich'		" surround text objects
