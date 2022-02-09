@@ -15,7 +15,7 @@ export VISUAL='/usr/bin/nvim'
 export EDITOR=$VISUAL
 export TERMINAL='/usr/bin/alacritty'
 # see https://github.com/brave/brave-browser/issues/19238#issuecomment-1008056778
-export BROWSER='/usr/bin/brave-beta'
+export BROWSER='/usr/bin/brave'
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -28,6 +28,7 @@ layout
 xrdb "$XDG_CONFIG_HOME"/x11/xresources
 # Autostart
 pgrep -a beet || beet bpd &
+picom --experimental-backends &
 lxpolkit &
 sxhkd & remaps
 unclutter &
