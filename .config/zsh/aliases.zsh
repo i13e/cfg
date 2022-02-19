@@ -30,7 +30,7 @@ alias cfg='/usr/bin/git --git-dir=$HOME/.config/cfg/ --work-tree=$HOME'
 alias mount='mount |column -t'
 alias pacfind='pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S'
 alias btm='btm --battery'
-
+alias yahaha='echo "you found me"'
 # Editor
 #alias vim='nvim'
 alias em='/usr/bin/emacs -nw'
@@ -112,7 +112,7 @@ if command -v exa >/dev/null; then
 fi
 
 if command -v paru >/dev/null; then
-	alias upd='checkupd && paru-wrapper.sh && hostupd && z4h update';
+	alias upd='checkupd && autosnap-wrapper && hostupd && z4h update';
 fi
 
 autoload -U zmv

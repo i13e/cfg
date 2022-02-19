@@ -107,7 +107,8 @@ endif
 	autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
 " Update binds when sxhkdrc is updated.
 	autocmd BufWritePost *sxhkdrc !pkill -USR1 sxhkd
-
+" Reload zsh when config files are updated
+	autocmd BufWritePost *zsh !exec zsh
 " Dashboard options
 let g:dashboard_custom_header = [
             \ ' ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗',

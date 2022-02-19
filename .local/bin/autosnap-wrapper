@@ -3,6 +3,15 @@
 # timeshift-autosnap helper for yay (yay-wrapper.sh)
 #
 # this helper code stops yay + timeshift-autosnap from taking multiple snapshots during the same update
+if [ -n "$AUR_HELPER" ] ; then
+    echo "AUR_HELPER has been manually set to $AUR_HELPER by the user"
+elif [ -x /usr/bin/paru ] ; then
+    export AUR_HELPER='/usr/bin/paru'
+elif [ -x /usr/bin/yay ] ; then
+    export AUR_HELPER='/usr/bin/yay'
+else
+    echo "warning: please install a supported aur helper (paru or yay) to use this script." ; exit 0;
+fi
 
 # shellcheck disable=SC2155
 export __AUTOSNAP_LOCK="$(mktemp -ut "aur-helper-autosnap.lock-XXXXXXX")"
