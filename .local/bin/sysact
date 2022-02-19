@@ -9,8 +9,8 @@ case "$(printf "󰍁 lock\n󰍃 logout\n󰤄 sleep\n󰜉 restart\n󰐥 shutdown\
 	'󰍁 lock') slock ;;
 	'󰍃 logout') sudo -A killall Xorg ;;
 	'󰤄 sleep') slock $ctl suspend-then-hibernate ;;
-	'󰜉 restart') $ctl reboot ;;
-	'󰐥 shutdown') $ctl poweroff ;;
+	'󰜉 restart') $ctl reboot -i ;;
+	'󰐥 shutdown') $ctl poweroff -i ;;
 	'󰶐 display off') xset dpms force off ;;
 	*) exit 1 ;;
 esac
