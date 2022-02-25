@@ -18,14 +18,16 @@ alias mv='mv -iv'
 alias mkdir='mkdir -pv'
 alias path='echo -e ${PATH//:/\\n}'
 alias ports='sudo ss -tulanp'
-alias mk=make
+alias mk="make"
 alias gurl='curl --compressed'
 alias unlock='sudo rm /var/lib/pacman/db.lck' # remove pacman lock
-alias cleanup='paru -Rns $(paru -Qtdq)'
+alias cleanup='paru -Rns $(paru -Qtdq) & paccache -ruk0'
 alias sha='shasum -a 256'
 alias sync='syncthing -browser-only'
+# rsync for website
 alias build='rm -f ~/docs/code/sites/ianb/dst/.files && ssg6 ~/docs/code/sites/ianb/src ~/docs/code/sites/ianb/dst "Ian B." "https://ianb.io"'
 alias deploy='rsync -avzhP --delete-after --chmod=755 ~/docs/code/sites/ianb/dst/ munchlax:/var/www/ianb'
+# bare repo alias
 alias cfg='/usr/bin/git --git-dir=$HOME/.config/cfg/ --work-tree=$HOME'
 alias mount='mount |column -t'
 alias pacfind='pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S'
