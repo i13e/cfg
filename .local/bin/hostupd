@@ -1,0 +1,10 @@
+#!/bin/sh
+# This script updates your hosts file to the newest release of
+# StevenBlack's unified file containing over 100,000 entries along
+# with your own custom blacklist, saved and controlled locally.
+#
+# Choose a hosts file here: https://github.com/StevenBlack/hosts
+
+sudo wget -qO /etc/hosts http://sbc.io/hosts/alternates/fakenews-gambling-porn-social/hosts
+sudo tee -a /etc/hosts < ~/.local/share/blacklist > /dev/null
+sudo chmod 644 /etc/hosts
