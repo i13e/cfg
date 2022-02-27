@@ -1,18 +1,18 @@
 #!/bin/sh
-# This script updates your hosts file to the newest release of
-# StevenBlack's unified file containing over 100,000 entries along
-# with your own custom blacklist, saved and controlled locally.
+# This script updates your hosts file to its latest release along
+# with your own custom hosts file, saved and controlled locally.
 #
-# Choose a hosts file here: https://github.com/StevenBlack/hosts
+# Recommended hosts file here: https://github.com/StevenBlack/hosts
+# or from anywhere you'd like.
 
 sudo wget -qO /etc/hosts http://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts
 sudo chmod 644 /etc/hosts
 while true; do
-    printf '%b ' "\033[1m":: Do you wish to use a custom blacklist? [Y/n]"\033[0m"
+    printf '%b ' "\033[1m":: Do you wish to use a custom hosts file? [Y/n]"\033[0m"
     read -r yn
     case $yn in
-        [Yy]* ) sudo tee -a /etc/hosts < ~/.local/share/blacklist > /dev/null; exit;;
+        [Yy]* ) sudo tee -a /etc/hosts < $XDG_DATA_HOME/hosts > /dev/null; exit;;
         [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
+        * ) echo "Please answer y or n.";;
     esac
 done
