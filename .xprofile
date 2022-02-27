@@ -27,8 +27,8 @@ picom --experimental-backends &
 lxpolkit &
 sxhkd & remaps
 unclutter &
-pgrep -u "$USER" "beet" || beet bpd &
-pgrep -u "$USER" "syncthing" || syncthing -no-browser &
-pgrep -u "$USER" "emacs" || emacs --daemon #&& emacsclient -c --eval "(delete-frame)" &
-pkill -u "$USER" "redshift" ; redshift &
+pidof -s "beet" || setsid -f beet bpd
+pidof -s "syncthing" || setsid -f syncthing -no-browser
+pidof -s "emacs" || setsid -f emacs --daemon #&& emacsclient -c --eval "(delete-frame)"
+pidof -s "redshift" || setsid -f redshift
 #light-locker --late-locking --lock-on-suspend --no-idle-hint &
