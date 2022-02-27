@@ -11,7 +11,7 @@ while true; do
     printf '%b ' "\033[1m":: Do you wish to use a custom hosts file? [Y/n]"\033[0m"
     read -r yn
     case $yn in
-        [Yy]* ) sudo tee -a /etc/hosts < $XDG_DATA_HOME/hosts > /dev/null; exit;;
+        [Yy]* ) sudo tee -a /etc/hosts < "$XDG_DATA_HOME/hosts" > /dev/null; exit;;
         [Nn]* ) exit;;
         * ) echo "Please answer y or n.";;
     esac
