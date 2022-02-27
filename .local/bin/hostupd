@@ -5,7 +5,7 @@
 # Recommended hosts file here: https://github.com/StevenBlack/hosts
 # or from anywhere you'd like.
 
-sudo wget -qO /etc/hosts http://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts
+sudo wget -qO /etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts
 sudo chmod 644 /etc/hosts
 while true; do
     printf '%b ' "\033[1m":: Do you wish to use a custom hosts file? [Y/n]"\033[0m"
