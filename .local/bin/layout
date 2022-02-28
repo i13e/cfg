@@ -9,15 +9,15 @@ onescreen() { # If only one output available or chosen.
 	xrandr --output "$1" --auto --scale 1.0x1.0 $(echo "$allposs" | grep -v "\b$1" | awk '{print "--output", $1, "--off"}' | paste -sd ' ' -)
 	}
 postrun() { # Stuff to run to clean up.
-	setbg		# Fix background if screen size/arangement has changed.
-	{ killall dunst ; setsid -f dunst ;} >/dev/null 2>&1 # Restart dunst to ensure proper location on screen
+	#setbg		# Fix background if screen size/arangement has changed.
+	#{ killall dunst ; setsid -f dunst ;} >/dev/null 2>&1 # Restart dunst to ensure proper location on screen
 	xset s 300 0       # set screensaver activation to 5min
 	xset dpms 0 0 0    # turn off dpms interference (run: xset q to check settings)
 	}
 # If there's only one screen
 [ "$(echo "$screens" | wc -l)" -lt 2 ] &&
-	{ onescreen "$screens"; postrun; notify-send "󰍹 Only one screen detected." "Using it in its optimal settings...";  exit ;}
-
+#	{ onescreen "$screens"; postrun; notify-send "󰍹 Only one screen detected." "Using it in its optimal settings...";  exit ;}
+	{ onescreen "$screens"; postrun; exit ;}
 xrandr --output eDP1 --mode 1920x1080 --pos 2560x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output VIRTUAL1 --off
 
 postrun
