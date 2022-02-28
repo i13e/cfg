@@ -102,7 +102,7 @@ alias ssc='sudo systemctl'
 if command -v devour >/dev/null; then
   alias z='devour zathura';
   alias m='devour umpv';
-  alias sxiv='devour sxiv';
+  alias sxiv='devour nsxiv -a';
 fi
 
 

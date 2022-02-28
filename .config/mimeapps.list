@@ -1,8 +1,13 @@
 [Default Applications]
+
+# xdg-open will use these settings to determine how to open filetypes.
+# These .desktop entries can also be seen and changed in ~/.local/share/applications/
+
 video/x-matroska=mpv.desktop;
 video/mp4=mpv.desktop;
-image/png=sxiv.desktop;
-image/jpeg=sxiv.desktop;
+image/png=img.desktop;
+image/jpeg=img.desktop;
+image/gif=img.desktop;
 application/vnd.appimage=appimagelauncher.desktop;
 x-scheme-handler/http=brave-browser.desktop;
 x-scheme-handler/https=brave-browser.desktop;
