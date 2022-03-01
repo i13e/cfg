@@ -1,5 +1,3 @@
-# i13e's config files
-
 ## Requirements
 
 - Git
