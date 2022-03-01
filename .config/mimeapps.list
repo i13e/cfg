@@ -8,6 +8,8 @@ video/mp4=mpv.desktop;
 image/png=img.desktop;
 image/jpeg=img.desktop;
 image/gif=img.desktop;
+text/x-shellscript=txt.desktop
+text/plain=txt.desktop
 application/vnd.appimage=appimagelauncher.desktop;
 x-scheme-handler/http=brave-browser.desktop;
 x-scheme-handler/https=brave-browser.desktop;
@@ -16,11 +18,7 @@ application/octet-stream=veracrypt.desktop;
 inode/directory=pcmanfm.desktop;
 x-scheme-handler/trash=pcmanfm.desktop;
 text/html=brave-browser.desktop;
-text/xml=brave.desktop
+text/xml=brave-browser.desktop
 application/pdf=org.pwmt.zathura.desktop
 x-scheme-handler/magnet=brave-browser.desktop
 x-scheme-handler/discord-455712169795780630=discord-455712169795780630.desktop
-
-[Added Associations]
-text/plain=nvim.desktop;
-application/x-shellscript=net.lutris.Lutris.desktop;
