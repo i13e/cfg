@@ -1,0 +1,3 @@
+[submodule ".config/mpv/shaders/SSimDownscaler"]
+	path = .config/mpv/shaders/SSimDownscaler
+	url = https://gist.github.com/36508af3ffc84410fe39761d6969be10.git
