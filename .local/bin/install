@@ -21,6 +21,8 @@ fi;
 
 cfg config status.showUntrackedFiles no
 
+# cfg branch --set-upstream-to=origin/master
+# switch to ssh
 # install paru
 # update packages if on arch
 # switch shell to start using tools
