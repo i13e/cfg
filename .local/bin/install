@@ -21,3 +21,6 @@ fi;
 
 cfg config status.showUntrackedFiles no
 
+# install paru
+# update packages if on arch
+# switch shell to start using tools
