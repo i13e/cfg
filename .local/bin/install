@@ -1,4 +1,6 @@
 #!/bin/sh
+# Install config in your $HOME by running:
+# curl -Lks https://raw.githubusercontent.com/i13e/cfg/master/.local/bin/install | /bin/sh
 git clone --bare git@github.com:i13e/cfg.git "$HOME/.config/cfg"
 cfg() {
 	/usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@"
