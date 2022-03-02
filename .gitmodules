@@ -13,3 +13,27 @@
 [submodule ".local/share/nvim/plugged/nord-vim"]
 	path = .local/share/nvim/plugged/nord-vim
 	url = https://github.com/arcticicestudio/nord-vim.git
+[submodule ".local/share/zsh/plugins/zsh-autopair"]
+	path = .local/share/zsh/plugins/zsh-autopair
+	url = https://github.com/hlissner/zsh-autopair.git
+[submodule ".local/share/zsh/plugins/zsh-vi-mode"]
+	path = .local/share/zsh/plugins/zsh-vi-mode
+	url = https://github.com/jeffreytse/zsh-vi-mode.git
+[submodule ".local/share/zsh/plugins/powerlevel10k"]
+	path = .local/share/zsh/plugins/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k.git
+[submodule ".local/share/zsh/plugins/fast-syntax-highlighting"]
+	path = .local/share/zsh/plugins/fast-syntax-highlighting
+	url = https://github.com/zdharma-continuum/fast-syntax-highlighting.git
+[submodule ".local/share/zsh/plugins/zsh-completions"]
+	path = .local/share/zsh/plugins/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions.git
+[submodule ".local/share/zsh/plugins/fzf"]
+	path = .local/share/zsh/plugins/fzf
+	url = https://github.com/junegunn/fzf.git
+[submodule ".local/share/zsh/plugins/zsh-history-substring-search"]
+	path = .local/share/zsh/plugins/zsh-history-substring-search
+	url = https://github.com/zsh-users/zsh-history-substring-search.git
+[submodule ".local/share/zsh/plugins/zsh-autosuggestions"]
+	path = .local/share/zsh/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git

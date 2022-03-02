@@ -24,6 +24,7 @@ cfg config status.showUntrackedFiles no
 # cfg branch --set-upstream-to=origin/master
 # switch to ssh
 # make folders mkdir ~/vids dl ?
+# submodules: git submodule init && git submodule update
 # install paru
 # update packages if on arch
 # switch shell to start using tools

@@ -97,7 +97,7 @@ source $ZDOTDIR/completion.zsh
 #z4h source $Z4H/ohmyzsh/ohmyzsh/lib/diagnostics.zsh
 #z4h source $Z4H/ohmyzsh/ohmyzsh/plugins/emoji-clock/emoji-clock.plugin.zsh
 #fpath+=($Z4H/ohmyzsh/ohmyzsh/plugins/supervisor)
-
+source ~/.local/share/zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh
 # Define key bindings.
 z4h bindkey z4h-backward-kill-word  Ctrl+Backspace     Ctrl+H
 z4h bindkey z4h-backward-kill-zword Ctrl+Alt+Backspace
@@ -143,24 +143,11 @@ bak() { cp $1 $1.bak }
 
 # Integrate FZF with terminal color scheme
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS='
-    --exact
-    --reverse
-    --ansi
-    --no-bold
-    --prompt=❯\
-    --color=16
-    --color=bg:-1,bg+:8
-    --color=fg:-1,fg+:-1
-    --color=hl:2,hl+:2
-    --color=prompt:5
-    --color=pointer:6
-    --color=marker:11
-    --color=spinner:6
-    --color=info:6'
 
 #if command -v fd >/dev/null; then
 #    export FZF_DEFAULT_COMMAND="fd ."
 #    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 #    export FZF_ALT_C_COMMAND="fd -t d . $HOME"
 #fi
+
+
