@@ -114,10 +114,10 @@ if command -v exa >/dev/null; then
 fi
 
 if command -v paru >/dev/null; then
-	alias upd='checkupd && autosnap-wrapper && hostupd && z4h update';
+	alias upd='checkupd && autosnap-wrapper && hostupd'
 fi
 
-autoload -U zmv
+#autoload -U zmv
 
 take() {
   mkdir "$1" && cd "$1";
