@@ -87,7 +87,8 @@ rcp() {
     --filter=':- .gitignore' \
     --filter=":- $XDG_CONFIG_HOME/git/ignore" \
     "$@"
-}; compdef rcp=rsync
+}
+#; compdef rcp=rsync
 alias rcpd='rcp --delete --delete-after'
 alias rcpu='rcp --chmod=go='
 alias rcpdu='rcpd --chmod=go='
@@ -121,7 +122,9 @@ fi
 
 take() {
   mkdir "$1" && cd "$1";
-}; compdef take=mkdir
+}
+
+#; compdef take=mkdir
 
 zman() {
   PAGER="less -g -I -s '+/^       "$1"'" man zshall;
@@ -131,4 +134,9 @@ zman() {
 r() {
   local time=$1; shift
   sched "$time" "notify-send --urgency=critical 'Reminder' '$@'; ding";
-}; compdef r=sched
+}
+
+precmd() {print -Pn "\e]0;%~\a"}
+preexec(){print -Pn "\e]0;${1//\%/%%}\a"}
+
+#; compdef r=sched

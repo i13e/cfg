@@ -32,10 +32,25 @@ if (( $+commands[fd] )); then
 fi
 
 ## Zsh4Humans (OLD)
-#setopt glob_dots magic_equal_subst no_multi_os no_local_loops
-#setopt rm_star_silent rc_quotes glob_star_short
-#setopt complete_in_word         # don't move cursor to end of line on completion
-#setopt no_auto_menu              # require an extra TAB press to open the completion menu
+setopt glob_dots magic_equal_subst no_multi_os no_local_loops
+setopt rm_star_silent rc_quotes glob_star_short
+setopt complete_in_word         # don't move cursor to end of line on completion
+setopt autocd
+setopt always_to_end auto_cd no_auto_remove_slash c_bases no_flow_control interactive_comments
+
+#prompt_percent prompt_cr no_prompt_bang no_prompt_subst
+#    'no_prompt_bang'         'no_prompt_subst'
+#    'prompt_sp'              'typeset_silent'   'no_auto_remove_slash'   'no_list_types'
+#auto_param_slash
+
+#noglobalrcs
+#globdots
+#nolisttypes
+#promptsubst
+#typesetsilent
+
+
+
 
 # Treat these characters as part of a word.
 WORDCHARS='_-*?[]~&.;!#$%^(){}<>'

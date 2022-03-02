@@ -1,3 +1,5 @@
+source $ZDOTDIR/config.zsh
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,7 +7,12 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-source $ZDOTDIR/config.zsh
+if [[ $TERM == dumb || -n $INSIDE_EMACS ]]; then
+  unsetopt zle prompt_cr prompt_subst
+  whence -w precmd >/dev/null && unfunction precmd
+  whence -w preexec >/dev/null && unfunction preexec
+  PS1='$ '
+fi
 
 # NOTE ZGEN_DIR and ZGEN_SOURCE are forward-declared in modules/shell/zsh.nix
 # NOTE Using zgenom because zgen is no longer maintained
@@ -14,11 +21,9 @@ source $ZDOTDIR/config.zsh
 #  git clone https://github.com/jandamm/zgenom "$ZGEN_DIR"
 #fi
 #source $ZGEN_DIR/zgenom.zsh
-
 # Check for plugin and zgenom updates every 7 days
 # This does not increase the startup time.
 #cfg submodule update
-
 #if ! zgenom saved; then
 #  echo "Initializing zgenom"
 #  rm -f $ZDOTDIR/*.zwc(N) \
@@ -27,7 +32,10 @@ source $ZDOTDIR/config.zsh
 
 # NOTE Be extra careful about plugin load order, or subtle breakage
 # can emerge. This is the best order I've found for these plugins.
-source ~/.local/share/zsh/plugins/fzf/shell/
+
+[[ $- == *i* ]] && source "/home/ianb/.local/share/zsh/plugins/fzf/shell/completion.zsh" 2> /dev/null
+source "/home/ianb/.local/share/zsh/plugins/fzf/shell/key-bindings.zsh"
+source ~/.local/share/zsh/plugins/fzf/shell/completion.zsh
 source ~/.local/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 source ~/.local/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source ~/.local/share/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
@@ -43,7 +51,7 @@ source ~/.local/share/zsh/plugins/zsh-autopair/autopair.zsh
 if [[ $TERM != dumb ]]; then
   autoload -Uz compinit && compinit -u -d $ZSH_CACHE/zcompdump
 
-#  source $ZDOTDIR/keybinds.zsh
+  source $ZDOTDIR/keybinds.zsh
   source $ZDOTDIR/completion.zsh
   source $ZDOTDIR/aliases.zsh
   source $XDG_CONFIG_HOME/git/aliases.zsh
@@ -52,7 +60,7 @@ if [[ $TERM != dumb ]]; then
   # If you have host-local configuration, put it here
   #_source $ZDOTDIR/local.zshrc
 
- # _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
+#  _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
   autopair-init
 fi
 
@@ -81,3 +89,5 @@ export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+#[ -f $ZDOTDIR/fzf.zsh ] && source $ZDOTDIR/fzf.zsh
