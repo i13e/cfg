@@ -4,7 +4,6 @@
 #
 # Recommended hosts file here: https://github.com/StevenBlack/hosts
 # or from anywhere you'd like.
-
 sudo wget -qO /etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts
 sudo chmod 644 /etc/hosts
 while true; do
