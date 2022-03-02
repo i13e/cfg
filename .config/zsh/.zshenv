@@ -1,5 +1,3 @@
-export ZDOTDIR=~/.config/zsh
-
 function _cache {
   (( $+commands[$1] )) || return 1
   local cache_dir="$XDG_CACHE_HOME/${SHELL##*/}"

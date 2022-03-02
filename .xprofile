@@ -20,6 +20,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 #export ERRFILE="$XDG_DATA_HOME/X11/xsession-errors"
 # Autostart
 layout
