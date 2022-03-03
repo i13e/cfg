@@ -25,9 +25,7 @@ fi
 
 # NOTE Be extra careful about plugin load order, or subtle breakage
 # can emerge. This is the best order I've found for these plugins.
-[[ $- == *i* ]] && source "$HOME/.local/share/zsh/plugins/fzf/shell/completion.zsh" 2> /dev/null
-#source "$XDG_DATA_HOME/zsh/plugins/fzf/shell/key-bindings.zsh"
-#source "$XDG_DATA_HOME/zsh/plugins/fzf/shell/completion.zsh"
+[ -f $ZDOTDIR/fzf.zsh ] && source "$ZDOTDIR/fzf.zsh"
 source "$XDG_DATA_HOME/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 source "$XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh"
@@ -37,7 +35,6 @@ source "$XDG_DATA_HOME/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
 source "$XDG_DATA_HOME/zsh/plugins/zsh-autopair/autopair.zsh"
 source "$ZDOTDIR/p10k.zsh"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 #  zgenom save
 #  zgenom compile $ZDOTDIR
 
@@ -96,5 +93,4 @@ ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=white,bold'
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 #source $ZDOTDIR/p10k.zsh
-#[ -f $ZDOTDIR/fzf.zsh ] && source $ZDOTDIR/fzf.zsh
 
