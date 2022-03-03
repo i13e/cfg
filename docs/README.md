@@ -13,3 +13,6 @@ This requires the public key of the machine where the setup is being
 installed to be registered as authorized on Github.
 
 ### Notes
+
+The install script is currently **unfinished** and will break your system
+if you attempt to use it.
