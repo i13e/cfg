@@ -26,13 +26,15 @@ fi
 # NOTE Be extra careful about plugin load order, or subtle breakage
 # can emerge. This is the best order I've found for these plugins.
 [ -f $ZDOTDIR/fzf.zsh ] && source "$ZDOTDIR/fzf.zsh"
-source "$XDG_DATA_HOME/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
-source "$XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-source "$XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh"
-source "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
-source "$XDG_DATA_HOME/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh"
-source "$XDG_DATA_HOME/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
-source "$XDG_DATA_HOME/zsh/plugins/zsh-autopair/autopair.zsh"
+source "$ZPLUGDIR/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+source "$ZPLUGDIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+source "$ZPLUGDIR/zsh-completions/zsh-completions.plugin.zsh"
+source "$ZPLUGDIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
+source "$ZPLUGDIR/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh"
+source "$ZPLUGDIR/powerlevel10k/powerlevel10k.zsh-theme"
+source "$ZPLUGDIR/zsh-autopair/autopair.zsh"
+
+# To customize prompt, run `p10k configure` or edit $ZDOTDIR/p10k.zsh.
 source "$ZDOTDIR/p10k.zsh"
 
 #  zgenom save
@@ -54,7 +56,6 @@ if [[ $TERM != dumb ]]; then
   _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
   autopair-init
 fi
-
 
 # Export environment variables.
 export HISTFILE="$XDG_DATA_HOME/history"
@@ -90,7 +91,3 @@ ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=white,bold'
 ZSH_HIGHLIGHT_STYLES[redirection]='fg=white,bold'
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=white,bold'
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=white,bold'
-
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-#source $ZDOTDIR/p10k.zsh
-
