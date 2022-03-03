@@ -7,13 +7,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [[ $TERM == dumb || -n $INSIDE_EMACS ]]; then
-  unsetopt zle prompt_cr prompt_subst
-  whence -w precmd >/dev/null && unfunction precmd
-  whence -w preexec >/dev/null && unfunction preexec
-  PS1='$ '
-fi
-
 # NOTE ZGEN_DIR and ZGEN_SOURCE are forward-declared in modules/shell/zsh.nix
 # NOTE Using zgenom because zgen is no longer maintained
 #if [ ! -d "$ZGEN_DIR" ]; then
@@ -32,18 +25,19 @@ fi
 
 # NOTE Be extra careful about plugin load order, or subtle breakage
 # can emerge. This is the best order I've found for these plugins.
+[[ $- == *i* ]] && source "$HOME/.local/share/zsh/plugins/fzf/shell/completion.zsh" 2> /dev/null
+#source "$XDG_DATA_HOME/zsh/plugins/fzf/shell/key-bindings.zsh"
+#source "$XDG_DATA_HOME/zsh/plugins/fzf/shell/completion.zsh"
+source "$XDG_DATA_HOME/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+source "$XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+source "$XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh"
+source "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
+source "$XDG_DATA_HOME/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh"
+source "$XDG_DATA_HOME/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
+source "$XDG_DATA_HOME/zsh/plugins/zsh-autopair/autopair.zsh"
+source "$ZDOTDIR/p10k.zsh"
 
-[[ $- == *i* ]] && source "/home/ianb/.local/share/zsh/plugins/fzf/shell/completion.zsh" 2> /dev/null
-source "/home/ianb/.local/share/zsh/plugins/fzf/shell/key-bindings.zsh"
-source ~/.local/share/zsh/plugins/fzf/shell/completion.zsh
-source ~/.local/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-source ~/.local/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-source ~/.local/share/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
-source ~/.local/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-source ~/.local/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh
-source ~/.local/share/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme
-source ~/.local/share/zsh/plugins/zsh-autopair/autopair.zsh
-
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 #  zgenom save
 #  zgenom compile $ZDOTDIR
 
@@ -60,23 +54,22 @@ if [[ $TERM != dumb ]]; then
   # If you have host-local configuration, put it here
   #_source $ZDOTDIR/local.zshrc
 
-#  _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
+  _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
   autopair-init
 fi
 
 
 # Export environment variables.
-export WGET="$XDG_CONFIG_HOME/wgetrc"
 export HISTFILE="$XDG_DATA_HOME/history"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-export LESSHISTFILE=-
 export GOPATH="$XDG_DATA_HOME/go"
 
 # Defaults
 export PAGER="less"
 export GPG_TTY=$TTY
 export LESS='-rsiF --mouse --wheel-lines=3'
+export LESSHISTFILE=-
 
 # Color Man Pages
 export LESS_TERMCAP_mb=$'\E[1;34m'     # begin bold
@@ -87,7 +80,21 @@ export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+# Syntax Highlighting
+typeset -A ZSH_HIGHLIGHT_STYLES
 
+ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[function]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=white,bold'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=white,bold'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=white,bold'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=white,bold'
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+#source $ZDOTDIR/p10k.zsh
 #[ -f $ZDOTDIR/fzf.zsh ] && source $ZDOTDIR/fzf.zsh
+

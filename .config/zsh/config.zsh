@@ -1,5 +1,10 @@
 ## ZSH configuration
-
+if [[ $TERM == dumb || -n $INSIDE_EMACS ]]; then
+  unsetopt zle prompt_cr prompt_subst
+  whence -w precmd >/dev/null && unfunction precmd
+  whence -w preexec >/dev/null && unfunction preexec
+  PS1='$ '
+fi
 ## Plugins
 # zsh-vi-mode
 export ZVM_INIT_MODE=sourcing
@@ -10,22 +15,16 @@ export _FASD_DATA="$XDG_CACHE_HOME/fasd"
 export _FASD_VIMINFO="$XDG_CACHE_HOME/viminfo"
 
 # fzf
+# --ansi, -- nobold, $FZF_DEFAULT_OPTS
 if (( $+commands[fd] )); then
   export FZF_DEFAULT_OPTS='
     --exact
     --reverse
-    --ansi
-    --no-bold
     --prompt=❯\
-    --color=16
-    --color=bg:-1,bg+:8
-    --color=fg:-1,fg+:-1
-    --color=hl:2,hl+:2
-    --color=prompt:5
-    --color=pointer:6
-    --color=marker:11
-    --color=spinner:6
-    --color=info:6'
+    --color=fg:#e5e9f0,bg:#3b4252,hl:#81a1c1
+    --color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1
+    --color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac
+    --color=marker:#a3be8b,spinner:#b48dac,header:#a3be8b'
   export FZF_DEFAULT_COMMAND="fd ."
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="fd -t d . $HOME"
