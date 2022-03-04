@@ -24,7 +24,7 @@ alias yta='yt -x -f bestaudio/best'
 
 # arch
 alias unlock='sudo rm /var/lib/pacman/db.lck' # remove pacman lock
-alias cleanup='paru -Rns $(paru -Qtdq) & paccache -ruk0'
+alias cleanup='paru -Rns $(paru -Qtdq) && paccache -ruk0'
 alias pacfind='pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S'
 
 alias mk="make"
@@ -119,7 +119,7 @@ if (( $+commands[devour] )); then
 
     # open a twitch stream in mpv
     function twitch { streamlink --twitch-disable-hosting --twitch-disable-reruns\
-        --twitch-disable-ads -p "devour mpv -" "http://twitch.tv/$@" 720p }
+        --twitch-disable-ads -p "devour mpv -" "http://twitch.tv/$@" 720p60 }
 fi
 if (( $+commands[exa] )); then
     alias ls='exa -al --color=always --color-scale --git --group-directories-first';
