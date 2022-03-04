@@ -13,7 +13,6 @@ augroup end
 " Initialize vim-plug
 " Specify a directory for plugins
 "call plug#begin('~/.local/share/nvim/plugged')
-"Plug 'arcticicestudio/nord-vim'		" color scheme
 "Plug 'reedes/vim-pencil'		" improved writing experience
 "Plug 'itchyny/lightline.vim'		" status bar
 "Plug 'tpope/vim-fugitive'		" git branch in status line
@@ -111,6 +110,29 @@ if has('nvim') || has('gui_running')
   autocmd! FileType fzf
   autocmd  FileType fzf set laststatus=0 | autocmd WinLeave <buffer> set laststatus=2
 endif
+
+
+
+
+
+
+" treesitter configuration
+lua << EOF
+require("nvim-treesitter.configs").setup {
+  ensure_installed = "maintained",
+  highlight = {
+    enable = true,
+  },
+  indent = {
+    enable = true
+    }
+}
+EOF
+
+
+
+
+
 
 " Automatically deletes all trailing whitespace on save.
 	autocmd BufWritePre * %s/\s\+$//e
