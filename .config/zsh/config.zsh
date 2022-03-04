@@ -5,7 +5,12 @@ if [[ $TERM == dumb || -n $INSIDE_EMACS ]]; then
   whence -w preexec >/dev/null && unfunction preexec
   PS1='$ '
 fi
+
 ## Plugins
+# directory
+mkdir -p $XDG_DATA_HOME/zsh/plugins
+export ZPLUGDIR=$XDG_DATA_HOME/zsh/plugins
+
 # zsh-vi-mode
 export ZVM_INIT_MODE=sourcing
 export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
@@ -20,7 +25,9 @@ if (( $+commands[fd] )); then
   export FZF_DEFAULT_OPTS='
     --exact
     --reverse
+    --cycle
     --prompt=❯\
+    --pointer=➜
     --color=fg:#e5e9f0,bg:#3b4252,hl:#81a1c1
     --color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1
     --color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac

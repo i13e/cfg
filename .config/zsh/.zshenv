@@ -1,6 +1,3 @@
-mkdir -p $HOME/.local/share/zsh/plugins
-export ZPLUGDIR=$HOME/.local/share/zsh/plugins
-
 function _cache {
   (( $+commands[$1] )) || return 1
   local cache_dir="$XDG_CACHE_HOME/${SHELL##*/}"
