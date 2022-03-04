@@ -41,7 +41,3 @@
 	path = .local/share/zsh/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
 	shallow = true
-[submodule ".local/share/nvim/site/pack/packer/packer.nvim"]
-	path = .local/share/nvim/site/pack/packer/packer.nvim
-	url = https://github.com/wbthomason/packer.nvim
-	shallow = true
