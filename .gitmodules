@@ -1,18 +1,19 @@
 [submodule ".config/mpv/shaders/SSimDownscaler"]
 	path = .config/mpv/shaders/SSimDownscaler
 	url = https://gist.github.com/36508af3ffc84410fe39761d6969be10.git
+    shallow = true
 [submodule ".config/mpv/shaders/SSimSuperRes"]
 	path = .config/mpv/shaders/SSimSuperRes
 	url = https://gist.github.com/2364ffa6e81540f29cb7ab4c9bc05b6b.git
+    shallow = true
 [submodule ".config/mpv/shaders/KrigBilateral"]
 	path = .config/mpv/shaders/KrigBilateral
 	url = https://gist.github.com/a015fc885d5c22e6891820ad89555637.git
+    shallow = true
 [submodule ".config/mpv/shaders/adaptive-sharpen"]
 	path = .config/mpv/shaders/adaptive-sharpen
 	url = https://gist.github.com/8a77e4eb8276753b54bb94c1c50c317e.git
-[submodule ".local/share/nvim/plugged/nord-vim"]
-	path = .local/share/nvim/plugged/nord-vim
-	url = https://github.com/arcticicestudio/nord-vim.git
+    shallow = true
 [submodule ".local/share/zsh/plugins/zsh-autopair"]
 	path = .local/share/zsh/plugins/zsh-autopair
 	url = https://github.com/hlissner/zsh-autopair.git

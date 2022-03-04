@@ -41,7 +41,7 @@ set hidden  				            " allow buffer switching without saving
 set ignorecase				            " ignore case when searching
 set smartcase			    	        " search for uppercase only when you specify uppercase
 set cursorline		    		        " show cursor line
-set showtabline=2   			        " disable tab line
+set showtabline=1   			        " disable tab line
 "set guicursor=                          " status bar shows mode; cursor doesn't need to
 set clipboard+=unnamedplus		        " Enable copy to system clipboard
 "set noshowmode                          " disable mode indicator as it is handled by lualine
