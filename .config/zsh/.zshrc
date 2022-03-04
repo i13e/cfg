@@ -40,6 +40,8 @@ source "$ZDOTDIR/p10k.zsh"
 #  zgenom save
 #  zgenom compile $ZDOTDIR
 
+autoload -U colors && colors
+
 ## Bootstrap interactive sessions
 if [[ $TERM != dumb ]]; then
   autoload -Uz compinit && compinit -u -d $ZSH_CACHE/zcompdump

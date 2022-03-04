@@ -21,6 +21,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export GPG_TTY=$(tty)
 #export ERRFILE="$XDG_DATA_HOME/X11/xsession-errors"
 # Autostart
 layout
@@ -31,6 +32,4 @@ sxhkd & remaps
 unclutter &
 pidof -s "beet" || setsid -f beet bpd
 pidof -s "syncthing" || setsid -f syncthing -no-browser
-pidof -s "emacs" || setsid -f emacs --daemon #&& emacsclient -c --eval "(delete-frame)"
 pidof -s "redshift" || setsid -f redshift
-#light-locker --late-locking --lock-on-suspend --no-idle-hint &

@@ -51,6 +51,16 @@ set completeopt=menu,menuone,noselect   " options for completion menu
 ""set encoding=utf-8
 set mouse=a
 
+" infinite undos
+  if !isdirectory($HOME . "/.config/nvim/undo")
+      call mkdir($HOME . "/.config/nvim/undo", "p")
+  endif
+  set undofile
+  set undodir=~/.config/nvim/undo
+  let s:undos = split(globpath(&undodir, '*'), "\n")
+  call filter(s:undos, 'getftime(v:val) < localtime() - (60 * 60 * 24 * 90)')
+  call map(s:undos, 'delete(v:val)')
+
 " python
 let g:loaded_python_provider = 0
 let g:python3_host_prog = '/usr/bin/python'
@@ -113,10 +123,14 @@ endif
 
 
 
+" completion
+lua require'lspconfig'.pyright.setup{}
+"local lsp = require "lspconfig"
+"local coq = require "coq" -- add this
 
-
-
-" treesitter configuration
+"lsp.<server>.setup(<stuff...>)                              -- before
+"lsp.<server>.setup(coq.lsp_ensure_capabilities(<stuff...>)) -- after
+" syntax
 lua << EOF
 require("nvim-treesitter.configs").setup {
   ensure_installed = "maintained",
