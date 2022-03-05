@@ -22,7 +22,7 @@ export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export GPG_TTY=$(tty)
-#export ERRFILE="$XDG_DATA_HOME/X11/xsession-errors"
+export ERRFILE="$XDG_DATA_HOME/x11/xsession-errors"
 # Autostart
 layout
 xrdb "$XDG_CONFIG_HOME"/x11/xresources
