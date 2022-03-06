@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # see https://unix.stackexchange.com/a/295652/332452
 . /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
 
@@ -8,6 +9,7 @@ export SSH_AUTH_SOCK
 
 # see https://github.com/NixOS/nixpkgs/issues/14966#issuecomment-520083836
 mkdir -p "$HOME/.local/share/keyrings"
+
 # Export Variables
 export PATH="$HOME/.local/bin:$PATH"
 export VISUAL="/usr/bin/nvim"
@@ -23,6 +25,7 @@ export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export GPG_TTY=$(tty)
 export ERRFILE="$XDG_DATA_HOME/x11/xsession-errors"
+
 # Autostart
 layout
 xrdb "$XDG_CONFIG_HOME"/x11/xresources

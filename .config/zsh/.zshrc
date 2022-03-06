@@ -81,15 +81,15 @@ export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
 # Syntax Highlighting
-typeset -A ZSH_HIGHLIGHT_STYLES
+#typeset -A ZSH_HIGHLIGHT_STYLES
 
-ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
-ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=green,bold'
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
-ZSH_HIGHLIGHT_STYLES[function]='fg=green,bold'
-ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
-ZSH_HIGHLIGHT_STYLES[precommand]='fg=green,bold'
-ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=white,bold'
-ZSH_HIGHLIGHT_STYLES[redirection]='fg=white,bold'
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=white,bold'
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=white,bold'
+#ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+#ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=green,bold'
+#ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
+#ZSH_HIGHLIGHT_STYLES[function]='fg=green,bold'
+#ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
+#ZSH_HIGHLIGHT_STYLES[precommand]='fg=green,bold'
+#ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=white,bold'
+#ZSH_HIGHLIGHT_STYLES[redirection]='fg=white,bold'
+#ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=white,bold'
+#ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=white,bold'
