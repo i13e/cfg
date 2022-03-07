@@ -24,7 +24,7 @@ alias yta='yt -x -f bestaudio/best'
 
 # arch
 alias unlock='sudo rm /var/lib/pacman/db.lck' # remove pacman lock
-alias cleanup='paru -Rns $(paru -Qtdq) && paccache -ruk0'
+alias cleanup='paru -Rns $(paru -Qtdq) ; paccache -ruk0'
 alias pacfind='pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S'
 
 alias mk="make"
