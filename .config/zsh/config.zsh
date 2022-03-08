@@ -37,13 +37,12 @@ if (( $+commands[fd] )); then
   export FZF_ALT_C_COMMAND="fd -t d . $HOME"
 fi
 
-## Zsh4Humans (OLD)
-setopt glob_dots magic_equal_subst no_multi_os no_local_loops
-setopt rm_star_silent rc_quotes glob_star_short
-setopt complete_in_word         # don't move cursor to end of line on completion
-setopt autocd
-setopt always_to_end auto_cd no_auto_remove_slash c_bases no_flow_control interactive_comments
 
+## Zsh4Humans (OLD)
+#setopt glob_dots magic_equal_subst no_multi_os no_local_loops
+#setopt rm_star_silent rc_quotes glob_star_short
+#setopt complete_in_word         # don't move cursor to end of line on completion
+setopt always_to_end auto_cd no_auto_remove_slash c_bases no_flow_control interactive_comments
 #prompt_percent prompt_cr no_prompt_bang no_prompt_subst
 #    'no_prompt_bang'         'no_prompt_subst'
 #    'prompt_sp'              'typeset_silent'   'no_auto_remove_slash'   'no_list_types'
@@ -104,7 +103,7 @@ DIRSTACKSIZE=9
 #unsetopt AUTO_CD                 # Implicit CD slows down plugins
 setopt AUTO_PUSHD                # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS         # Do not store duplicates in the stack.
-setopt PUSHD_SILENT        	 # Do not print the directory stack after pushd or popd.
+setopt PUSHD_SILENT              # Do not print the directory stack after pushd or popd.
 setopt PUSHD_TO_HOME             # Push to home directory when no argument is given.
 setopt CDABLE_VARS               # Change directory to a path stored in a variable.
 setopt MULTIOS                   # Write to multiple descriptors.

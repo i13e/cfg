@@ -1,36 +1,35 @@
 [user]
-	name = Ian Breckenridge
-	email = 62034540+i13e@users.noreply.github.com
-	signingkey = CF74CE671D8462B5
+    name = Ian Breckenridge
+    email = 62034540+i13e@users.noreply.github.com
+    signingkey = CF74CE671D8462B5
 [commit]
-	gpgSign = true
+    gpgSign = true
 [tag]
-	gpgSign = true
+    gpgSign = true
 [core]
-	editor = $EDITOR
-	whitespace = trailing-space
+    editor = $EDITOR
+    whitespace = trailing-space
 [init]
-	defaultBranch = master
+    defaultBranch = master
 [github]
-	user = i13e
-[rebase]
-	autosquash = true
+    user = i13e
 [push]
-	default = current
-	gpgSign = if-asked
+    default = current
+    autoSquash = true
+    gpgSign = if-asked
 [pull]
-	rebase = true
+    rebase = true
 [alias]
-	unadd = reset HEAD
-	# data analysis
-	ranked-authors = !git authors | sort | uniq -c | sort -n
-	emails = !git log --format="%aE" | sort -u
-	email-domains = !git log --format="%aE" | awk -F'@' '{print $2}' | sort -u
+    unadd = reset HEAD
+    # data analysis
+    ranked-authors = !git authors | sort | uniq -c | sort -n
+    emails = !git log --format="%aE" | sort -u
+    email-domains = !git log --format="%aE" | awk -F'@' '{print $2}' | sort -u
 [filter "lfs"]
-	required = true
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	clean = git-lfs clean -- %f
+    required = true
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    clean = git-lfs clean -- %f
 [url "https://github.com/"]
     insteadOf = gh:
 [url "git@github.com:"]

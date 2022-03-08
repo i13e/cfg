@@ -109,7 +109,8 @@ alias ssc='sudo systemctl'
 alias jctl='sudo journalctl'
 alias sctl='sudo systemctl'
 
-
+# save search engines in chrome/brave/etc
+#sqlite3 -csv ~/.config/BraveSoftware/Brave-Browser/Default/Web\ Data 'select short_name,keyword,url from keywords' > ~/search-engines.csv
 # check if installed
 
 if (( $+commands[devour] )); then

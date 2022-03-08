@@ -1,5 +1,3 @@
-export PYTHONHISTFILE="$XDG_DATA_HOME"
-
 function _cache {
   (( $+commands[$1] )) || return 1
   local cache_dir="$XDG_CACHE_HOME/${SHELL##*/}"
@@ -14,6 +12,7 @@ function _cache {
       source "$cache" || rm -f $cache
   fi
 }
+export ZSH_CACHE="$XDG_CACHE_HOME/zsh"
 
 function _source {
   for file in "$@"; do
