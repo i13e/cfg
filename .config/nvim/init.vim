@@ -13,13 +13,13 @@ augroup end
 " Initialize vim-plug
 " Specify a directory for plugins
 "call plug#begin('~/.local/share/nvim/plugged')
-"Plug 'reedes/vim-pencil'		" improved writing experience
+"Plug 'reedes/vim-pencil'		    " improved writing experience
 "Plug 'itchyny/lightline.vim'		" status bar
-"Plug 'tpope/vim-fugitive'		" git branch in status line
+"Plug 'tpope/vim-fugitive'		    " git branch in status line
 "Plug 'mgee/lightline-bufferline'	" buffers in tabline
 "Plug 'junegunn/fzf.vim'			" fzf integration with vim
 "Plug 'machakann/vim-sandwich'		" surround text objects
-"Plug 'junegunn/goyo.vim'		" distraction free writing
+"Plug 'junegunn/goyo.vim'		    " distraction free writing
 "Plug 'junegunn/limelight.vim'		" hyperfocused writing
 "Plug 'ap/vim-css-color'			" css colors highlighted
 "Plug 'glepnir/dashboard-nvim'
@@ -31,23 +31,23 @@ set termguicolors                       " enable 24-bit RGB colors
 colorscheme nord                        " color scheme selection
 
 " core configuration
-set scrolloff=7		    		        " Show 7 lines around the cursorline
-set tabstop=4	    			        " length of a tab
+set scrolloff=7                         " Show 7 lines around the cursorline
+set tabstop=4                           " length of a tab
 set expandtab                           " tab uses tabstop length
 set shiftwidth=4                        " level of indentation
-set number number			            " Enable line numbers
-set hidden  				            " allow buffer switching without saving
-set ignorecase				            " ignore case when searching
-set smartcase			    	        " search for uppercase only when you specify uppercase
-set cursorline		    		        " show cursor line
-set showtabline=1   			        " disable tab line
+set number number                       " Enable line numbers
+set hidden                              " allow buffer switching without saving
+set ignorecase                          " ignore case when searching
+set smartcase                           " search for uppercase only when you specify uppercase
+set cursorline                          " show cursor line
+set showtabline=1                       " disable tab line
 "set guicursor=                          " status bar shows mode; cursor doesn't need to
-set clipboard+=unnamedplus		        " Enable copy to system clipboard
+set clipboard+=unnamedplus              " Enable copy to system clipboard
 "set noshowmode                          " disable mode indicator as it is handled by lualine
 set spelllang=en_us                     " set language for spell checking
 set completeopt=menu,menuone,noselect   " options for completion menu
-""let g:netrw_banner = 0                  " Hide banner shown in the file explorer
-""let g:netrw_liststyle = 3		          " Use tree view in file explorer
+""let g:netrw_banner = 0                 " Hide banner shown in the file explorer
+""let g:netrw_liststyle = 3             " Use tree view in file explorer
 ""set encoding=utf-8
 set mouse=a
 

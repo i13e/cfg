@@ -175,6 +175,19 @@ function lie {
 # https://news.ycombinator.com/item?id=18898898
 function pycd { pushd `python -c "import os.path, $1; print(os.path.dirname($1.__file__))"`; }
 
+# https://news.ycombinator.com/item?id=9869613
+function up {
+    if [[ "$#" < 1 ]] ; then
+        cd ..
+    else
+        CDSTR=""
+        for i in {1..$1} ; do
+            CDSTR="../$CDSTR"
+        done
+        cd $CDSTR
+    fi
+}
+
 # set terminal window title
 function precmd { print -Pn "\e]0;%~\a"; }
 function preexec { print -Pn "\e]0;${1//\%/%%}\a"; }
