@@ -5,16 +5,14 @@
 
 git clone --bare https://github.com/i13e/cfg.git "$HOME/.config/cfg"
 
-cfg() {
-	/usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@"
-}
+cfg() { /usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@" }
 
 mkdir -p "$HOME/.cfg-backup/"
 
 if cfg checkout; then
   echo "Successfully checked out dotfiles.";
   else
-    echo "Backing up pre-existing dot files.";
+    echo "Backing up pre-existing dotfiles.";
     cfg checkout 2>&1 | grep -E "\s+\." | awk {'print $1'} | xargs -I{} mv {} "$HOME/.cfg-backup/"
     cfg checkout
 fi;
