@@ -1,6 +1,3 @@
-" load packer
-lua require('plugins')
-
 "Plug 'reedes/vim-pencil'		    " improved writing experience
 "Plug 'tpope/vim-fugitive'		    " git branch in status line
 "Plug 'junegunn/fzf.vim'			" fzf integration with vim
@@ -10,42 +7,60 @@ lua require('plugins')
 "Plug 'ap/vim-css-color'			" css colors highlighted
 "Plug 'glepnir/dashboard-nvim'
 
-" ==============================
-" general configuration
-" ==============================
-
-" color configuration
-"set termguicolors                      " enable 24-bit RGB colors
-"colorscheme nord                       " color scheme selection
-
 lua << EOF
+-- load packer
+require('plugins')
+
+-- =============================
+-- general configuration
+-- =============================
+
+-- aliases (NOTE: vim.opt is better than vim.o)
+local opt = vim.opt                     -- global
+local g   = vim.g                       -- global for let options
+local wo  = vim.wo                      -- window local
+local bo  = vim.bo                      -- buffer local
+local fn  = vim.fn                      -- access vim functions
+local cmd = vim.cmd                     -- vim commands
+--local map = require('user.utils').map -- import map helper
+
+-- IMPROVE NEOVIM STARTUP
+-- https://github.com/editorconfig/editorconfig-vim/issues/50
+g.loaded_python_provier=0
+g.python3_host_skip_check = 1
+g.python3_host_prog='/usr/bin/python'
+opt.pyxversion=3
+
 
 --color configuration
-vim.o.termguicolors = true              --enable 24-bit RGB colors
-vim.cmd [[colorscheme nord]]            --colorscheme selection
+opt.termguicolors = true                -- enable 24-bit RGB colors
+cmd [[colorscheme nord]]                -- colorscheme selection
 
-local set = vim.opt                     --
-
-set.scrolloff = 7                       --show 7 lines around the cursorline
-set.tabstop = 4                         --length of a tab
---set.softtabstop = 4                     --?
-set.expandtab = true                    --tab uses tabstop length
-set.shiftwidth = 4                      --level of indentation
-vim.o.hlsearch = false                  --set highlight on search
-vim.wo.number = true                    --make line numbers default
---vim.wo.relativenumber = true            --make
-set.hidden = true                       --allow buffer switching without saving
-vim.o.ignorecase = true                 --case insensitive searching
-vim.o.smartcase = true                  --UNLESS /C or capital in search
-set.cursorline = true                   --show cursor line
+opt.scrolloff = 7                       -- show 7 lines around the cursorline
+opt.tabstop = 4                         -- length of a tab
+--opt.softtabstop = 4                     -- delete tabs instead of spaces?
+opt.expandtab = true                    -- tab uses tabstop length
+opt.shiftwidth = 4                      -- level of indentation
+opt.hlsearch = false                    -- set highlight on search
+wo.number = true                        -- make line numbers default
+--vim.wo.relativenumber = true            -- make relative numbers default
+opt.hidden = true                       -- allow buffer switching without saving
+opt.ignorecase = true                   -- case insensitive searching
+opt.smartcase = true                    -- UNLESS /C or capital in search
+opt.cursorline = true                   -- show cursor line
 
 
+opt.showmode = false                    -- disable mode indicator (handled by lualine)
+
+opt.completeopt = "menuone,noselect"    -- options for completion menu
+
+opt.title = true
 
 
 
 
-vim.o.mouse = 'a'                       --enable mouse mode
-vim.opt.undofile = true                 --Save undo history
+opt.mouse = 'a'                         -- enable mouse mode
+opt.undofile = true                     -- save undo history
 
 EOF
 
@@ -59,12 +74,12 @@ EOF
 "set ignorecase                          " ignore case when searching
 "set smartcase                           " search for uppercase only when you specify uppercase
 "set cursorline                          " show cursor line
-set showtabline=1                       " disable tab line
+"set showtabline=1                        " disable tab line
 ""set guicursor=                         " status bar shows mode; cursor doesn't need to
 set clipboard+=unnamedplus              " Enable copy to system clipboard
-set noshowmode                          " disable mode indicator as it is handled by lualine
+"set noshowmode                          " disable mode indicator as it is handled by lualine
 set spelllang=en_us                     " set language for spell checking
-set completeopt=menu,menuone,noselect   " options for completion menu
+"set completeopt=menu,menuone,noselect   " options for completion menu
 ""let g:netrw_banner = 0                  " Hide banner shown in the file explorer
 ""let g:netrw_liststyle = 3               " Use tree view in file explorer
 ""set encoding=utf-8
@@ -74,10 +89,6 @@ set completeopt=menu,menuone,noselect   " options for completion menu
 let s:undos = split(globpath(&undodir, '*'), "\n")
 call filter(s:undos, 'getftime(v:val) < localtime() - (60 * 60 * 24 * 90)')
 call map(s:undos, 'delete(v:val)')
-
-" Neovim python support
-lua vim.g.loaded_python_provider = 0
-let g:python3_host_prog = '/usr/bin/python'
 
 " ==============================
 " keybindings
