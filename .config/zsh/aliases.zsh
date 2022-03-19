@@ -122,7 +122,7 @@ if (( $+commands[devour] )); then
 
     # open a twitch stream in mpv
     function twitch { streamlink --twitch-disable-hosting --twitch-disable-reruns\
-        --twitch-disable-ads -p "devour mpv -" "http://twitch.tv/$@" 720p60 }
+        --twitch-disable-ads -p "devour mpv -" "http://twitch.tv/$@" 480p }
 fi
 if (( $+commands[exa] )); then
     alias ls='exa -al --color=always --color-scale --git --group-directories-first';
