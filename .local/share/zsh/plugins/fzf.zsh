@@ -4,4 +4,7 @@
 
 # Key bindings
 # ------------
-source "/usr/share/fzf/key-bindings.zsh"
+FILE="/usr/share/fzf/key-bindings.zsh"
+if [[ -a $FILE ]]; then
+    source $FILE
+fi
