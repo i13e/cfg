@@ -1,10 +1,10 @@
 #!/bin/sh
-[ -x /usr/bin/paru ] && [ -x /usr/bin/checkupdates ] && x="$(( $(paru -Qua | wc -l) + $(checkupdates | wc -l) ))"
-if [ "$x" = 1 ] ; then
-    echo "$x upstream update available" >&2
+[ -x /usr/bin/paru ] && [ -x /usr/bin/checkupdates ] && x="$(( $(paru -Qua 2> /dev/null | wc -l) + $(checkupdates 2> /dev/null | wc -l) ))"
+if [ "$" = 1 ] ; then
+    echo "$x upstream update available"
 elif [ -n "$x" ] ; then
-    echo "$x upstream updates available" >&2
+    echo "$x upstream updates available"
     #echo "$updates" | sed 's|^|    |' >&2
 else
-    echo "warning: please install pacman-contrib and paru-bin (AUR) to use this function." >&2
+    echo "warning: please install pacman-contrib and paru-bin (AUR) to use this function."
 fi
