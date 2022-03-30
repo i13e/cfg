@@ -47,5 +47,6 @@
     url = https://github.com/wbthomason/packer.nvim.git
     shallow = true
 [submodule ".local/share/zsh/plugins/dotbare"]
-	path = .local/share/zsh/plugins/dotbare
-	url = https://github.com/kazhala/dotbare.git
+    path = .local/share/zsh/plugins/dotbare
+    url = https://github.com/kazhala/dotbare.git
+    shallow = true
