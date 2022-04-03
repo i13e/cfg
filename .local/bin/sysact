@@ -5,12 +5,12 @@ case "$(readlink -f /sbin/init)" in
 	*) ctl='loginctl' ;;
 esac
 
-case "$(printf "󰍁 lock\n󰍃 logout\n󰤄 sleep\n󰜉 restart\n󰐥 shutdown\n󰶐 display off" | dmenu -i -p 'Action: ')" in
-	'󰍁 lock') slock ;;
-	'󰍃 logout') sudo -A killall Xorg ;;
-	'󰤄 sleep') slock $ctl suspend-then-hibernate ;;
-	'󰜉 restart') $ctl reboot -i ;;
-	'󰐥 shutdown') $ctl poweroff -i ;;
-	'󰶐 display off') xset dpms force off ;;
+case "$(printf " lock\n logout\n sleep\nﰇ restart\n襤 shutdown\nﴹ display off" | dmenu -i -p 'Action: ')" in
+	' lock') lockscreen.sh ;; #lockscreen.sh / betterlockscreen -l
+	' logout') kill -9 -1 ;;
+	' sleep') lockscreen.sh & $ctl suspend-then-hibernate ;; #playerctl pause
+	'ﰇ restart') $ctl reboot -i ;;
+	'襤shutdown') $ctl poweroff -i ;;
+	'ﴹ display off') xset dpms force off ;;
 	*) exit 1 ;;
 esac
