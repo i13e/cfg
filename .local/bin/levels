@@ -1,0 +1,100 @@
+#!/bin/bash
+#color="#afb7d2'>"
+#col="<span color='"
+#end="</span>"
+#FULL=""
+#EMPTY=""
+value="${3:-5}"
+
+case $1 in
+volume)
+	case $2 in
+		up) currentVolume=$(pulsemixer --get-volume | awk '{print $1}')
+			if [[ "$currentVolume" -ge "100" ]]; then
+				pulsemixer --max-volume 100
+			else
+				pulsemixer --change-volume +"$value"
+			fi
+		;;
+		down) pulsemixer --change-volume -"$value"
+		;;
+		mute) muted=$(pulsemixer --get-mute)
+			if [[ "$muted" == "0" ]]; then
+				pulsemixer --toggle-mute
+	            vol=$(pulsemixer --get-volume | awk '{print $1}')
+                dunstify -h string:x-canonical-private-synchronous:audio "婢 Muted" -h int:value:"$vol" -t 1500
+				exit 0
+			else
+				pulsemixer --toggle-mute
+			fi
+	esac
+	vol=$(pulsemixer --get-volume | awk '{print $1}')
+        #pulsemixer --get-muted && notifyMuted "$volume" && return
+    if [ "$vol" -le 25 ]; then
+        dunstify -h string:x-canonical-private-synchronous:audio "奄 Volume: " -h int:value:"$vol" -t 1500
+    elif [ "$vol" -le 75 ]; then
+        dunstify -h string:x-canonical-private-synchronous:audio "奔 Volume: " -h int:value:"$vol" -t 1500
+    else
+        dunstify -h string:x-canonical-private-synchronous:audio "墳 Volume: " -h int:value:"$vol" -t 1500
+    fi
+	;;
+mic)
+	case $2 in
+		up) currentVolume=$(pulsemixer --id source-281 --get-volume | awk '{print $1}')
+			if [[ "$currentVolume" -ge "100" ]]; then
+				pulsemixer --max-volume 100 --id source-281
+			else
+				pulsemixer --id source-281 --change-volume +"$value"
+			fi
+		;;
+		down) pulsemixer --id source-281 --change-volume -"$value"
+		;;
+		mute) muted=$(pulsemixer --id source-281 --get-mute)
+			if [[ "$muted" == "0" ]]; then
+				pulsemixer --toggle-mute --id source-281
+	            vol=$(pulsemixer --id source-281 --get-volume | awk '{print $1}')
+                dunstify -h string:x-canonical-private-synchronous:microphone " Mic muted" -h int:value:"$vol" -t 1500
+				exit 0
+			else
+				pulsemixer --toggle-mute --id source-281
+			fi
+	esac
+	vol=$(pulsemixer --id source-281 --get-volume | awk '{print $1}')
+    dunstify -h string:x-canonical-private-synchronous:microphone " Mic Volume: " -h int:value:"$vol" -t 1500
+	#notify-send -u normal " Mic Volume: $vol%"
+	;;
+brightness)
+    case $2 in
+    up)
+        xbacklight -inc 10
+        ;;
+    down)
+        xbacklight -dec 10
+        ;;
+    esac
+    bright=$(xbacklight -get | cut -d "." -f 1)
+    if [ "$bright" -le 25 ]; then
+        dunstify -h string:x-canonical-private-synchronous:brightness " Brightness: " -h int:value:"$bright" -t 1500
+    elif [ "$bright" -le 75 ]; then
+        dunstify -h string:x-canonical-private-synchronous:brightness " Brightness: " -h int:value:"$bright" -t 1500
+    else
+        dunstify -h string:x-canonical-private-synchronous:brightness " Brightness: " -h int:value:"$bright" -t 1500
+    fi
+    ;;
+mpc)
+	case $2 in
+	up)
+		mpc volume +"$value"
+		;;
+	down)
+		mpc volume -"$value"
+		;;
+	esac
+	vol=$(mpc volume | awk -F "\t|%|:" '{ print $2 }' | tr -d " ")
+	#label="MPD"
+	;;
+esac
+
+#barFull=$(seq -s "$FULL" $((vol / 10)) | sed 's/[0-9]//g')
+#barEmpty=$(seq -s "$EMPTY" $((11 - vol / 10)) | sed 's/[0-9]//g')
+#dunstify -t 3000 -r 2593 -u normal "$label Volume: $vol%" "$col$color$barFull$end$barEmpty"
