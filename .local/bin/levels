@@ -1,9 +1,6 @@
 #!/bin/bash
-#color="#afb7d2'>"
-#col="<span color='"
-#end="</span>"
-#FULL=""
-#EMPTY=""
+# dependencies: dunstify, pulsemixer, xbacklight
+
 value="${3:-5}"
 
 case $1 in
@@ -93,8 +90,7 @@ mpc)
 	vol=$(mpc volume | awk -F "\t|%|:" '{ print $2 }' | tr -d " ")
 	#label="MPD"
 	;;
+*)
+    echo "Not the right arguments: $1"
+    exit 2
 esac
-
-#barFull=$(seq -s "$FULL" $((vol / 10)) | sed 's/[0-9]//g')
-#barEmpty=$(seq -s "$EMPTY" $((11 - vol / 10)) | sed 's/[0-9]//g')
-#dunstify -t 3000 -r 2593 -u normal "$label Volume: $vol%" "$col$color$barFull$end$barEmpty"
