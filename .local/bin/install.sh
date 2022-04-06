@@ -5,7 +5,7 @@
 
 git clone --bare --depth 1 https://github.com/i13e/cfg.git "$HOME/.config/cfg"
 
-cfg() { /usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@" }
+fucntion cfg { /usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@" }
 
 mkdir -p "$HOME/.cfg-backup/"
 
