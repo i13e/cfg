@@ -3,6 +3,8 @@
 # Install config in your $HOME by running:
 # curl -Lks https://raw.githubusercontent.com/i13e/cfg/master/.local/bin/install.sh | /bin/sh
 
+sudo pacman -S --needed base-devel git
+
 git clone --bare --depth 1 https://github.com/i13e/cfg.git "$HOME/.config/cfg"
 
 cfg() { /usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@"; }
@@ -14,7 +16,7 @@ if cfg checkout; then
   else
     echo "Backing up pre-existing dotfiles.";
     cfg checkout 2>&1 | grep -E "\s+\." | awk "{print $1}" | xargs -I{} mv {} "$HOME/.cfg-backup/"
-    cfg checkout
+    cfg checkout && echo "Successfully checked out dotfiles.";
 fi;
 
 cfg config status.showUntrackedFiles no
@@ -27,18 +29,22 @@ cfg config status.showUntrackedFiles no
 # else skip
 
 # make folders mkdir ~/vids dl ?
-# submodules: git submodule init && git submodule update
+
+# update submodules
+git submodule init && git submodule update
 
 # Would you like to run the rest of the install script? (Arch Only)
 # if yes continue
 # if no, exit
 
 # install paru
-#sudo pacman -S --needed base-devel
-#git clone https://aur.archlinux.org/paru.git
-#cd paru
-#makepkg -si
+git clone https://aur.archlinux.org/paru-bin.git
+cd paru-bin
+makepkg -si
+cd ~ && rm paru-bin
 
+# fonts, neovim, symlinks, compositor, scripts, tools, browser zsh
+# chsh -s /bin/zsh
 # would you like to use your own package list or install the repo default?
 # install pkg list from repo
 # WARNING: Do not run the rest of this script unless you know EXACTLY what
