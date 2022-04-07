@@ -6,9 +6,9 @@ case "$(readlink -f /sbin/init)" in
 esac
 
 case "$(printf " lock\n logout\n sleep\nﰇ restart\n襤 shutdown\nﴹ display off" | dmenu -i -p 'Action: ')" in
-	' lock') lockscreen.sh ;; #lockscreen.sh / betterlockscreen -l
+	' lock') lock.sh ;;
 	' logout') kill -9 -1 ;;
-	' sleep') lockscreen.sh & $ctl suspend-then-hibernate ;; #playerctl pause
+	' sleep') lock.sh & sleep 1; systemctl suspend-then-hibernate ;;
 	'ﰇ restart') $ctl reboot -i ;;
 	'襤shutdown') $ctl poweroff -i ;;
 	'ﴹ display off') xset dpms force off ;;
