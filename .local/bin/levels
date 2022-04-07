@@ -1,32 +1,32 @@
 #!/bin/bash
-# dependencies: dunstify, pulsemixer, xbacklight
-
-value="${3:-5}"
+# for mic mute: https://askubuntu.com/questions/26068/how-do-you-mute-from-the-command-line/1163416#1163416
+# dependencies: dunstify, pulseaudio, xbacklight
 
 case $1 in
 volume)
-	case $2 in
-		up) currentVolume=$(pulsemixer --get-volume | awk '{print $1}')
-			if [[ "$currentVolume" -ge "100" ]]; then
-				pulsemixer --max-volume 100
+    SINK=$(pactl info | grep "Default Sink" | cut -d " " -f3)
+    value="${3:-5}"
+    case $2 in
+		up) currentVol=$(pactl list | grep -E "Name: $SINK$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
+			if [[ "$currentVol" -ge "100" ]]; then
+                true
 			else
-				pulsemixer --change-volume +"$value"
+                pactl set-sink-volume "$SINK" +"$value"%
 			fi
 		;;
-		down) pulsemixer --change-volume -"$value"
+		down) pactl set-sink-volume "$SINK" -"$value"%
 		;;
-		mute) muted=$(pulsemixer --get-mute)
-			if [[ "$muted" == "0" ]]; then
-				pulsemixer --toggle-mute
-	            vol=$(pulsemixer --get-volume | awk '{print $1}')
+		mute) muted=$(pactl list | grep -E "Name: $SINK$|Mute" | grep "Name:" -A1 | tail -1 |cut -d: -f2| tr -d " ")
+			if [ "$muted" == no ]; then
+                pactl set-sink-mute "$SINK" toggle
+                vol=$(pactl list | grep -E "Name: $SINK$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
                 dunstify -h string:x-canonical-private-synchronous:audio "婢 Muted" -h int:value:"$vol" -t 1500
 				exit 0
 			else
-				pulsemixer --toggle-mute
+                pactl set-sink-mute "$SINK" toggle
 			fi
 	esac
-	vol=$(pulsemixer --get-volume | awk '{print $1}')
-        #pulsemixer --get-muted && notifyMuted "$volume" && return
+    vol=$(pactl list | grep -E "Name: $SINK$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
     if [ "$vol" -le 25 ]; then
         dunstify -h string:x-canonical-private-synchronous:audio "奄 Volume: " -h int:value:"$vol" -t 1500
     elif [ "$vol" -le 75 ]; then
@@ -34,39 +34,43 @@ volume)
     else
         dunstify -h string:x-canonical-private-synchronous:audio "墳 Volume: " -h int:value:"$vol" -t 1500
     fi
+    exit 0
 	;;
 mic)
-	case $2 in
-		up) currentVolume=$(pulsemixer --id source-281 --get-volume | awk '{print $1}')
-			if [[ "$currentVolume" -ge "100" ]]; then
-				pulsemixer --max-volume 100 --id source-281
+    SOURCE=$(pactl info | grep "Default Source" | cut -d " " -f3)
+    value="${3:-5}"
+    case $2 in
+		up) currentVol=$(pactl list | grep -E "Name: $SOURCE$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
+			if [[ "$currentVol" -ge "100" ]]; then
+                true
 			else
-				pulsemixer --id source-281 --change-volume +"$value"
+                pactl set-source-volume "$SOURCE" +"$value"%
 			fi
 		;;
-		down) pulsemixer --id source-281 --change-volume -"$value"
+		down) pactl set-source-volume "$SOURCE" -"$value"%
 		;;
-		mute) muted=$(pulsemixer --id source-281 --get-mute)
-			if [[ "$muted" == "0" ]]; then
-				pulsemixer --toggle-mute --id source-281
-	            vol=$(pulsemixer --id source-281 --get-volume | awk '{print $1}')
+		mute) muted=$(pactl list | grep -E "Name: $SOURCE$|Mute" | grep "Name:" -A1 | tail -1 |cut -d: -f2| tr -d " ")
+			if [ "$muted" == no ]; then
+                pactl set-source-mute "$SOURCE" toggle
+                vol=$(pactl list | grep -E "Name: $SOURCE$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
                 dunstify -h string:x-canonical-private-synchronous:microphone " Mic muted" -h int:value:"$vol" -t 1500
 				exit 0
 			else
-				pulsemixer --toggle-mute --id source-281
+                pactl set-source-mute "$SOURCE" toggle
 			fi
 	esac
-	vol=$(pulsemixer --id source-281 --get-volume | awk '{print $1}')
+    vol=$(pactl list | grep -E "Name: $SOURCE$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
     dunstify -h string:x-canonical-private-synchronous:microphone " Mic Volume: " -h int:value:"$vol" -t 1500
 	#notify-send -u normal " Mic Volume: $vol%"
 	;;
 brightness)
+    value="${3:-10}"
     case $2 in
     up)
-        xbacklight -inc 10
+        xbacklight -inc "$value"
         ;;
     down)
-        xbacklight -dec 10
+        xbacklight -dec "$value"
         ;;
     esac
     bright=$(xbacklight -get | cut -d "." -f 1)
