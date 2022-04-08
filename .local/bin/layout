@@ -16,7 +16,7 @@ postrun() { # Stuff to run to clean up.
 	}
 # If there's only one screen
 [ "$(echo "$screens" | wc -l)" -lt 2 ] &&
-	{ onescreen "$screens"; postrun; notify-send "󰍹 Only one screen detected." "Using it in its optimal settings...";  exit ;}
+	{ onescreen "$screens"; postrun; notify-send " Only one screen detected." "Using it in its optimal settings…";  exit ;}
 xrandr --output eDP1 --mode 1920x1080 --pos 2560x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output VIRTUAL1 --off
 
 postrun
