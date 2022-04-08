@@ -48,12 +48,12 @@ genbg() {
 
 ## CONFIGURATION ##############################################################
 
-status=$(playerctl status || true)
+status=$(media-control status || true)
 
 # Run before starting the locker
 pre_lock() {
     if [ "$status" == "Playing" ]; then
-        playerctl pause
+        media-control pause
     fi
     dunstctl set-paused true
 
@@ -124,7 +124,7 @@ lock() {
 # Run after the locker exits
 post_lock() {
     if [ "$status" == "Playing" ]; then
-	    playerctl play
+	    media-control play
     fi
     dunstctl set-paused false
     return
