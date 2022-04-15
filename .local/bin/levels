@@ -32,7 +32,7 @@ case $1 in
                     echo "$vol"
                     exit 0
                 else
-                    echo "$muted"
+                    echo "M"
                     exit 0
                 fi
         esac

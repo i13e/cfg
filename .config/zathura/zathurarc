@@ -2,13 +2,13 @@
 # see zathuraarc(5) for all configuration options
 
 # settings
-set font             "Monospace 12"
+set font             "Monospace 10"
 set selection-notification   "true"
 set selection-clipboard "clipboard"
 set guioptions                 "sv"
 set scroll-page-aware        "true"
 set statusbar-basename       "true"
-set window-title-basename    "true"
+set window-title-home-tilde  "true"
 set recolor                  "true"
 set recolor-keephue          "true"
 set adjust-open          "best-fit"

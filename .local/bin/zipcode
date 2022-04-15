@@ -1,0 +1,2 @@
+#!/bin/sh
+curl -s ipinfo.io | jq -r '[.postal,.country] | @csv' | tr -d '"'
