@@ -27,8 +27,6 @@ import os
 import socket
 import errno
 import subprocess
-import fcntl
-import stat
 import string
 
 files = sys.argv[1:]
