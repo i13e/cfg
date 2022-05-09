@@ -31,9 +31,13 @@ cfg config status.showUntrackedFiles no
 # make folders mkdir ~/vids dl ?
 
 # update submodules
-git submodule init && git submodule update
+cfg submodule init && cfg submodule update
 
-# Would you like to run the rest of the install script? (Arch Only)
+
+# check that you are on archlinux?
+# WARNING: Do not run the rest of this script unless you know EXACTLY what
+#you are doing. It is only recommended for a clean install of Arch Linux.
+#Do you wish to continue?
 # if yes continue
 # if no, exit
 
@@ -41,13 +45,13 @@ git submodule init && git submodule update
 git clone https://aur.archlinux.org/paru-bin.git
 cd paru-bin
 makepkg -si
-cd ~ && rm paru-bin
+cd "$HOME" && rm -rf paru-bin
 
-# fonts, neovim, symlinks, compositor, scripts, tools, browser zsh
-# chsh -s /bin/zsh
+# install from repo's packagelist
+# paru -S fonts, neovim, symlinks, compositor, scripts, tools, browser, zsh, etc
 # would you like to use your own package list or install the repo default?
 # install pkg list from repo
-# WARNING: Do not run the rest of this script unless you know EXACTLY what
-#you are doing. It is only recommended for a clean install of Arch Linux.
-#Do you wish to continue?
 # switch shell to start using tools
+
+echo "changing default shell to zsh…"
+chsh -s /bin/zsh

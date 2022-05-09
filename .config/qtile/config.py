@@ -23,6 +23,7 @@ from libqtile.config import (
     Match,
     # Keychord,
 )
+from keys import KbdOverview
 
 terminal = guess_terminal()
 
@@ -32,11 +33,13 @@ modifier_keys = dict(
     S="shift",
     C="control",
 )
-
+# current = qtile.current_layout.name
 keys = [
     ### The essentials
     # Key("M-<Enter>", lazy.spawn(terminal)),
     # Key("M-S-<Enter>" lazy.spawn(dmenu_run)),
+    Key("M-d", lazy.group["scratchpad"].dropdown_toggle("term")),
+    Key("M-a", lazy.function(KbdOverview().toggle)),
     Key("M-<Tab>", lazy.next_layout()),
     Key("M-S-<Tab>", lazy.prev_layout()),
     Key("M-S-r", lazy.restart()),
@@ -58,29 +61,55 @@ keys = [
     Key("M-<space>", lazy.layout.next()),
     # lazy.layout.previous()),
     ## Move windows within group
-    Key("M-S-h", lazy.layout.move_left(), lazy.layout.shuffle_left()),
-    Key("M-S-j", lazy.layout.move_down(), lazy.layout.shuffle_down()),
-    Key("M-S-k", lazy.layout.move_up()),
-    Key("M-S-l", lazy.layout.move_right()),
-    Key("M-S-k", lazy.layout.shuffle_up()),
-    Key("M-S-l", lazy.layout.shuffle_right()),
-    # Key("M-S-h", lazy.layout.swap_left()),
-    # Key("M-S-l", lazy.layout.swap_right()),
-    # Key("M-S-h", lazy.layout.client_to_previous()),
-    # Key("M-S-l", lazy.layout.client_to_next()),
+    Key(
+        "M-S-h",
+        lazy.layout.move_left().when(layout="treetab"),
+        lazy.layout.shuffle_left(),
+        # lazy.layout.client_to_previous(),
+        lazy.layout.swap_left().when(layout=["monadtall", "monadwide"]),
+    ),
+    Key(
+        "M-S-j",
+        lazy.layout.move_down().when(layout="treetab"),
+        lazy.layout.shuffle_down(),
+    ),
+    Key(
+        "M-S-k",
+        lazy.layout.move_up().when(layout="treetab"),
+        lazy.layout.shuffle_up(),
+    ),
+    Key(
+        "M-S-l",
+        lazy.layout.move_right().when(layout="treetab"),
+        lazy.layout.shuffle_right(),
+        # lazy.layout.client_to_next(),
+        lazy.layout.swap_right().when(layout=["monadtall", "monadwide"]),
+    ),
     ## Flip layouts
-    Key("M-C-h", lazy.layout.flip_left()),
-    Key("M-C-j", lazy.layout.flip_down()),
-    Key("M-C-k", lazy.layout.flip_up()),
-    Key("M-C-l", lazy.layout.flip_right()),
-    Key("M-C-h", lazy.layout.swap_column_left()),
-    Key("M-C-j", lazy.layout.section_down()),
-    Key("M-C-k", lazy.layout.section_up()),
-    Key("M-C-l", lazy.layout.swap_column_left()),
-    Key("M-C-h", lazy.layout.integrate_left()),
-    Key("M-C-j", lazy.layout.integrate_down()),
-    Key("M-C-k", lazy.layout.integrate_up()),
-    Key("M-C-l", lazy.layout.integrate_right()),
+    Key(
+        "M-C-h",
+        lazy.layout.flip_left(),
+        lazy.layout.swap_column_left(),
+        lazy.layout.integrate_left(),
+    ),
+    Key(
+        "M-C-j",
+        lazy.layout.flip_down(),
+        lazy.layout.section_down().when(layout="treetab"),
+        lazy.layout.integrate_down(),
+    ),
+    Key(
+        "M-C-k",
+        lazy.layout.flip_up(),
+        lazy.layout.section_up().when(layout="treetab"),
+        lazy.layout.integrate_up(),
+    ),
+    Key(
+        "M-C-l",
+        lazy.layout.flip_right(),
+        lazy.layout.swap_column_right(),
+        lazy.layout.integrate_right(),
+    ),
     # Key("M-S-<space>", lazy.layout.flip())),
     ## Resize windows
     Key("M-A-h", lazy.layout.grow_width(-30)),
@@ -99,10 +128,10 @@ keys = [
     # Key("M-S-h", lazy.group.unminimize_all()),
     ## TODO, Adjust paddings/margins
     ### Plasma controls
-    # Key("M-o", lazy.layout.mode_horizontal()),
-    # Key("M-u", lazy.layout.mode_vertical()),
-    # Key("M-S-o", lazy.layout.mode_horizontal_split()),
-    # Key("M-S-u", lazy.layout.mode_vertical_split()),
+    # Key("M-o", lazy.layout.mode_horizontal().when(layout="plasma")),
+    # Key("M-u", lazy.layout.mode_vertical().when(layout="plasma")),
+    # Key("M-S-o", lazy.layout.mode_horizontal_split().when(layout="plasma")),
+    # Key("M-S-u", lazy.layout.mode_vertical_split().when(layout="plasma")),
     ### Toggle split direction
     Key("M-s", lazy.layout.toggle_split()),
     ### Floating controls
@@ -111,15 +140,13 @@ keys = [
     # Key("M-<bracketright", lazy.group.next_window()),
     # Key("M-<bracketright", lazy.window.bring_to_front()),
     ### Treetab controls
-    Key("M-v", lazy.layout.expand_branch()),
-    Key("M-S-v", lazy.layout.collapse_branch()),
+    Key("M-v", lazy.layout.expand_branch().when(layout="treetab")),
+    Key("M-S-v", lazy.layout.collapse_branch().when(layout="treetab")),
     ### Monad controls
     # lazy.layout.decrease_nmaster()),
     # lazy.layout.increase_nmaster()),
     # lazy.layout.rotate()),
 ]
-keys.append(Key("M-d", lazy.group["scratchpad"].dropdown_toggle("term")))
-# "M-a": lazy.spawn("sh -c 'echo \""+show_keys() + '" | rofi -dmenu -theme ~/.config/rofi/configTall.rasi -i -p "?"\''),
 
 # Define groups
 groups = [
@@ -138,25 +165,38 @@ groups = [
             ),
         ],
     ),
-    Group("爵", matches=[Match(wm_class="brave-browser")], layout="bsp"),
-    Group("﬏", matches=[Match(wm_class=["code"])], layout="bsp"),
+    Group("1", label="爵", matches=[Match(wm_class="brave-browser")], layout="bsp"),
+    Group("2", label="﬏", matches=[Match(wm_class=["code", "emacs"])], layout="bsp"),
     Group(
-        "",
+        "3",
+        label="",
         matches=[Match(wm_class=["geary", "ptask", "pantheon-calendar"])],
         layout="bsp",
     ),
     Group(
-        "",
+        "4",
+        label="",
         matches=[Match(wm_class=["joplin", "libreoffice", "zathura", "evince"])],
         layout="bsp",
     ),
-    Group("", matches=[Match(wm_class=["firefox"])], layout="bsp"),
-    Group("", matches=[Match(wm_class=["ferdi", "discord", "polari"])], layout="bsp"),
-    Group("阮", matches=[Match(wm_class=["spotify", "ncmpcpp", "cmus"])], layout="bsp"),
-    Group("辶", matches=[Match(wm_class=["gimp"])], layout="bsp"),
-    Group("", matches=[Match(wm_class=["pcmanfm"])], layout="bsp"),
+    Group("5", label="", matches=[Match(wm_class=["firefox"])], layout="bsp"),
     Group(
-        "漣",
+        "6",
+        label="",
+        matches=[Match(wm_class=["ferdi", "discord", "polari"])],
+        layout="bsp",
+    ),
+    Group(
+        "7",
+        label="阮",
+        matches=[Match(wm_class=["spotify", "ncmpcpp", "cmus"])],
+        layout="bsp",
+    ),
+    Group("8", label="辶", matches=[Match(wm_class=["gimp"])], layout="bsp"),
+    Group("9", label="", matches=[Match(wm_class=["pcmanfm"])], layout="bsp"),
+    Group(
+        "10",
+        label="漣",
         matches=[
             Match(wm_class=["nm-connection-editor", "blueman-manager", "pavucontrol"])
         ],
@@ -208,8 +248,6 @@ layout_defaults = dict(
 )
 floating_layout = layout.Floating(
     **layout_defaults,
-    fullscreen_border_width=3,
-    max_border_width=3,
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
@@ -232,8 +270,7 @@ auto_minimize = True
 
 # Available layouts
 layouts = [
-    # layout.MonadWide(**layout_defaults),
-    layout.Bsp(**layout_defaults, fair=False),  # grow_amount=2
+    layout.Bsp(**layout_defaults, fair=False, border_on_single=True),
     layout.Columns(
         **layout_defaults,
         border_on_single=True,
@@ -245,40 +282,41 @@ layouts = [
         wrap_focus_rows=True,
         wrap_focus_stacks=True,
     ),
-    # layout.RatioTile(**layout_defaults),
-    # layout.VerticalTile(**layout_defaults),
-    # layout.Matrix(**layout_defaults, columns=3),
     # layout.Zoomy(**layout_defaults, columnwidth=250),
-    # layout.Slice(**layout_defaults, width=1920, fallback=layout.TreeTab(), match=Match(wm_class="joplin"), side="right"),
-    layout.TreeTab(
-        **layout_defaults,
-        active_bg=colors[2],
-        active_fg=colors[1],
-        bg_color=colors[0],
-        urgent_bg=colors[3],
-        urgent_fg=colors[0],
-        fontsize=16,
-        inactive_bg=colors[14],
-        inactive_fg=colors[1],
-        sections=["Adenine", "Cytosine", "Guanine", "Thymine"],
-        section_fontsize=18,
-        section_fg=colors[1],
-        section_top=12,
-        section_bottom=12,
-        section_left=6,
-        section_padding=6,
-        vspace=2,
-        margin_y=10,
-        margin_left=10,
-        padding_left=9,
-        padding_x=3,
-        padding_y=5,
-        panel_width=300,
-    ),
+    # layout.TreeTab(
+    #    **layout_defaults,
+    #    active_bg=colors[2],
+    #    active_fg=colors[1],
+    #    bg_color=colors[0],
+    #    urgent_bg=colors[3],
+    #    urgent_fg=colors[0],
+    #    fontsize=16,
+    #    inactive_bg=colors[14],
+    #    inactive_fg=colors[1],
+    #    sections=["Adenine", "Cytosine", "Guanine", "Thymine"],
+    #    section_fontsize=18,
+    #    section_fg=colors[1],
+    #    section_top=12,
+    #    section_bottom=12,
+    #    section_left=6,
+    #    section_padding=6,
+    #    vspace=2,
+    #    margin_y=10,
+    #    margin_left=10,
+    #    padding_left=9,
+    #    padding_x=3,
+    #    padding_y=5,
+    #    panel_width=300,
+    # ),
     # layout.MonadTall(**layout_defaults),
-    # layout.Max(**layout_defaults),
-    # layout.Tile(shift_windows=True, **layout_defaults),
     # layout.Stack(num_stacks=2, **layout_defaults),
+    # layout.Matrix(**layout_defaults, columns=3),
+    # layout.Max(**layout_defaults),
+    # layout.MonadWide(**layout_defaults),
+    # layout.Slice(**layout_defaults, width=1920, match=Match(wm_class="joplin"), side="right"),
+    # layout.RatioTile(**layout_defaults),
+    # layout.Tile(shift_windows=True, **layout_defaults),
+    # layout.VerticalTile(**layout_defaults),
     floating_layout,
 ]
 
@@ -295,7 +333,9 @@ location = subprocess.check_output(["zipcode"]).decode("utf-8").strip()
 
 
 # TODO: write a script to read volume faster
-get_volume = subprocess.check_output(["levels","volume","get"]).decode("utf-8").strip()
+get_volume = (
+    subprocess.check_output(["levels", "volume", "get"]).decode("utf-8").strip()
+)
 
 
 def longNameParse(text):
@@ -334,6 +374,8 @@ def l_text():
         foreground=colors[14],
         fontsize=48,
     )
+
+
 def sep():
     return widget.Sep(
         padding=10,
@@ -341,12 +383,15 @@ def sep():
         linewidth=0,
         size_percent=50,
     )
+
+
 def r_text():
     return widget.TextBox(
         text="",
         foreground=colors[14],
         fontsize=48,
     )
+
 
 screens = [
     Screen(
@@ -362,6 +407,7 @@ screens = [
                 l_text(),
                 widget.GroupBox(
                     padding=5,
+                    borderwidth=0,
                     active=colors[9],
                     inactive=colors[10],
                     disable_drag=True,
@@ -416,31 +462,6 @@ screens = [
                     },
                     parse_text=longNameParse,
                 ),
-                # l_text(),
-                # widget.TaskList(
-                # 	border=colors[6],
-                # 	background=colors[14],
-                # 	highlight_method="block",
-                # 	icon_size=24,
-                # 	#margin=10,
-                # 	#padding=8,
-                # 	margin_y=14,
-                # 	#margin_x=0,
-                # 	padding_y=2,
-                # 	#padding_x=0,
-                # 	spacing=0,
-                # 	max_title_width=36,
-                # 	title_width_method="uniform",
-                # 	urgent_alert_method="block",
-                # 	urgent_border=colors[3],
-                # 	txt_floating="",
-                # 	txt_maximized="",
-                # 	txt_minimized="",
-                # 	icon_y=12,
-                # 	icon_x=1,
-                # 	#length=bar.CALCULATED,
-                # ),
-                # r_text(),
                 widget.CheckUpdates(
                     # distro="Arch",
                     foreground=colors[3],
@@ -496,24 +517,6 @@ screens = [
                 ),
                 r_text(),
                 sep(),
-                # l_text(),
-                # widget.TextBox(
-                #    text=" ",
-                #    foreground=colors[6],
-                #    background=colors[14],
-                #    # fontsize=38,
-                # ),
-                # widget.Bluetooth(
-                #    background=colors[14],
-                #    foreground=colors[6],
-                #    hci="/dev_00_0A_45_0D_24_47",
-                #    mouse_callbacks={
-                #       "Button1": toggle_bluetooth,
-                #       "Button3": open_bt_menu,
-                #    },
-                # ),
-                # r_text(),
-                # sep(),
                 l_text(),
                 widget.OpenWeather(
                     background=colors[14],
@@ -550,22 +553,6 @@ screens = [
                 ),
                 r_text(),
                 sep(),
-                # l_text(),
-                # widget.TextBox(
-                # 	text=" ",
-                # 	foreground=colors[7],  # fontsize=38
-                # 	background=colors[14],
-                # ),
-                # widget.Wlan(
-                # 	interface="wlp61s0",
-                # 	format="{essid}",
-                # 	foreground=colors[7],
-                # 	background=colors[14],
-                # 	padding=5,
-                # 	mouse_callbacks={"Button1": open_connman},
-                # ),
-                # r_text(),
-                # sep(),
                 l_text(),
                 widget.Battery(
                     fontsize=18,
@@ -608,13 +595,13 @@ screens = [
                 ),
             ],
             25,
-            # margin=[0, 0, 21, 0],
+            margin=[0, 0, 10, 0],
             border_width=[5, 0, 5, 0],
             border_color="#2e3440",
         ),
-        # bottom=bar.Gap(18),
-        # left=bar.Gap(18),
-        # right=bar.Gap(18),
+        bottom=bar.Gap(10),
+        left=bar.Gap(10),
+        right=bar.Gap(10),
     ),
 ]
 
@@ -624,6 +611,8 @@ mouse = [
     Drag("M-1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag("M-3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click("M-2", lazy.window.bring_to_front()),
+    Click("M-C-3", lazy.spawn("jgmenu --csv-file=~/.config/jgmenu/qtile.csv")),
+    Click("M-A-3", lazy.spawn("jgmenu_run")),
 ]
 
 # Startup scripts

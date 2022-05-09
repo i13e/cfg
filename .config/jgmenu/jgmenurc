@@ -20,6 +20,7 @@ item_border          = 0
 sep_height           = 5
 font                 = Sans 12
 icon_size            = 24
+icon_theme           = Papirus
 color_menu_bg        = #2e3440 100
 color_norm_bg        = #2e3440 0
 color_norm_fg        = #e5e9f0 100
