@@ -3,7 +3,7 @@
 # Install config in your $HOME by running:
 # curl -Lks https://raw.githubusercontent.com/i13e/cfg/master/.local/bin/install.sh | /bin/sh
 
-sudo pacman -S --needed base-devel git
+sudo pacman -S --needed --noconfirm base-devel git
 
 git clone --bare --depth 1 https://github.com/i13e/cfg.git "$HOME/.config/cfg"
 
@@ -44,7 +44,7 @@ cfg submodule init && cfg submodule update
 # install paru
 git clone https://aur.archlinux.org/paru-bin.git
 cd paru-bin
-makepkg -si
+makepkg -si --noconfirm
 cd "$HOME" && rm -rf paru-bin
 
 # install from repo's packagelist
