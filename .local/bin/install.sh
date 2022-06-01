@@ -43,15 +43,28 @@ cfg submodule init && cfg submodule update
 
 # install paru
 git clone https://aur.archlinux.org/paru-bin.git
-cd paru-bin
+cd paru-bin || exit # exit in case cd fails
 makepkg -si --noconfirm
 cd "$HOME" && rm -rf paru-bin
+
+# confirm script from hostupd
+#while true; do
+#    printf '%b ' "\033[1m":: Do you wish to use a custom hosts file? [Y/n]"\033[0m"
+#    read -r yn
+#    case $yn in
+#        [Yy]* ) sudo tee -a /etc/hosts < "$XDG_DATA_HOME/hosts" > /dev/null; exit;;
+#        [Nn]* ) exit;;
+#        * ) echo "Please answer y or n.";;
+#    esac
+#done
 
 # install from repo's packagelist
 # paru -S fonts, neovim, symlinks, compositor, scripts, tools, browser, zsh, etc
 # would you like to use your own package list or install the repo default?
 # install pkg list from repo
 # switch shell to start using tools
+
+printf "Password: " ; read -r myPass ; echo "Password is: $myPass"
 
 echo "changing default shell to zsh…"
 chsh -s /bin/zsh

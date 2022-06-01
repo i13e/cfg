@@ -58,7 +58,7 @@ export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
 export GPG_TTY=$(tty)
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 #export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
-export LESS='-rsiFMx4 --mouse --wheel-lines=3'
+export LESS='-rsiFMx4 --mouse --wheel-lines=5'
 export PAGER="less"
 export LESS_TERMCAP_mb="$(printf '%b' '[1;34m')"
 export LESS_TERMCAP_md="$(printf '%b' '[1;34m')"
@@ -69,9 +69,9 @@ export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 #export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 #export QT_QPA_PLATFORMTHEME="gtk2"	# Have QT use gtk2 theme.
-
+export PF_INFO="ascii title os host kernel wm pkgs shell editor palette"
 # Autostart
-xrdb "$XDG_CONFIG_HOME"/x11/xresources
+xrdb "$XDG_CONFIG_HOME/x11/xresources"
 layout
 picom --experimental-backends &
 lxpolkit &
