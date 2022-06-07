@@ -21,8 +21,8 @@ choice=$(echo "$options" | dmenu -i -p "Action:")
 case "$choice" in
 	*Lock*) lock.sh ;;
 	*Logout*) kill -9 -1 ;;
-	*Suspend*) lock.sh & sleep 1; systemctl suspend-then-hibernate ;;
-	*Hibernate*) lock.sh & sleep 1; systemctl hibernate ;;
+	*Suspend*) lock.sh & systemctl suspend-then-hibernate ;;
+	*Hibernate*) lock.sh & systemctl hibernate ;;
 	*Reboot*) $ctl reboot -i ;;
 	*Shutdown*) $ctl poweroff -i ;;
 	*Display*off*) xset dpms force off ;;

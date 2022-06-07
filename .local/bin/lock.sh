@@ -1,46 +1,22 @@
 #!/usr/bin/bash
-# Mostly from https://github.com/Barbaross93/Genome
-# With some cleanup at the end
+## Initially from: https://github.com/Barbaross93/Nebula/blob/main/.local/bin/lockscreen.sh
+## fixed to work with multi-monitor
+## Requires: i3lock-color, imagemagick, picom
 
 set -euo pipefail
 
-cachepath=$XDG_CACHE_HOME/lockscreen
-cropuser=$cachepath/$USER-pic-crop.png
+USER_PIC="$HOME/images/icons/avatar_highres.png"
+CROP_USER="$XDG_CACHE_HOME/$USER-pic-crop.png"
 
-width=$(xrandr --query | grep ' connected' | grep -o '[0-9][0-9]*x[0-9][0-9]*[^ ]*' | sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\1/' |cut -d "x" -f 1 |head -n1)
-height=$(xrandr --query | grep ' connected' | grep -o '[0-9][0-9]*x[0-9][0-9]*[^ ]*' | sed -r 's/^[^0-9]*([0-9]+x[0-9]+).*$/\1/' |cut -d "x" -f 2 |head -n1)
-half_width=$((width/2))
-half_height=$((height/2))
-
-cropuser() {
-  userpic=$HOME/pics/link-coffee.png
-
-	convert $userpic -resize 170x170 -gravity Center \( \
-		-size 170x170 xc:Black \
-		-fill White \
-		-draw "circle 85 85 85 1" \
-		-alpha Copy\
-		\) -compose CopyOpacity -composite -trim $cropuser
-}
-
-blurbg() {
-    maim -u "$cachepath/screenshot.png"
-	convert "$cachepath/screenshot.png" \
-		-filter Gaussian \
-		-blur 0x27 \
-		"$cachepath/screenshot-blur.png"
-}
-
-genbg() {
-	if [[ ! -d $cachepath ]]; then
-		mkdir -p $cachepath
-    cropuser
-	fi
-	blurbg
-	composite -geometry "+$((half_width-85))+$((half_height-137))" $cropuser $cachepath/screenshot-blur.png $cachepath/screenshot-pic-blur.png
-}
-
-#genbg
+if [[ ! -d "$CROP_USER" ]]; then
+    mkdir -p "$XDG_CACHE_HOME"
+    convert "$USER_PIC" -resize 140x140 -gravity Center \( \
+	-size 140x140 xc:Black \
+	-fill White \
+	-draw "circle 70 70 70 1" \
+	-alpha Copy\
+	\) -compose CopyOpacity -composite -trim "$CROP_USER"
+fi
 
 # see xss-lock(1) and /usr/share/doc/xss-lock/transfer-sleep-lock-i3lock.sh
 # if i3lock causes trouble with suspend on your computer. It could also be a
@@ -48,20 +24,21 @@ genbg() {
 
 ## CONFIGURATION ##############################################################
 
-status=$(media-control status || true)
+STATUS=$(media-control status || true)
 
-# Run before starting the locker
+## Run before starting the locker
 pre_lock() {
-    if [ "$status" == "Playing" ]; then
+    if [ "$STATUS" == "Playing" ]; then
         media-control pause
     fi
     dunstctl set-paused true
 
-    #if pgrep -x "picom" >/dev/null; then
-        #true
-    #else
-        #setsid -f picom --experimental-backends &
-    #fi
+    # Ensure picom is running otherwise blur won't work
+    if pgrep -x "picom" >/dev/null; then
+        true
+    else
+        setsid -f picom --experimental-backends &
+    fi
 
     # If rofi is opened, it grabs the keyboard and borks i3lock. Not sure how to
     # take a general approach to see if the keyboard is actively grabbed
@@ -71,59 +48,63 @@ pre_lock() {
     return
 }
 
-# Options to pass to i3lock
+## Variables for i3lock
+FONT="monospace"
+WRONG="bf616a"
+
+## Options to pass to i3lock
 lock() {
-    i3lock --nofork                           \
-        --color 00000000                      \
-        --tiling                              \
-        --ignore-empty-password               \
-        --screen=1                            \
-        --date-str="@$(uname -n)"             \
-        --date-pos="w/2:h/2+90"               \
-        --indicator                           \
-        --force-clock                         \
-        --pass-media-keys                     \
-        --pass-power-keys                     \
-        --pass-volume-keys                    \
-        --date-size=16                        \
-        --insidever-color=2e3440A8            \
-        --insidewrong-color=2e3440A8          \
-        --inside-color=2e344000               \
-        --ringwrong-color=bf616a              \
-        --ring-color=81a1c1                   \
-        --ringver-color=88c0d0                \
+    i3lock \
+        --color 0000001A \
+        --ignore-empty-password \
+        --pass-media-keys \
+        --pass-volume-keys \
+        --pass-screen-keys \
+        --pass-power-keys \
+        --indicator \
+        --nofork \
+        --force-clock \
+        --image "$CROP_USER" --center \
+        --radius 50 \
+        --ring-width 3 \
+        --time-size 14 \
+        --time-str="%R" \
+        --date-size 16 \
+        --date-str="@$(uname -n)" \
+        --time-font="$FONT" \
+        --date-font="$FONT" \
+        --time-pos="ix:iy+75" \
+        --date-pos="ix:iy+130" \
+        --time-color=e5e9f0 \
+        --date-color=e5e9f0 \
         --line-uses-inside                    \
-        --keyhl-color=b48ead                  \
-        --bshl-color=bf616a                   \
-        --separator-color=81a1c1              \
+        --insidever-color=2e3440A8 \
+        --insidewrong-color=2e3440A8 \
+        --inside-color=2e344000 \
+        --ringver-color=88c0d0 \
+        --ringwrong-color="$WRONG" \
+        --ring-color=81a1c1 \
+        --separator-color=81a1c1 \
+        --keyhl-color=b48ead \
+        --bshl-color="$WRONG" \
         --verif-color=88c0d0                  \
-        --wrong-color=bf616a                  \
-        --ind-pos="w/2:h/2-42"                \
-        --time-color=e5e9f0                   \
-        --time-pos="w/2:h/2+35"               \
-        --time-str="%R"                       \
-        --date-color=e5e9f0                   \
-        --time-font="Monospace"               \
-        --date-font="Monospace"               \
-        --verif-font="Monospace"              \
-        --wrong-font="Monospace"              \
-        --greeter-font="Monospace:style=Bold" \
+        --wrong-color="$WRONG" \
+        --verif-font="$FONT" \
+        --wrong-font="$FONT" \
+        --greeter-font="$FONT:style=Bold" \
         --greeter-text="$USER"                \
         --greeter-color=8fbcbb                \
-        --greeter-pos="w/2:h/2+70"            \
-        --radius 50                           \
-        --ring-width 3                        \
+        --greeter-pos="ix:iy+110" \
         --greeter-size=18                     \
-        --time-size=14                        \
         --verif-size=10                       \
         --wrong-size=10                       \
         --modif-size=9                        \
-        --modif-pos="w/2:h/2-15"
-    } #--no-verify -i
+        --modif-pos="ix:iy+10"
+    } #--no-verify --blur 5 --screen 1 --ind-pos="w/2:h/2-42"
 
-# Run after the locker exits
+## Run after the locker exits
 post_lock() {
-    if [ "$status" == "Playing" ]; then
+    if [ "$STATUS" == "Playing" ]; then
 	    media-control play
     fi
     dunstctl set-paused false
