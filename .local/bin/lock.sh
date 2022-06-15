@@ -1,19 +1,21 @@
-#!/usr/bin/bash
-## Initially from: https://github.com/Barbaross93/Nebula/blob/main/.local/bin/lockscreen.sh
-## fixed to work with multi-monitor
+#!/usr/bin/sh
+## Originally from: https://github.com/Barbaross93/Nebula/blob/main/.local/bin/lockscreen.sh
+## rewritten to work with multi-monitor setups and be POSIX-compliant
 ## Requires: i3lock-color, imagemagick, picom
 
-set -euo pipefail
+USER_PIC="$HOME/images/icons/avatar_highres.png" # where your user pic resides
+CROP_USER="/tmp/$USER-pic-crop.png" # where the formatted pic will be generated
 
-USER_PIC="$HOME/images/icons/avatar_highres.png"
-CROP_USER="$XDG_CACHE_HOME/$USER-pic-crop.png"
 
-if [[ ! -d "$CROP_USER" ]]; then
-    mkdir -p "$XDG_CACHE_HOME"
-    convert "$USER_PIC" -resize 140x140 -gravity Center \( \
-	-size 140x140 xc:Black \
+if [ -f "$USER_PIC" ] && [ -f "$CROP_USER" ]; then
+    true
+elif [ ! -f "$USER_PIC" ]; then
+    echo "No user picture has been selected."; exit
+elif [ ! -f "$CROP_USER" ]; then
+    convert "$USER_PIC" -resize 150x150 -gravity Center \( \
+	-size 150x150 xc:Black \
 	-fill White \
-	-draw "circle 70 70 70 1" \
+	-draw "circle 75 75 75 1" \
 	-alpha Copy\
 	\) -compose CopyOpacity -composite -trim "$CROP_USER"
 fi
@@ -28,13 +30,19 @@ STATUS=$(media-control status || true)
 
 ## Run before starting the locker
 pre_lock() {
-    if [ "$STATUS" == "Playing" ]; then
+
+    # Pause music
+    if [ "$STATUS" = "Playing" ]; then
         media-control pause
     fi
-    dunstctl set-paused true
+
+    # Pause notifications
+    if pgrep -x "dunst"; then
+        dunstctl set-paused true
+    fi
 
     # Ensure picom is running otherwise blur won't work
-    if pgrep -x "picom" >/dev/null; then
+    if pgrep -x "picom"; then
         true
     else
         setsid -f picom --experimental-backends &
@@ -50,64 +58,82 @@ pre_lock() {
 
 ## Variables for i3lock
 FONT="monospace"
-WRONG="bf616a"
+DIM="0000001A" # dim screen 10%: https://stackoverflow.com/a/25170174/15593672
+ACCENT="81A1C1"
+WHITE="EFE9F0"
+DARK="2E3440D9"
+RIGHT="88C0D0"
+WRONG="BF616A"
 
 ## Options to pass to i3lock
 lock() {
     i3lock \
-        --color 0000001A \
+        --color="$DIM" \
+        --inside-color="$DIM" \
         --ignore-empty-password \
+        --show-failed-attempts \
         --pass-media-keys \
-        --pass-volume-keys \
         --pass-screen-keys \
         --pass-power-keys \
-        --indicator \
-        --nofork \
+        --pass-volume-keys \
         --force-clock \
+        --nofork \
         --image "$CROP_USER" --center \
-        --radius 50 \
-        --ring-width 3 \
-        --time-size 14 \
-        --time-str="%R" \
-        --date-size 16 \
+        --indicator \
+        --line-uses-inside \
+        --radius=55 \
+        --ring-width=3 \
+        --time-str="%a %d, %R" \
         --date-str="@$(uname -n)" \
+        --verif-text="Verifying…" \
+        --wrong-text="Access Denied" \
+        --greeter-text="$USER" \
+        --keyhl-color=b48ead \
+        --greeter-color=8fbcbb \
+        --ring-color="$ACCENT" \
+        --separator-color="$ACCENT" \
+        --layout-color="$WHITE" \
+        --time-color="$WHITE" \
+        --date-color="$WHITE" \
+        --modif-color="$WHITE" \
+        --insidewrong-color="$DARK" \
+        --insidever-color="$DARK" \
+        --keylayout 0 \
+        --verif-color="$RIGHT" \
+        --ringver-color="$RIGHT" \
+        --bshl-color="$WRONG" \
+        --wrong-color="$WRONG" \
+        --ringwrong-color="$WRONG" \
+        --layout-font="$FONT" \
         --time-font="$FONT" \
         --date-font="$FONT" \
-        --time-pos="ix:iy+75" \
-        --date-pos="ix:iy+130" \
-        --time-color=e5e9f0 \
-        --date-color=e5e9f0 \
-        --line-uses-inside                    \
-        --insidever-color=2e3440A8 \
-        --insidewrong-color=2e3440A8 \
-        --inside-color=2e344000 \
-        --ringver-color=88c0d0 \
-        --ringwrong-color="$WRONG" \
-        --ring-color=81a1c1 \
-        --separator-color=81a1c1 \
-        --keyhl-color=b48ead \
-        --bshl-color="$WRONG" \
-        --verif-color=88c0d0                  \
-        --wrong-color="$WRONG" \
         --verif-font="$FONT" \
         --wrong-font="$FONT" \
         --greeter-font="$FONT:style=Bold" \
-        --greeter-text="$USER"                \
-        --greeter-color=8fbcbb                \
-        --greeter-pos="ix:iy+110" \
-        --greeter-size=18                     \
-        --verif-size=10                       \
-        --wrong-size=10                       \
-        --modif-size=9                        \
-        --modif-pos="ix:iy+10"
+        --time-pos="ix:iy+80" \
+        --date-pos="ix:iy+135" \
+        --greeter-pos="ix:iy+115" \
+        --verif-size=12 \
+        --wrong-size=12 \
+        --modif-size=12 \
+        --time-size=14 \
+        --date-size=16 \
+        --greeter-size=18
     } #--no-verify --blur 5 --screen 1 --ind-pos="w/2:h/2-42"
+    #--layout
+
+
 
 ## Run after the locker exits
 post_lock() {
-    if [ "$STATUS" == "Playing" ]; then
+    if [ "$STATUS" = "Playing" ]; then
 	    media-control play
     fi
-    dunstctl set-paused false
+
+    if pgrep -x dunst; then
+        dunstctl set-paused false
+    fi
+
     return
 }
 
