@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Install config in your $HOME by running:
-# curl -Lks https://raw.githubusercontent.com/i13e/cfg/master/.local/bin/install.sh | /bin/sh
+# curl -FsSL https://raw.github.com/i13e/cfg/master/.local/bin/install.sh | /bin/sh
 
 sudo pacman -S --needed --noconfirm base-devel git
 
