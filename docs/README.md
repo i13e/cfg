@@ -1,3 +1,5 @@
+# Dotfiles for i13e
+
 ## Requirements
 
 - Git
@@ -14,5 +16,5 @@ installed to be registered as authorized on Github.
 
 ### Notes
 
-The install script is currently **unfinished** and will break your system
-if you attempt to use it.
+- The install script is currently **unfinished** and will break your system if you attempt to use it.
+- Update zsh plugins as submodules with: 'cfg submodule update --remote'
