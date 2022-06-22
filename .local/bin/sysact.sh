@@ -20,7 +20,7 @@ choice=$(echo "$options" | dmenu -i -p "Action:")
 
 case "$choice" in
 	*Lock*) lock.sh ;;
-	*Logout*) kill -9 -1 ;;
+	*Logout*) kill -15 -1 ;;
 	*Suspend*) lock.sh & systemctl suspend-then-hibernate ;;
 	*Hibernate*) lock.sh & systemctl hibernate ;;
 	*Reboot*) $ctl reboot -i ;;

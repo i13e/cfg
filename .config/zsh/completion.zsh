@@ -17,12 +17,12 @@ setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
 setopt PATH_DIRS           # Perform path search even on command names with slashes.
 setopt AUTO_MENU           # Show completion menu on a successive tab press.
 setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
-# setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a trailing slash.
-# setopt AUTO_PARAM_KEYS
-# setopt FLOW_CONTROL        # Disable start/stop characters in shell editor.
+#setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a trailing slash.
+#setopt AUTO_PARAM_KEYS
+#setopt FLOW_CONTROL        # Disable start/stop characters in shell editor.
 unsetopt MENU_COMPLETE     # Do not autoselect the first completion entry.
 unsetopt COMPLETE_ALIASES  # Completion for aliases
-# unsetopt ALWAYS_TO_END     # Move cursor to the end of a completed word.
+#unsetopt ALWAYS_TO_END     # Move cursor to the end of a completed word.
 unsetopt CASE_GLOB
 
 # Fuzzy match mistyped completions.
@@ -87,7 +87,6 @@ zstyle ':completion:*:*:mpg123:*' file-patterns '*.(mp3|MP3):mp3\ files *(-/):di
 zstyle ':completion:*:*:mpg321:*' file-patterns '*.(mp3|MP3):mp3\ files *(-/):directories'
 zstyle ':completion:*:*:ogg123:*' file-patterns '*.(ogg|OGG|flac):ogg\ files *(-/):directories'
 zstyle ':completion:*:*:mocp:*' file-patterns '*.(wav|WAV|mp3|MP3|ogg|OGG|flac):ogg\ files *(-/):directories'
-zstyle ':completion:*:*:*:default' menu yes select search # NOTE may not work
 # SSH/SCP/RSYNC
 zstyle ':completion:*:(scp|rsync):*' tag-order 'hosts:-host:host hosts:-domain:domain hosts:-ipaddr:ip\ address *'
 zstyle ':completion:*:(scp|rsync):*' group-order users files all-files hosts-domain hosts-host hosts-ipaddr

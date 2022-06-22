@@ -9,7 +9,7 @@ sh:
 if command -v curl >/dev/null 2>&1; then
     sh -c "$(curl -fsSL https://raw.github.com/i13e/cfg/master/.local/bin/install.sh)"
 else
-    sh -c "$(wget -O- https://raw.github.com/i13e/cfg/master/.local/bin/install.sh)"
+    sh -c "$(wget -nv -O - https://raw.github.com/i13e/cfg/master/.local/bin/install.sh)"
 fi
 ```
 
