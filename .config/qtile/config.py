@@ -6,7 +6,8 @@ import os
 # import re
 # import socket
 import subprocess
-#from typing import List
+
+# from typing import List
 from libqtile.utils import guess_terminal  # noqa: F401
 from libqtile import qtile
 import psutil
@@ -28,7 +29,7 @@ from libqtile.config import (
 
 # from keys import KbdOverview TODO remove
 
-terminal = guess_terminal() # let qtile guess your terminal
+terminal = guess_terminal()  # let qtile guess your terminal
 
 modifier_keys = dict(
     M="mod4",
@@ -394,9 +395,10 @@ def template(x):
             size_percent=50,
         )
 
-# define primary bar and the widgets therein
-def primary_bar():
-    return [
+
+# define bars and the widgets therein
+def bars(x):
+    widgets = [
         widget.TextBox(
             text="ﮂ",
             foreground=colors[13],
@@ -588,19 +590,18 @@ def primary_bar():
             mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("sysact.sh")},
         ),
     ]
-
-
-# Define bar for every screen besides your primary one
-def secondary_bar():
-    secondary_bar = primary_bar()
-    del secondary_bar[18]   # BUG: only one systray can be used
-    return secondary_bar
+    if x == "primary":
+        return widgets
+    # # Define bar for every screen besides your primary one
+    if x == "secondary":
+        del widgets[18]  # only one systray can be used
+        return widgets
 
 
 screens = [
     Screen(
         top=bar.Bar(
-            primary_bar(),
+            bars("primary"),
             # opacity=0.85,
             size=25,
             margin=[0, 0, 10, 0],
@@ -614,7 +615,7 @@ screens = [
     ),
     Screen(
         top=bar.Bar(
-            secondary_bar(),
+            bars("secondary"),
             # opacity=0.85,
             size=25,
             margin=[0, 0, 10, 0],
