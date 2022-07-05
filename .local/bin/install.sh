@@ -3,11 +3,12 @@
 # Install config in your $HOME by running:
 # curl -FsSL https://raw.github.com/i13e/cfg/master/.local/bin/install.sh | /bin/sh
 
-sudo pacman -S --needed --noconfirm base-devel git
+sudo pacman -S --needed --asdeps --noconfirm base-devel git
 
 mkdir -p "$HOME/.config"
 
-git clone --bare --depth 1 https://github.com/i13e/cfg.git "$HOME/.config/cfg"
+git clone --bare --branch master --depth 1 https://github.com/i13e/cfg.git "$HOME/.config/cfg"
+#--recursive?
 
 cfg() { /usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@"; }
 
@@ -33,7 +34,7 @@ cfg config status.showUntrackedFiles no
 # make folders mkdir ~/vids dl ?
 
 # update submodules
-cfg submodule init && cfg submodule update
+cfg submodule update --init
 
 
 # check that you are on archlinux?
@@ -66,7 +67,15 @@ cd "$HOME" && rm -rf paru-bin
 # install pkg list from repo
 # switch shell to start using tools
 
-printf "Password: " ; read -r myPass ; echo "Password is: $myPass"
+#printf "Password: " ; read -r myPass ; echo "Password is: $myPass"
 
-echo "changing default shell to zsh…"
-chsh -s /bin/zsh
+# if zsh was installed change the shell to zsh
+if command -v curl >/dev/null 2>&1; then
+    echo "changing default shell to zsh…"
+    sudo usermod -s "$(which zsh)" "$USER"
+else
+    true
+fi
+
+# sudo ln -s ~/.local/bin/hooks/* /etc/pacman.d/hooks
+# can also use cp

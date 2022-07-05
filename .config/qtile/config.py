@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+# Requires: dbus-next, psutil, mypy, jq,
 import os
 
+# TODO remove unneeded calls
 # import re
 # import socket
 import subprocess
-from typing import List
+#from typing import List
 from libqtile.utils import guess_terminal  # noqa: F401
 from libqtile import qtile
 import psutil
@@ -23,9 +25,10 @@ from libqtile.config import (
     Match,
     # Keychord,
 )
-from keys import KbdOverview
 
-terminal = guess_terminal()
+# from keys import KbdOverview TODO remove
+
+terminal = guess_terminal() # let qtile guess your terminal
 
 modifier_keys = dict(
     M="mod4",
@@ -33,18 +36,20 @@ modifier_keys = dict(
     S="shift",
     C="control",
 )
+
 # current = qtile.current_layout.name
+
 keys = [
     ### The essentials
     # Key("M-<Enter>", lazy.spawn(terminal)),
-    # Key("M-S-<Enter>" lazy.spawn(dmenu_run)),
+    # Key("M-S-<Enter>", lazy.spawn(dmenu_run)),
     Key("M-d", lazy.group["scratchpad"].dropdown_toggle("term")),
-    Key("M-a", lazy.function(KbdOverview().toggle)),
+    # Key("M-a", lazy.function(KbdOverview().toggle)),
     Key("M-<Tab>", lazy.next_layout()),
     Key("M-S-<Tab>", lazy.prev_layout()),
     Key("M-S-r", lazy.restart()),
     Key("M-S-q", lazy.shutdown()),
-    Key("M-S-c", lazy.window.kill()),
+    Key("M-x", lazy.window.kill()),
     ### Switch focus to specific monitor (out of three)
     # M-w, lazy.to_screen(0)),
     # M-e, lazy.to_screen(1)),
@@ -123,9 +128,9 @@ keys = [
     ## Window states
     Key("M-f", lazy.window.toggle_fullscreen()),
     Key("M-S-f", lazy.window.toggle_floating()),
-    Key("M-m", lazy.window.toggle_maximize()),
-    # Key("M-h", lazy.window.toggle_minimize()),
-    # Key("M-S-h", lazy.group.unminimize_all()),
+    # Key("M-m", lazy.window.toggle_maximize()),
+    Key("M-h", lazy.window.toggle_minimize()),
+    Key("M-S-h", lazy.group.unminimize_all()),
     ## TODO, Adjust paddings/margins
     ### Plasma controls
     # Key("M-o", lazy.layout.mode_horizontal().when(layout="plasma")),
@@ -320,7 +325,7 @@ layouts = [
     floating_layout,
 ]
 
-
+# TODO remove?
 # prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
 
 
@@ -358,7 +363,7 @@ def finish_task():
     qtile.cmd_spawn('task "$((`cat /tmp/tw_polybar_id`))" done')
 
 
-# Don't keep?
+# TODO remove?
 def toggle_bluetooth():
     qtile.cmd_spawn("./.config/qtile/system-bluetooth-bluetoothctl.sh --toggle")
 
@@ -368,243 +373,261 @@ def todays_date():
 
 
 # widget templates
-def l_text():
-    return widget.TextBox(
-        text="",
-        foreground=colors[14],
-        fontsize=48,
-    )
+def template(x):
+    if x == "r":
+        return widget.TextBox(
+            text="",
+            foreground=colors[14],
+            fontsize=48,
+        )
+    elif x == "l":
+        return widget.TextBox(
+            text="",
+            foreground=colors[14],
+            fontsize=48,
+        )
+    else:
+        return widget.Sep(
+            padding=10,
+            foreground=colors[2],
+            linewidth=0,
+            size_percent=50,
+        )
+
+# define primary bar and the widgets therein
+def primary_bar():
+    return [
+        widget.TextBox(
+            text="ﮂ",
+            foreground=colors[13],
+            fontsize=28,
+            padding=20,
+            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn(terminal)},
+        ),
+        template("l"),
+        widget.GroupBox(
+            padding=5,
+            borderwidth=0,
+            active=colors[9],
+            inactive=colors[10],
+            disable_drag=True,
+            rounded=True,
+            highlight_color=colors[2],
+            block_highlight_text_color=colors[6],
+            highlight_method="block",
+            this_current_screen_border=colors[14],
+            this_screen_border=colors[7],
+            other_current_screen_border=colors[14],
+            other_screen_border=colors[14],
+            foreground=colors[1],
+            background=colors[14],
+            urgent_border=colors[3],
+        ),
+        template("r"),
+        template(" "),
+        template("l"),
+        widget.CurrentLayoutIcon(
+            custom_icon_paths=[os.path.expanduser("~/.config/qtile/icons")],
+            foreground=colors[2],
+            background=colors[14],
+            padding=-5,
+            scale=0.70,
+        ),
+        template("r"),
+        template(" "),
+        template("l"),
+        widget.GenPollText(
+            func=taskwarrior,
+            update_interval=5,
+            foreground=colors[11],
+            background=colors[14],
+            mouse_callbacks={"Button1": finish_task},
+        ),
+        template("r"),
+        widget.Spacer(),
+        widget.TextBox(
+            text=" ",
+            foreground=colors[12],
+        ),
+        widget.WindowName(
+            foreground=colors[12],
+            for_current_screen=True,
+            width=bar.CALCULATED,
+            empty_group_string="Desktop",
+            max_chars=20,
+            mouse_callbacks={
+                "Button2": lambda: qtile.cmd_spawn("xdotool getwindowfocus windowkill")
+            },
+            parse_text=longNameParse,
+        ),
+        widget.CheckUpdates(
+            # distro="Arch",
+            foreground=colors[3],
+            colour_have_updates=colors[3],
+            display_format=" {updates}",
+            # colour_no_updates=colors[12],
+            # no_update_string=" 0",
+            mouse_callbacks={"Button2": lambda: qtile.cmd_spawn("alacritty -e paru")},
+            custom_command="paru -Qua ; checkupdates",
+            padding=20,
+        ),
+        widget.Spacer(),
+        template("l"),
+        widget.Systray(
+            icon_size=26,
+            background=colors[14],
+        ),
+        widget.Pomodoro(
+            background=colors[14],
+            padding=5,
+            fontsize=20,
+            color_active=colors[3],
+            color_break=colors[6],
+            color_inactive=colors[10],
+            # timer_visible=False,
+            # length_pomodori=25
+            # length_short_break=5
+            # length_long_break=15
+            # num_pomodori=4
+            prefix_active=" ",
+            prefix_break=" ",
+            prefix_inactive=" ",
+            prefix_long_break=" ",
+            prefix_paused=" ",
+        ),
+        template("r"),
+        template(" "),
+        template("l"),
+        widget.TextBox(
+            text="墳 ",
+            foreground=colors[8],
+            background=colors[14],
+        ),
+        widget.PulseVolume(
+            foreground=colors[8],
+            # emoji=True,
+            get_volume_command=get_volume,
+            background=colors[14],
+            limit_max_volume="True",
+            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("pavucontrol")},
+        ),
+        template("r"),
+        template(" "),
+        template("l"),
+        widget.OpenWeather(
+            background=colors[14],
+            foreground=colors[7],
+            app_key="7834197c2338888258f8cb94ae14ef49",
+            zip=location,
+            language="en",
+            metric=False,
+            format="{icon} {temp:.0f}°{units_temperature}",
+            # from https://github.com/sffjunkie/qtile-openweathermap/blob/de368ac36736391dfafe18367f9d12c2fc258149/owm.py#L37
+            # NOTE: Nerdfonts is missing the MD icon for partly cloudy night
+            weather_symbols={
+                "01d": "\U0000fa98",  # Clear sky 滛望
+                "01n": "\U0000fa93",
+                "02d": "\U0000fa94",  # Few clouds 杖
+                "02n": "\U0000e37e",
+                "03d": "\U0000fa94",  # Scattered Clouds 杖
+                "03n": "\U0000e37e",
+                "04d": "\U0000fa8f",  # Broken clouds 摒
+                "04n": "\U0000fa8f",
+                "09d": "\U0000fa95",  # Shower Rain 歹
+                "09n": "\U0000fa95",
+                "10d": "\U0000fa95",  # Rain 歹
+                "10n": "\U0000fa95",
+                "11d": "\U0000fb7c",  # Thunderstorm ﭼ
+                "11n": "\U0000fb7c",
+                "13d": "\U0000fa97",  # Snow 流
+                "13n": "\U0000fa97",
+                "50d": "\U0000fa90",  # Mist 敖
+                "50n": "\U0000fa90",
+                "sleetd": "\U0000fb7d",
+                "sleetn": "\U0000fb7d",
+            },
+        ),
+        template("r"),
+        template(" "),
+        template("l"),
+        widget.Battery(
+            fontsize=18,
+            full_char="",
+            charge_char="",
+            discharge_char="",
+            empty_char="",
+            unknown_char="",
+            format="{char} {percent:2.0%}",
+            foreground=colors[5],
+            low_foreground=colors[3],
+            low_percentage=0.25,
+            background=colors[14],
+            notify_below=0.1,
+            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn(terminal + " -e btm")},
+        ),
+        template("r"),
+        template(" "),
+        template("l"),
+        widget.TextBox(
+            text=" ",
+            foreground=colors[4],  # fontsize=38
+            background=colors[14],
+        ),
+        widget.Clock(
+            format="%a %d %R",
+            foreground=colors[4],
+            background=colors[14],
+            #    mouse_callbacks={"Button1": todays_date},
+        ),
+        template("r"),
+        widget.TextBox(
+            text="⏻",
+            foreground=colors[13],
+            fontsize=28,
+            padding=20,
+            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("sysact.sh")},
+        ),
+    ]
 
 
-def sep():
-    return widget.Sep(
-        padding=10,
-        foreground=colors[2],
-        linewidth=0,
-        size_percent=50,
-    )
-
-
-def r_text():
-    return widget.TextBox(
-        text="",
-        foreground=colors[14],
-        fontsize=48,
-    )
+# Define bar for every screen besides your primary one
+def secondary_bar():
+    secondary_bar = primary_bar()
+    del secondary_bar[18]   # BUG: only one systray can be used
+    return secondary_bar
 
 
 screens = [
     Screen(
         top=bar.Bar(
-            [
-                widget.TextBox(
-                    text="ﮂ",
-                    foreground=colors[13],
-                    fontsize=28,
-                    padding=20,
-                    mouse_callbacks={"Button3": lambda: qtile.cmd_spawn(terminal)},
-                ),
-                l_text(),
-                widget.GroupBox(
-                    padding=5,
-                    borderwidth=0,
-                    active=colors[9],
-                    inactive=colors[10],
-                    disable_drag=True,
-                    rounded=True,
-                    highlight_color=colors[2],
-                    block_highlight_text_color=colors[6],
-                    highlight_method="block",
-                    this_current_screen_border=colors[14],
-                    this_screen_border=colors[7],
-                    other_current_screen_border=colors[14],
-                    other_screen_border=colors[14],
-                    foreground=colors[1],
-                    background=colors[14],
-                    urgent_border=colors[3],
-                ),
-                r_text(),
-                sep(),
-                l_text(),
-                widget.CurrentLayoutIcon(
-                    custom_icon_paths=[os.path.expanduser("~/.config/qtile/icons")],
-                    foreground=colors[2],
-                    background=colors[14],
-                    padding=-5,
-                    scale=0.70,
-                ),
-                r_text(),
-                sep(),
-                l_text(),
-                widget.GenPollText(
-                    func=taskwarrior,
-                    update_interval=5,
-                    foreground=colors[11],
-                    background=colors[14],
-                    mouse_callbacks={"Button1": finish_task},
-                ),
-                r_text(),
-                widget.Spacer(),
-                widget.TextBox(
-                    text=" ",
-                    foreground=colors[12],
-                ),
-                widget.WindowName(
-                    foreground=colors[12],
-                    for_current_screen=True,
-                    width=bar.CALCULATED,
-                    empty_group_string="Desktop",
-                    max_chars=20,
-                    mouse_callbacks={
-                        "Button2": lambda: qtile.cmd_spawn(
-                            "xdotool getwindowfocus windowkill"
-                        )
-                    },
-                    parse_text=longNameParse,
-                ),
-                widget.CheckUpdates(
-                    # distro="Arch",
-                    foreground=colors[3],
-                    colour_have_updates=colors[3],
-                    display_format=" {updates}",
-                    # colour_no_updates=colors[12],
-                    # no_update_string=" 0",
-                    mouse_callbacks={
-                        "Button2": lambda: qtile.cmd_spawn("alacritty -e paru")
-                    },
-                    custom_command="paru -Qua ; checkupdates",
-                    padding=20,
-                ),
-                widget.Spacer(),
-                l_text(),
-                widget.Systray(
-                    icon_size=26,
-                    background=colors[14],
-                ),
-                widget.Pomodoro(
-                    background=colors[14],
-                    padding=5,
-                    fontsize=20,
-                    color_active=colors[3],
-                    color_break=colors[6],
-                    color_inactive=colors[10],
-                    # timer_visible=False,
-                    # length_pomodori=25
-                    # length_short_break=5
-                    # length_long_break=15
-                    # num_pomodori=4
-                    prefix_active=" ",
-                    prefix_break=" ",
-                    prefix_inactive=" ",
-                    prefix_long_break=" ",
-                    prefix_paused=" ",
-                ),
-                r_text(),
-                sep(),
-                l_text(),
-                widget.TextBox(
-                    text="墳 ",
-                    foreground=colors[8],
-                    background=colors[14],
-                ),
-                widget.PulseVolume(
-                    foreground=colors[8],
-                    # emoji=True,
-                    get_volume_command=get_volume,
-                    background=colors[14],
-                    limit_max_volume="True",
-                    mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("pavucontrol")},
-                ),
-                r_text(),
-                sep(),
-                l_text(),
-                widget.OpenWeather(
-                    background=colors[14],
-                    foreground=colors[7],
-                    app_key="7834197c2338888258f8cb94ae14ef49",
-                    zip=location,
-                    language="en",
-                    metric=False,
-                    format="{icon} {temp:.0f}°{units_temperature}",
-                    # from https://github.com/sffjunkie/qtile-openweathermap/blob/de368ac36736391dfafe18367f9d12c2fc258149/owm.py#L37
-                    # NOTE: Nerdfonts is missing the MD icon for partly cloudy night
-                    weather_symbols={
-                        "01d": "\U0000fa98",  # Clear sky 滛望
-                        "01n": "\U0000fa93",
-                        "02d": "\U0000fa94",  # Few clouds 杖
-                        "02n": "\U0000e37e",
-                        "03d": "\U0000fa94",  # Scattered Clouds 杖
-                        "03n": "\U0000e37e",
-                        "04d": "\U0000fa8f",  # Broken clouds 摒
-                        "04n": "\U0000fa8f",
-                        "09d": "\U0000fa95",  # Shower Rain 歹
-                        "09n": "\U0000fa95",
-                        "10d": "\U0000fa95",  # Rain 歹
-                        "10n": "\U0000fa95",
-                        "11d": "\U0000fb7c",  # Thunderstorm ﭼ
-                        "11n": "\U0000fb7c",
-                        "13d": "\U0000fa97",  # Snow 流
-                        "13n": "\U0000fa97",
-                        "50d": "\U0000fa90",  # Mist 敖
-                        "50n": "\U0000fa90",
-                        "sleetd": "\U0000fb7d",
-                        "sleetn": "\U0000fb7d",
-                    },
-                ),
-                r_text(),
-                sep(),
-                l_text(),
-                widget.Battery(
-                    fontsize=18,
-                    full_char="",
-                    charge_char="",
-                    discharge_char="",
-                    empty_char="",
-                    unknown_char="",
-                    format="{char} {percent:2.0%}",
-                    foreground=colors[5],
-                    low_foreground=colors[3],
-                    low_percentage=0.25,
-                    background=colors[14],
-                    notify_below=0.1,
-                    mouse_callbacks={
-                        "Button3": lambda: qtile.cmd_spawn(terminal + " -e btm")
-                    },
-                ),
-                r_text(),
-                sep(),
-                l_text(),
-                widget.TextBox(
-                    text=" ",
-                    foreground=colors[4],  # fontsize=38
-                    background=colors[14],
-                ),
-                widget.Clock(
-                    format="%a %d %R",
-                    foreground=colors[4],
-                    background=colors[14],
-                    #    mouse_callbacks={"Button1": todays_date},
-                ),
-                r_text(),
-                widget.TextBox(
-                    text="⏻",
-                    foreground=colors[13],
-                    fontsize=28,
-                    padding=20,
-                    mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("sysact")},
-                ),
-            ],
-            25,
+            primary_bar(),
+            # opacity=0.85,
+            size=25,
             margin=[0, 0, 10, 0],
             border_width=[5, 0, 5, 0],
             border_color="#2e3440",
+            background="#2e3440",
         ),
         bottom=bar.Gap(10),
         left=bar.Gap(10),
         right=bar.Gap(10),
     ),
+    Screen(
+        top=bar.Bar(
+            secondary_bar(),
+            # opacity=0.85,
+            size=25,
+            margin=[0, 0, 10, 0],
+            border_width=[5, 0, 5, 0],
+            border_color="#2e3440",
+            background="#2e3440",
+        ),
+        bottom=bar.Gap(10),
+        left=bar.Gap(10),
+        right=bar.Gap(10),
+    ),
+    # ... and so on
 ]
-
 
 # Drag floating layouts.
 mouse = [
@@ -622,7 +645,7 @@ def start_once():
     subprocess.call([home + "/.config/qtile/autostart.sh"])
 
 
-# Window swallowing
+# Window swallowing ;)
 @hook.subscribe.client_new
 def _swallow(window):
     pid = window.window.get_net_wm_pid()
