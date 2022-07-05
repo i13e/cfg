@@ -1,5 +1,6 @@
-# vim: set ft=cfg
 # see zathuraarc(5) for all configuration options
+# https://pwmt.org/projects/zathura/documentation/
+# https://pwmt.org/projects/girara/options/
 
 # settings
 set font             "Monospace 10"
@@ -8,7 +9,7 @@ set selection-clipboard "clipboard"
 set guioptions                 "sv"
 set scroll-page-aware        "true"
 set statusbar-basename       "true"
-set window-title-home-tilde  "true"
+set window-title-basename    "true"
 set recolor                  "true"
 set recolor-keephue          "true"
 set adjust-open          "best-fit"
@@ -16,6 +17,7 @@ set statusbar-h-padding        "10"
 set statusbar-v-padding        "10"
 set scroll-full-overlap      "0.01"
 set scroll-step               "100"
+
 include nord
 
 # remaps

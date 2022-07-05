@@ -1,6 +1,6 @@
 #!/bin/sh
 [ -x /usr/bin/paru ] && [ -x /usr/bin/checkupdates ] && x="$(( $(paru -Qua 2> /dev/null | wc -l) + $(checkupdates 2> /dev/null | wc -l) ))"
-if [ "$" = 1 ] ; then
+if [ "$x" = 1 ] ; then
     echo "$x upstream update available"
 elif [ -n "$x" ] ; then
     echo "$x upstream updates available"

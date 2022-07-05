@@ -76,12 +76,10 @@ case $1 in
     brightness)
         value="${3:-10}"
         case $2 in
-            up)
-                xbacklight -inc "$value" -time 0
-                ;;
-            down)
-                xbacklight -dec "$value" -time 0
-                ;;
+            up) xbacklight -inc "$value" -time 0 ;;
+            max) xbacklight -set 100 -time 0;;
+            min) xbacklight -set 0 -time 0;;
+            down) xbacklight -dec "$value" -time 0 ;;
         esac
         bright=$(xbacklight -get | cut -d "." -f 1)
         if [ "$bright" -le 25 ]; then

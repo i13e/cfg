@@ -1,5 +1,5 @@
-#!/bin/zsh
-# profile file. Runs on login. Environmental variables are set here.
+#!/bin/bash
+# profile file, runs on login. Environment variables are set here.
 
 # adds "~/.local/bin" to $PATH
 export PATH="$HOME/.local/bin:$PATH"
