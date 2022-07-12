@@ -1,5 +1,5 @@
 #!/bin/sh
-# Zsh startup file, will always be run. Set environment variables here.
+# Profile file, runs on login. Environment variables are set here.
 
 # adds "~/.local/bin" to $PATH
 export PATH="$HOME/.local/bin:$PATH"
@@ -14,14 +14,14 @@ export PATH="$HOME/.local/bin:$PATH"
 # see https://github.com/NixOS/nixpkgs/issues/14966#issuecomment-520083836
 #mkdir -p "$HOME/.local/share/keyrings"
 
-## Default programs:
+## Default programs.
 export VISUAL="/usr/bin/nvim"
 export EDITOR="$VISUAL"
 export TERMINAL="$HOME/.local/bin/alacritty.sh"
 export BROWSER="/usr/bin/brave"
 export PAGER="/usr/bin/less"
 
-## ~/ Clean-up:
+## $HOME Clean-up.
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -57,7 +57,7 @@ export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/config.py"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 
-## Other program settings:
+## Other program settings.
 #export DICS="/usr/share/stardict/dic/"
 export GPG_TTY=$TTY
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
