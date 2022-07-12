@@ -3,10 +3,13 @@
 # This file runs when a DM logs you into a graphical session.
 # If you use startx/xinit, this file will also be sourced.
 
-xrdb "$HOME/.config/x11/xresources" #& xrdbpid=$!
-"$HOME"/.local/bin/layout           # set the layout & background of the screen
-"$HOME"/.local/bin/remaps      	    # run the remaps script, switching caps/esc and more; check it for more info
-"$HOME"/.local/bin/setbg
+# If .zshenv wasn't sourced, source it.
+[ -z "$XDG_CONFIG_HOME" ] && . "$HOME/.zshenv"
+
+xrdb "$XDG_CONFIG_HOME/x11/xresources" & xrdbpid=$!
+layout              # set the layout & background of the screen
+remaps      	    # run the remaps script (switching caps/esc)
+setbg
 
 autostart="syncthing --no-browser
 picom --experimental-backends
@@ -23,7 +26,7 @@ done #>/dev/null 2>&1
 # startup=("list programs" "to" "run here")
 # for program in "${startup[@]}"; do
 #     pgrep -fl "$program" || $program &
-# done
+# done >/dev/null 2>&1
 
 # Ensure that xrdb has finished before moving on.
-#[ -n "$xrdbpid" ] && wait "$xrdbpid"
+[ -n "$xrdbpid" ] && wait "$xrdbpid"
