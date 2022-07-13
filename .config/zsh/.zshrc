@@ -1,81 +1,143 @@
+#!/usr/bin/zsh
+# Description
+
+# If .zprofile wasn't sourced, source it.
+[ -z "$XDG_CONFIG_HOME" ] && . "$HOME/.zprofile"
+
 source $ZDOTDIR/config.zsh
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+function _cache {
+  (( $+commands[$1] )) || return 1
+  local cache_dir="$XDG_CACHE_HOME/${SHELL##*/}"
+  local cache="$cache_dir/$1"
+  if [[ ! -f $cache || ! -s $cache ]]; then
+      #echo "Caching $1"
+      mkdir -p $cache_dir
+      "$@" >$cache
+      chmod 600 $cache
+  fi
+  if [[ -o interactive ]]; then
+      source $cache || rm -f $cache
+  fi
+}
+
+# Be restrictive with permissions
+if (( EUID != 0 )); then
+    umask 027
+# else
+    # Be even more restrictive if root.
+    # umask 077
 fi
 
-# NOTE ZGEN_DIR and ZGEN_SOURCE are forward-declared in modules/shell/zsh.nix
-# NOTE Using zgenom because zgen is no longer maintained
-#if [ ! -d "$ZGEN_DIR" ]; then
-#  echo "Installing jandamm/zgenom"
-#  git clone https://github.com/jandamm/zgenom "$ZGEN_DIR"
-#fi
-#source $ZGEN_DIR/zgenom.zsh
-# Check for plugin and zgenom updates every 7 days
-# This does not increase the startup time.
-#cfg submodule update
-#if ! zgenom saved; then
-#  echo "Initializing zgenom"
-#  rm -f $ZDOTDIR/*.zwc(N) \
-#        $XDG_CACHE_HOME/zsh/*(N) \
-#        $ZGEN_INIT.zwc
+# Make zsh directories if needed.
+local ZSH_CACHE="$XDG_CACHE_HOME/zsh"
+local ZPLUGDIR="$XDG_DATA_HOME/zsh/plugins"
+[ -d "$ZSH_CACHE" ] || mkdir -p "$ZSH_CACHE"
+[ -d "$ZPLUGDIR" ] || mkdir -p "$ZPLUGDIR"
 
-# NOTE Be extra careful about plugin load order, or subtle breakage
-# can emerge. This is the best order I've found for these plugins.
-[ -f $ZPLUGDIR/fzf.plugin.zsh ] && source "$ZPLUGDIR/fzf.plugin.zsh"
-source "$ZPLUGDIR/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
-source "$ZPLUGDIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-source "$ZPLUGDIR/zsh-completions/zsh-completions.plugin.zsh"
-source "$ZPLUGDIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
-source "$ZPLUGDIR/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh"
-source "$ZPLUGDIR/powerlevel10k/powerlevel10k.zsh-theme"
-source "$ZPLUGDIR/zsh-autopair/autopair.zsh"
+# # If not in tmux, start tmux.
+# if [[ -z ${TMUX+X}${ZSH_SCRIPT+X}${ZSH_EXECUTION_STRING+X} ]]; then
+#   exec tmux
+# fi
 
+zcompile-many() {
+    local f
+    for f; do
+        [ "$f".zsh.zwc -nt "$f".zsh ] || zcompile -R -- "$f".zwc "$f";
+    done
+}
+
+# NOTE: Be careful about plugin load order or subtle breakage can emerge.
+repos=(
+    #"jeffreytse/zsh-vi-mode"
+    "zdharma-continuum/fast-syntax-highlighting"
+    #"zsh-users/zsh-completions"
+    "zsh-users/zsh-autosuggestions"
+    "zsh-users/zsh-history-substring-search"
+    "romkatv/powerlevel10k"
+    "hlissner/zsh-autopair"
+    "USER/dotbare"
+)
+plugins=(${repos:t})
+
+## Clone and compile to wordcode missing plugins.
+# for ((i = 1; i <= $#repos; i++)); do
+#     if [ ! -d "$ZPLUGDIR/${plugins[$i]}" ]; then
+#         local gh="https://github.com/${repos[$i]}.git"
+#         git clone --depth=1 "$gh" "$ZPLUGDIR/$plugins[$i]"
+#         # use cfg?
+#         # cfg submodule add --shallow
+#         # zcompile-many "$ZPLUGDIR/$plugins[$i]/src/*.zsh"
+#         # zcompile-many "$ZPLUGDIR/$plugins[$i]/src/**/*.zsh"
+#         # ln -s $ZPLUGDIR/$file/$file.(plugin.zsh|zsh-theme) $ZPLUGDIR/
+#     elif [ -d "$ZPLUGDIR/${plugins[$i]}" ]; then
+#         # zcompile-many "$ZPLUGDIR/$plugins[$i]/src/*.zsh"
+#         # zcompile-many "$ZPLUGDIR/$plugins[$i]/src/**/*.zsh"
+#         # ln -s $ZPLUGDIR/$file/$file.(plugin.zsh|zsh-theme) $ZPLUGDIR/
+#         source $ZPLUGDIR/$plugins[$i]/$plugins[$i].(plugin.zsh|zsh-theme)
+#     else
+#         echo "Plugin ${plugins[$i]} already exists."
+#     fi
+# done
+# zcompile-many ~/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
+# zcompile-many $ZPLUGDIR/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
+# make -C ~/powerlevel10k pkg
+
+# Activate Powerlevel10k Instant Prompt.
+if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Enable the "new" completion system (compsys).
+fpath=($ZPLUGDIR/zsh-completions/src $fpath)
+autoload -Uz compinit && compinit -d $ZSH_CACHE/zcompdump-$ZSH_VERSION
+zcompile-many $ZSH_CACHE/zcompdump-$ZSH_VERSION
+zcompile-many $ZDOTDIR/*.zsh
+unfunction zcompile-many
+
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+## Load plugins.
+# Don't use any plugins for root
+# if [ "$EUID" -ne 0 ]; then fi
+
+[ -x /usr/bin/fzf ] && source "$ZPLUGDIR/fzf.zsh"
+for file in $plugins; do
+    if [ -f $ZPLUGDIR/$file/$file.(plugin.zsh|zsh-theme) ] ; then
+        #echo "Loading $file";
+        source $ZPLUGDIR/$file/$file.(plugin.zsh|zsh-theme)
+    fi
+done
 # To customize prompt, run `p10k configure` or edit $ZDOTDIR/p10k.zsh.
 source "$ZDOTDIR/p10k.zsh"
 
-#  zgenom save
-#  zgenom compile $ZDOTDIR
 
-autoload -U colors && colors
+# Enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    #test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    eval "$(dircolors -b $ZDOTDIR/dircolors)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
 ## Bootstrap interactive sessions
 if [[ $TERM != dumb ]]; then
-  autoload -Uz compinit && compinit -u -d $ZSH_CACHE/zcompdump
+    # Change cursor shape to beam and pwd in terminal title
+    export GPG_TTY=$TTY
+    precmd() { printf "\e]0;%s\a" ${(V)${(%):-%1~}} >$TTY; printf "\e[5 q" >$TTY }
+    preexec() { printf "\e]0;%s\a" ${(V)${(%):-%1~}} >$TTY; printf "\e[5 q" >$TTY }
 
-  source "$ZDOTDIR/keybinds.zsh"
-  source "$ZDOTDIR/completion.zsh"
-  source "$ZDOTDIR/aliases.zsh"
-  source "$XDG_CONFIG_HOME/git/aliases.zsh"
-  # Auto-generated by nixos
-  #_source $ZDOTDIR/extra.zshrc
-  # If you have host-local configuration, put it here
-  #_source $ZDOTDIR/local.zshrc
+    source "$ZDOTDIR/keybinds.zsh"
+    source "$ZDOTDIR/completion.zsh"
+    source "$ZDOTDIR/aliases.zsh"
 
-  _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
-  autopair-init
+    # Auto-generated by nixos
+    #_source $ZDOTDIR/extra.zshrc
+    # If you have host-local configuration, put it here
+    #_source $ZDOTDIR/local.zshrc
+
+    _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
+    autopair-init
 fi
-
-# Export environment variables.
-export HISTFILE="$XDG_DATA_HOME/history"
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-export GOPATH="$XDG_DATA_HOME/go"
-
-# Defaults
-export PAGER="less"
-export GPG_TTY=$TTY
-export LESS='-rsiF --mouse --wheel-lines=3'
-export LESSHISTFILE=-
-
-# Color Man Pages
-export LESS_TERMCAP_mb=$'\E[1;34m'     # begin bold
-export LESS_TERMCAP_md=$'\E[1;34m'     # begin blink
-export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
-export LESS_TERMCAP_so=$'\E[01;35m'    # begin reverse video
-export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
-export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
-export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
