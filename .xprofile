@@ -3,14 +3,16 @@
 # This file runs when a DM logs you into a graphical session.
 # If you use startx/xinit, this file will also be sourced.
 
-# If .zshenv wasn't sourced, source it.
-[ -z "$XDG_CONFIG_HOME" ] && . "$HOME/.zshenv"
+# If .zprofile wasn't sourced, source it.
+[ -z "$XDG_CONFIG_HOME" ] && . "$HOME/.zprofile"
 
+# Run startup scripts.
 xrdb "$XDG_CONFIG_HOME/x11/xresources" & xrdbpid=$!
 layout              # set the layout & background of the screen
 remaps      	    # run the remaps script (switching caps/esc)
 setbg
 
+# Autostart programs.
 autostart="syncthing --no-browser
 picom --experimental-backends
 lxpolkit
@@ -18,15 +20,16 @@ unclutter
 redshift
 sxhkd
 "
+
 printf "%s" "$autostart" | while IFS="" read -r program; do
     pgrep -fl "$program" || $program &
 done #>/dev/null 2>&1
 
-# as a bash array.
+# As a bash array.
 # startup=("list programs" "to" "run here")
 # for program in "${startup[@]}"; do
 #     pgrep -fl "$program" || $program &
 # done >/dev/null 2>&1
 
-# Ensure that xrdb has finished before moving on.
+## Ensure that xrdb has finished.
 [ -n "$xrdbpid" ] && wait "$xrdbpid"
