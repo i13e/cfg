@@ -1,0 +1,13 @@
+[Unit]
+Description=Bluetooth sleep hook
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=-/usr/bin/systemctl stop bluetooth.service
+ExecStop=-/usr/bin/systemctl start bluetooth.service
+
+[Install]
+WantedBy=sleep.target
