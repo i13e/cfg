@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # for mic mute: https://askubuntu.com/questions/26068/how-do-you-mute-from-the-command-line/1163416#1163416
 # dependencies: notify-send, pactl, light
 
@@ -19,7 +19,7 @@ case $1 in
             notify-send -h string:x-canonical-private-synchronous:audio "奄 Volume: " -h int:value:"$vol"
         elif [ "$vol" -le 75 ]; then
             notify-send -h string:x-canonical-private-synchronous:audio "奔 Volume: " -h int:value:"$vol"
-        elif [ "$muted" == yes ]; then
+        elif [ "$muted" = yes ]; then
             notify-send -h string:x-canonical-private-synchronous:audio "婢 Muted: " -h int:value:"$vol"
         else
             notify-send -h string:x-canonical-private-synchronous:audio "墳 Volume: " -h int:value:"$vol"
@@ -38,7 +38,7 @@ case $1 in
         esac
         vol=$(pactl get-source-volume @DEFAULT_SOURCE@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
         muted=$(pactl get-source-mute @DEFAULT_SOURCE@ | cut -d " " -f2)
-        if [ "$muted" == yes ]; then
+        if [ "$muted" = yes ]; then
             notify-send -h string:x-canonical-private-synchronous:audio " Mic Muted: " -h int:value:"$vol"
         else
             notify-send -h string:x-canonical-private-synchronous:audio " Mic Volume: " -h int:value:"$vol"
