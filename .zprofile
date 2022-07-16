@@ -59,7 +59,6 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 
 ## Other program settings.
 #export DICS="/usr/share/stardict/dic/"
-export GPG_TTY=$TTY
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 #export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export LESS='-rsiFMx4 --mouse --wheel-lines=5'

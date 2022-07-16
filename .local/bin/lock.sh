@@ -1,11 +1,13 @@
 #!/usr/bin/sh
 ## Originally from: https://github.com/Barbaross93/Nebula/blob/main/.local/bin/lockscreen.sh
-## rewritten to work with multi-monitor setups and be POSIX-compliant
-## Requires: i3lock-color, imagemagick, picom
+## rewritten to support multi-monitors, additional lockers,
+## security features, Wayland, and be POSIX-compliant.
+## Requires: i3lock-color, imagemagick, picom, xss-lock
+
+#trap 'kill -9 -$$ %1 %2' EXIT INT
 
 USER_PIC="$HOME/images/icons/avatar_highres.png" # where your user pic resides
 CROP_USER="/tmp/$USER-pic-crop.png" # where the formatted pic will be generated
-
 
 if [ -f "$USER_PIC" ] && [ -f "$CROP_USER" ]; then
     true
@@ -31,114 +33,148 @@ STATUS=$(media-control status || true)
 ## Run before starting the locker
 pre_lock() {
 
-    # Pause music
-    if [ "$STATUS" = "Playing" ]; then
-        media-control pause
-    fi
+    # Pause music (if enabled)
+    [ "$STATUS" = "Playing" ] && media-control pause
 
     # Pause notifications
-    if pgrep -x "dunst"; then
-        dunstctl set-paused true
-    fi
+    dunstctl set-paused true
+    # TODO wayland equivalent?
 
     # Ensure picom is running otherwise blur won't work
-    if pgrep -x "picom"; then
-        true
-    else
-        setsid -f picom --experimental-backends &
-    fi
+    pgrep -x picom || picom --experimental-backends &
+    # TODO wayland equivalent?
 
-    # If rofi is opened, it grabs the keyboard and borks i3lock. Not sure how to
-    # take a general approach to see if the keyboard is actively grabbed
-    if pgrep -x rofi; then
-        killall rofi
-    fi
-    return
+    # Kill these just in case
+    pkill -x rofi
+    pkill -x xcolor
+
+    # Clear gpg-cache and ssh keys prior to lock. pam-gnupg starts it up again after unlock
+    gpg-connect-agent --no-autostart reloadagent /bye
+
+    # Clear all clipboard & selections
+    [ $XDG_SESSION_TYPE = x11 ] && xsel -dbps --logfile /dev/null
+    [ $XDG_SESSION_TYPE = wayland ] && wl-copy -c
 }
 
-## Variables for i3lock
+# TODO is this needed?
+#echo pause >/tmp/signal_bar
+#mpdstatus=$(mpc status | grep 'playing')
+#mpc pause
+
+## If using locker w/o screen coverage (e.g. xtrlock, slock with unlockscreen patch)
+#nsxiv -bf ~/.cache/i3lock/$currentWall &
+#unclutter -idle 0 -jitter 99999 & # hide cursor
+
+## Variables for lockers
 FONT="monospace"
-DIM="0000001A" # dim screen 10%: https://stackoverflow.com/a/25170174/15593672
-ACCENT="81A1C1"
-WHITE="EFE9F0"
-DARK="2E3440D9"
-RIGHT="88C0D0"
-WRONG="BF616A"
+DIM="#0000001A"          # dim screen 10%: https://stackoverflow.com/a/25170174/15593672
+BG="#2E3440"           # background color
+ACCENT="#81A1C1"         # accent color
+TEXT="#EFE9F0"          # text color
+RIGHT="#88C0D0"          # blue color
+WRONG="#BF616A"          # red color
+
+    #XSECURELOCK_SAVER="/home/barbaross/.local/bin/background.sh"
+xlock() {
+    XSECURELOCK_AUTH_BACKGROUND_COLOR="$BG" \
+    XSECURELOCK_BACKGROUND_COLOR="$BG" \
+    XSECURELOCK_AUTH_FOREGROUND_COLOR="$TEXT" \
+    XSECURELOCK_DIM_COLOR="$DIM" \
+    XSECURELOCK_AUTH_WARNING_COLOR="$WRONG" \
+    XSECURELOCK_SHOW_HOSTNAME=0 \
+    XSECURELOCK_COMPOSITE_OBSCURER=1 \
+    XSECURELOCK_BURNIN_MITIGATION=0 \
+    XSECURELOCK_SHOW_USERNAME=0 \
+    XSECURELOCK_PASSWORD_PROMPT=time \
+    XSECURELOCK_SHOW_DATETIME=0 \
+    XSECURELOCK_FONT="$FONT" \
+    XSECURELOCK_NO_COMPOSITE=0 \
+    XSECURELOCK_BLANK_TIMEOUT=-1 \
+    XSECURELOCK_DISCARD_FIRST_KEYPRESS=0 \
+    XSECURELOCK_BLANK_DPMS_STATE=off \
+    xsecurelock
+}
 
 ## Options to pass to i3lock
-lock() {
-    i3lock \
-        --color="$DIM" \
-        --inside-color="$DIM" \
-        --ignore-empty-password \
-        --show-failed-attempts \
-        --pass-media-keys \
-        --pass-screen-keys \
-        --pass-power-keys \
-        --pass-volume-keys \
-        --force-clock \
-        --nofork \
-        --image "$CROP_USER" --center \
-        --indicator \
-        --line-uses-inside \
-        --radius=55 \
-        --ring-width=3 \
-        --time-str="%a %d, %R" \
-        --date-str="@$(uname -n)" \
-        --verif-text="Verifying…" \
-        --wrong-text="Access Denied" \
-        --greeter-text="$USER" \
-        --keyhl-color=b48ead \
-        --greeter-color=8fbcbb \
-        --ring-color="$ACCENT" \
-        --separator-color="$ACCENT" \
-        --layout-color="$WHITE" \
-        --time-color="$WHITE" \
-        --date-color="$WHITE" \
-        --modif-color="$WHITE" \
-        --insidewrong-color="$DARK" \
-        --insidever-color="$DARK" \
-        --keylayout 0 \
-        --verif-color="$RIGHT" \
-        --ringver-color="$RIGHT" \
-        --bshl-color="$WRONG" \
-        --wrong-color="$WRONG" \
-        --ringwrong-color="$WRONG" \
-        --layout-font="$FONT" \
-        --time-font="$FONT" \
-        --date-font="$FONT" \
-        --verif-font="$FONT" \
-        --wrong-font="$FONT" \
-        --greeter-font="$FONT:style=Bold" \
-        --time-pos="ix:iy+80" \
-        --date-pos="ix:iy+135" \
-        --greeter-pos="ix:iy+115" \
-        --verif-size=12 \
-        --wrong-size=12 \
-        --modif-size=12 \
-        --time-size=14 \
-        --date-size=16 \
-        --greeter-size=18
-    } #--no-verify --blur 5 --screen 1 --ind-pos="w/2:h/2-42"
-    #--layout
+lock() { i3lock \
+    --color="$DIM" \
+    --inside-color="$DIM" \
+    --ignore-empty-password \
+    --show-failed-attempts \
+    --pass-media-keys \
+    --pass-screen-keys \
+    --pass-power-keys \
+    --pass-volume-keys \
+    --force-clock \
+    --nofork \
+    --image "$CROP_USER" --center \
+    --indicator \
+    --line-uses-inside \
+    --radius=55 \
+    --ring-width=3 \
+    --time-str="%a %d, %R" \
+    --date-str="@$(uname -n)" \
+    --verif-text="Verifying…" \
+    --wrong-text="Access Denied" \
+    --greeter-text="$USER" \
+    --keyhl-color=b48ead \
+    --greeter-color=8fbcbb \
+    --ring-color="$ACCENT" \
+    --separator-color="$ACCENT" \
+    --layout-color="$TEXT" \
+    --time-color="$TEXT" \
+    --date-color="$TEXT" \
+    --modif-color="$TEXT" \
+    --insidewrong-color="$BG"D9 \
+    --insidever-color="$BG"D9 \
+    --keylayout 0 \
+    --verif-color="$RIGHT" \
+    --ringver-color="$RIGHT" \
+    --bshl-color="$WRONG" \
+    --wrong-color="$WRONG" \
+    --ringwrong-color="$WRONG" \
+    --layout-font="$FONT" \
+    --time-font="$FONT" \
+    --date-font="$FONT" \
+    --verif-font="$FONT" \
+    --wrong-font="$FONT" \
+    --greeter-font="$FONT:style=Bold" \
+    --time-pos="ix:iy+80" \
+    --date-pos="ix:iy+135" \
+    --greeter-pos="ix:iy+115" \
+    --verif-size=12 \
+    --wrong-size=12 \
+    --modif-size=12 \
+    --time-size=14 \
+    --date-size=16 \
+    --greeter-size=18
+} #--no-verify --blur 5 --screen 1 --ind-pos="w/2:h/2-42"
 
-
+#slock -m "$(lock_msg.sh)" || lock
+#i3lock -i ~/Pictures/noise_lock_452f2f.png -e -t -u -n || lock
 
 ## Run after the locker exits
 post_lock() {
-    if [ "$STATUS" = "Playing" ]; then
-	    media-control play
-    fi
+    [ "$STATUS" = "Playing" ] && media-control play
 
-    if pgrep -x dunst; then
-        dunstctl set-paused false
-    fi
-
-    return
+    pgrep -x dunst && dunstctl set-paused false
 }
+#mailsync #Since mail isn't detected while PC is asleep
+#if [ -n "$mpdstatus" ] && mpc play
+#echo resume >/tmp/signal_bar
 
 pre_lock
 
-lock
+if [ $XDG_SESSION_TYPE = "wayland" ]; then
+    swaylock
+elif [ $XDG_SESSION_TYPE = "x11" ]; then
+    case $1 in
+        --simple) slock || lock ;;
+        --secure) xlock || lock ;;
+        *) lock ;;
+    esac
+else
+    echo "Unsupported session type: $XDG_SESSION_TYPE"
+fi
 
 post_lock
