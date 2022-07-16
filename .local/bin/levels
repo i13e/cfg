@@ -4,73 +4,45 @@
 
 case $1 in
     volume)
-        SINK=$(pactl info | grep "Default Sink" | cut -d " " -f3)
+        #SINK=$(pactl get-default-sink)
         value="${3:-5}"
+        vol=$(pactl get-sink-volume @DEFAULT_SINK@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
         case $2 in
-            up) currentVol=$(pactl list | grep -E "Name: $SINK$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
-                if [[ "$currentVol" -ge "100" ]]; then
-                    true
-                else
-                    pactl set-sink-volume "$SINK" +"$value"%
-                fi
-                ;;
-            down) pactl set-sink-volume "$SINK" -"$value"%
-                ;;
-            mute) muted=$(pactl list | grep -E "Name: $SINK$|Mute" | grep "Name:" -A1 | tail -1 |cut -d: -f2| tr -d " ")
-                if [ "$muted" == no ]; then
-                    pactl set-sink-mute "$SINK" toggle
-                    vol=$(pactl list | grep -E "Name: $SINK$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
-                    notify-send -h string:x-canonical-private-synchronous:audio "婢 Muted: " -h int:value:"$vol"
-                    exit 0
-                else
-                    pactl set-sink-mute "$SINK" toggle
-                fi
-                ;;
-            get) muted=$(pactl list | grep -E "Name: $SINK$|Mute" | grep "Name:" -A1 | tail -1 |cut -d: -f2| tr -d " ")
-                if [ "$muted" == no ]; then
-                    vol=$(pactl list | grep -E "Name: $SINK$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
-                    echo "$vol"
-                    exit 0
-                else
-                    echo "M"
-                    exit 0
-                fi
+            up) [ "$vol" -ge "100" ] || pactl set-sink-volume @DEFAULT_SINK@ +"$value"% ;;
+            down) pactl set-sink-volume @DEFAULT_SINK@ -"$value"% ;;
+            mute) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
+            get) ;;
         esac
-        vol=$(pactl list | grep -E "Name: $SINK$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
+        vol=$(pactl get-sink-volume @DEFAULT_SINK@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
+        muted=$(pactl get-sink-mute @DEFAULT_SINK@ | cut -d " " -f2)
         if [ "$vol" -le 25 ]; then
             notify-send -h string:x-canonical-private-synchronous:audio "奄 Volume: " -h int:value:"$vol"
         elif [ "$vol" -le 75 ]; then
             notify-send -h string:x-canonical-private-synchronous:audio "奔 Volume: " -h int:value:"$vol"
+        elif [ "$muted" == yes ]; then
+            notify-send -h string:x-canonical-private-synchronous:audio "婢 Muted: " -h int:value:"$vol"
         else
             notify-send -h string:x-canonical-private-synchronous:audio "墳 Volume: " -h int:value:"$vol"
         fi
         exit 0
         ;;
     mic)
-        SOURCE=$(pactl info | grep "Default Source" | cut -d " " -f3)
+        #SOURCE=$(pactl get-default-source)
         value="${3:-5}"
+        vol=$(pactl get-source-volume @DEFAULT_SOURCE@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
         case $2 in
-            up) currentVol=$(pactl list | grep -E "Name: $SOURCE$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
-                if [[ "$currentVol" -ge "100" ]]; then
-                    true
-                else
-                    pactl set-source-volume "$SOURCE" +"$value"%
-                fi
-                ;;
-            down) pactl set-source-volume "$SOURCE" -"$value"%
-                ;;
-            mute) muted=$(pactl list | grep -E "Name: $SOURCE$|Mute" | grep "Name:" -A1 | tail -1 |cut -d: -f2| tr -d " ")
-                if [ "$muted" == no ]; then
-                    pactl set-source-mute "$SOURCE" toggle
-                    vol=$(pactl list | grep -E "Name: $SOURCE$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
-                    notify-send -h string:x-canonical-private-synchronous:microphone " Mic Muted: " -h int:value:"$vol"
-                    exit 0
-                else
-                    pactl set-source-mute "$SOURCE" toggle
-                fi
+            up) [ "$vol" -ge "100" ] || pactl set-source-volume @DEFAULT_SOURCE@ +"$value"% ;;
+            down) pactl set-source-volume @DEFAULT_SOURCE@ -"$value"% ;;
+            mute) pactl set-source-mute @DEFAULT_SOURCE@ toggle ;;
+            get) ;;
         esac
-        vol=$(pactl list | grep -E "Name: $SOURCE$|Volume" | grep "Name:" -A1 | tail -1 | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
-        notify-send -h string:x-canonical-private-synchronous:microphone " Mic Volume: " -h int:value:"$vol"
+        vol=$(pactl get-source-volume @DEFAULT_SOURCE@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
+        muted=$(pactl get-source-mute @DEFAULT_SOURCE@ | cut -d " " -f2)
+        if [ "$muted" == yes ]; then
+            notify-send -h string:x-canonical-private-synchronous:audio " Mic Muted: " -h int:value:"$vol"
+        else
+            notify-send -h string:x-canonical-private-synchronous:audio " Mic Volume: " -h int:value:"$vol"
+        fi
         exit 0
         ;;
     brightness)
@@ -93,17 +65,14 @@ case $1 in
         ;;
     mpc)
         case $2 in
-            up)
-                mpc volume +"$value"
-                ;;
-            down)
-                mpc volume -"$value"
-                ;;
+            up) mpc volume +"$value" ;;
+            down) mpc volume -"$value" ;;
         esac
         vol=$(mpc volume | awk -F "\t|%|:" '{ print $2 }' | tr -d " ")
         #label="MPD"
         ;;
     *)
         echo "Not the right arguments: $1"
-        exit 2
+        exit 1
+        ;;
 esac
