@@ -6,6 +6,7 @@
 
 #trap 'kill -9 -$$ %1 %2' EXIT INT
 
+### Generate User Pic for lockscreen.
 USER_PIC="$HOME/images/icons/avatar_highres.png" # where your user pic resides
 CROP_USER="/tmp/$USER-pic-crop.png" # where the formatted pic will be generated
 
@@ -42,7 +43,7 @@ pre_lock() {
 
     # Ensure picom is running otherwise blur won't work
     pgrep -x picom || picom --experimental-backends &
-    # TODO wayland equivalent?
+    # TODO rewrite to support wayland
 
     # Kill these just in case
     pkill -x rofi
@@ -54,16 +55,15 @@ pre_lock() {
     # Clear all clipboard & selections
     [ $XDG_SESSION_TYPE = x11 ] && xsel -dbps --logfile /dev/null
     [ $XDG_SESSION_TYPE = wayland ] && wl-copy -c
+
+    # TODO is this needed?
+    #echo pause >/tmp/signal_bar
+
+    ## If using locker w/o screen coverage (e.g. xtrlock, slock with unlockscreen patch)
+
+    #nsxiv -bf ~/.cache/i3lock/$currentWall &
+    #unclutter -idle 0 -jitter 99999 & # hide cursor
 }
-
-# TODO is this needed?
-#echo pause >/tmp/signal_bar
-#mpdstatus=$(mpc status | grep 'playing')
-#mpc pause
-
-## If using locker w/o screen coverage (e.g. xtrlock, slock with unlockscreen patch)
-#nsxiv -bf ~/.cache/i3lock/$currentWall &
-#unclutter -idle 0 -jitter 99999 & # hide cursor
 
 ## Variables for lockers
 FONT="monospace"
@@ -74,7 +74,8 @@ TEXT="#EFE9F0"          # text color
 RIGHT="#88C0D0"          # blue color
 WRONG="#BF616A"          # red color
 
-    #XSECURELOCK_SAVER="/home/barbaross/.local/bin/background.sh"
+## Options to pass to xsecurelock
+#XSECURELOCK_SAVER="/home/barbaross/.local/bin/background.sh"
 xlock() {
     XSECURELOCK_AUTH_BACKGROUND_COLOR="$BG" \
     XSECURELOCK_BACKGROUND_COLOR="$BG" \
@@ -155,13 +156,17 @@ lock() { i3lock \
 
 ## Run after the locker exits
 post_lock() {
+
+    # Resume music (if enabled)
     [ "$STATUS" = "Playing" ] && media-control play
 
-    pgrep -x dunst && dunstctl set-paused false
+    # Unpause notifications
+    dunstctl set-paused false
+
+    #echo resume >/tmp/signal_bar
+    #task sync
+    #vdirsyncer sync
 }
-#mailsync #Since mail isn't detected while PC is asleep
-#if [ -n "$mpdstatus" ] && mpc play
-#echo resume >/tmp/signal_bar
 
 pre_lock
 
