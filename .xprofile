@@ -10,7 +10,6 @@
 xrdb "$XDG_CONFIG_HOME/x11/xresources" & xrdbpid=$!
 layout              # set the layout & background of the screen
 remaps      	    # run the remaps script (switching caps/esc)
-setbg
 
 # Autostart programs.
 autostart="syncthing --no-browser

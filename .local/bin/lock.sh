@@ -53,8 +53,8 @@ pre_lock() {
     gpg-connect-agent --no-autostart reloadagent /bye
 
     # Clear all clipboard & selections
-    [ $XDG_SESSION_TYPE = x11 ] && xsel -dbps --logfile /dev/null
-    [ $XDG_SESSION_TYPE = wayland ] && wl-copy -c
+    [ "$XDG_SESSION_TYPE" = x11 ] && xsel -dbps --logfile /dev/null
+    [ "$XDG_SESSION_TYPE" = wayland ] && wl-copy -c
 
     # TODO is this needed?
     #echo pause >/tmp/signal_bar
@@ -170,9 +170,9 @@ post_lock() {
 
 pre_lock
 
-if [ $XDG_SESSION_TYPE = "wayland" ]; then
+if [ "$XDG_SESSION_TYPE" = wayland ]; then
     swaylock
-elif [ $XDG_SESSION_TYPE = "x11" ]; then
+elif [ "$XDG_SESSION_TYPE" = x11 ]; then
     case $1 in
         --simple) slock || lock ;;
         --secure) xlock || lock ;;

@@ -61,7 +61,7 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 #export DICS="/usr/share/stardict/dic/"
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 #export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
-export LESS='-rsiFMx4 --mouse --wheel-lines=5'
+export LESS='-isRFXMx4 --mouse --wheel-lines=5'
 #export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 #export MANPAGER='nvim +Man!'
 export LIBVA_DRIVER_NAME=iHD

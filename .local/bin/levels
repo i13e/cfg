@@ -1,6 +1,6 @@
 #!/bin/bash
 # for mic mute: https://askubuntu.com/questions/26068/how-do-you-mute-from-the-command-line/1163416#1163416
-# dependencies: notify-send, pactl, xbacklight
+# dependencies: notify-send, pactl, light
 
 case $1 in
     volume)
@@ -76,12 +76,12 @@ case $1 in
     brightness)
         value="${3:-10}"
         case $2 in
-            up) xbacklight -inc "$value" -time 0 ;;
-            max) xbacklight -set 100 -time 0;;
-            min) xbacklight -set 0 -time 0;;
-            down) xbacklight -dec "$value" -time 0 ;;
+            up) light -A "$value" ;;
+            max) light -S 100 ;;
+            down) light -U "$value" ;;
+            min) light -S 0 ;;
         esac
-        bright=$(xbacklight -get | cut -d "." -f 1)
+        bright=$(light | cut -d "." -f 1)
         if [ "$bright" -le 25 ]; then
             notify-send -h string:x-canonical-private-synchronous:brightness " Brightness: " -h int:value:"$bright"
         elif [ "$bright" -le 75 ]; then

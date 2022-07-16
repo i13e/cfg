@@ -9,10 +9,8 @@ case "$(readlink -f /sbin/init)" in
 esac
 
 # Background xss-lock if not already running
-if [ pgrep -x "xss-lock" >/dev/null ] ; then
-    true
-else
-    xset s 300 5
+if ! pgrep -x "xss-lock" >/dev/null ; then
+    [ "$XDG_SESSION_TYPE" = x11 ] && xset s 300 5 && xset dpms 0 0 0
     xss-lock -n /usr/lib/xsecurelock/dimmer -l -- lock.sh &
 fi
 
@@ -24,13 +22,12 @@ options=" Lock
  Shutdown
 ﴹ Display off"
 
-choice=$(printf "$options" | dmenu -i -p "Action:")
-# TODO is lock-session needed on suspend with xss-lock?
+choice=$(printf "%s" "$options" | dmenu -i -p "Action:")
 case "$choice" in
 	*Lock*) loginctl lock-session ;;
 	*Logout*) kill -15 -1 ;;
-	*Suspend*) loginctl lock-session & $ctl suspend-then-hibernate ;;
-	*Hibernate*) loginctl lock-session & $ctl hibernate ;;
+	*Suspend*) $ctl suspend-then-hibernate ;;
+	*Hibernate*) $ctl hibernate ;;
 	*Reboot*) $ctl reboot -i ;;
 	*Shutdown*) $ctl poweroff -i ;;
 	*Display*off*) xset dpms force off ;; # TODO write a wayland alternative
