@@ -26,18 +26,15 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
-#export BRAVE_FLAGS=$(cat $XDG_CONFIG_HOME/brave-flags.conf | sed 's/#.*//')
 export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
 #export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
 export ERRFILE="$XDG_DATA_HOME/x11/xsession-errors"
 export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
 #export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch-config"
 #export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
-export LESSHISTFILE="-"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-#export ALSA_CONFIG_PATH="$XDG_CONFIG_HOME/alsa/asoundrc"
 #export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
 #export KODI_DATA="$XDG_DATA_HOME/kodi"
@@ -60,13 +57,9 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 ## Other program settings.
 #export DICS="/usr/share/stardict/dic/"
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
-#export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
-export LESS='-isRFXMx4 --mouse --wheel-lines=5'
+export LESS='-isRFMx4 --mouse --wheel-lines=5'
 #export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 #export MANPAGER='nvim +Man!'
 export LIBVA_DRIVER_NAME=iHD
 export QT_QPA_PLATFORMTHEME=gtk2
 export PF_INFO="ascii title os host kernel wm pkgs shell editor palette"
-
-#XDG_SESSION_TYPE=x11
-#pidof -s "beet" || beet bpd &
