@@ -1,12 +1,6 @@
 -- each of these are documented in `:help nvim-tree.OPTION_NAME`
-if not pcall(require, "nvim-tree") then
-	return
-end
-
-local remap = vim.api.nvim_set_keymap
-
-remap("", "<leader>ee", "<Esc>:NvimTreeToggle<CR>", { silent = true })
-remap("", "<leader>ef", "<Esc>:NvimTreeFindFileToggle<CR>", { silent = true })
+vim.keymap.set("", "<leader>ee", "<Esc>:NvimTreeToggle<CR>", { silent = true })
+vim.keymap.set("", "<leader>ef", "<Esc>:NvimTreeFindFileToggle<CR>", { silent = true })
 
 require("nvim-tree").setup({
 	disable_netrw = true,
