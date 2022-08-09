@@ -1,20 +1,20 @@
-#!/bin/sh
+#!/bin/bash
 # for mic mute: https://askubuntu.com/questions/26068/how-do-you-mute-from-the-command-line/1163416#1163416
-# dependencies: notify-send, pactl, light
+# dependencies: pactl, light, notify-send
 
 case $1 in
     volume)
         #SINK=$(pactl get-default-sink)
         value="${3:-5}"
-        vol=$(pactl get-sink-volume @DEFAULT_SINK@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
+        vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | cut -d% -f1)
         case $2 in
-            up) [ "$vol" -ge "100" ] || pactl set-sink-volume @DEFAULT_SINK@ +"$value"% ;;
+            up) [ "$vol" -ge 100 ] || pactl set-sink-volume @DEFAULT_SINK@ +"$value"% ;;
             down) pactl set-sink-volume @DEFAULT_SINK@ -"$value"% ;;
             mute) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
             get) ;;
         esac
-        vol=$(pactl get-sink-volume @DEFAULT_SINK@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
-        muted=$(pactl get-sink-mute @DEFAULT_SINK@ | cut -d " " -f2)
+        vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | cut -d% -f1)
+        muted=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
         if [ "$vol" -le 25 ]; then
             notify-send -h string:x-canonical-private-synchronous:audio "奄 Volume: " -h int:value:"$vol"
         elif [ "$vol" -le 75 ]; then
@@ -29,19 +29,19 @@ case $1 in
     mic)
         #SOURCE=$(pactl get-default-source)
         value="${3:-5}"
-        vol=$(pactl get-source-volume @DEFAULT_SOURCE@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
+        vol=$(pactl get-source-volume @DEFAULT_SOURCE@ | awk '{print $5}' | cut -d% -f1)
         case $2 in
-            up) [ "$vol" -ge "100" ] || pactl set-source-volume @DEFAULT_SOURCE@ +"$value"% ;;
+            up) [ "$vol" -ge 100 ] || pactl set-source-volume @DEFAULT_SOURCE@ +"$value"% ;;
             down) pactl set-source-volume @DEFAULT_SOURCE@ -"$value"% ;;
             mute) pactl set-source-mute @DEFAULT_SOURCE@ toggle ;;
             get) ;;
         esac
-        vol=$(pactl get-source-volume @DEFAULT_SOURCE@ | cut -d% -f1 | cut -d/ -f2 | tr -d " ")
-        muted=$(pactl get-source-mute @DEFAULT_SOURCE@ | cut -d " " -f2)
+        vol=$(pactl get-source-volume @DEFAULT_SOURCE@ | awk '{print $5}' | cut -d% -f1)
+        muted=$(pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}')
         if [ "$muted" = yes ]; then
-            notify-send -h string:x-canonical-private-synchronous:audio " Mic Muted: " -h int:value:"$vol"
+            notify-send -h string:x-canonical-private-synchronous:mic " Mic Muted: " -h int:value:"$vol"
         else
-            notify-send -h string:x-canonical-private-synchronous:audio " Mic Volume: " -h int:value:"$vol"
+            notify-send -h string:x-canonical-private-synchronous:mic " Mic Volume: " -h int:value:"$vol"
         fi
         exit 0
         ;;
@@ -53,13 +53,13 @@ case $1 in
             down) light -U "$value" ;;
             min) light -S 0 ;;
         esac
-        bright=$(light | cut -d "." -f 1)
+        bright=$(light | cut -d. -f1)
         if [ "$bright" -le 25 ]; then
-            notify-send -h string:x-canonical-private-synchronous:brightness " Brightness: " -h int:value:"$bright"
+            notify-send -h string:x-canonical-private-synchronous:bright " Brightness: " -h int:value:"$bright"
         elif [ "$bright" -le 75 ]; then
-            notify-send -h string:x-canonical-private-synchronous:brightness " Brightness: " -h int:value:"$bright"
+            notify-send -h string:x-canonical-private-synchronous:bright " Brightness: " -h int:value:"$bright"
         else
-            notify-send -h string:x-canonical-private-synchronous:brightness " Brightness: " -h int:value:"$bright"
+            notify-send -h string:x-canonical-private-synchronous:bright " Brightness: " -h int:value:"$bright"
         fi
         exit 0
         ;;

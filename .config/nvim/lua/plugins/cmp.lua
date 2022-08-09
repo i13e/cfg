@@ -3,7 +3,12 @@ if not res then
 	return
 end
 
-local luasnip = require("luasnip")
+local res_luasnip, luasnip = pcall(require, "luasnip")
+if not res_luasnip then
+	return
+end
+
+require("luasnip.loaders.from_vscode").lazy_load()
 
 cmp.setup({
 	snippet = {
@@ -14,17 +19,23 @@ cmp.setup({
 	},
 
 	window = {
-		-- completion = { border = 'single' },
-		-- documentation = { border = 'single' },
+		--completion = { border = 'single' },
+		documentation = {
+			--border = 'single',
+			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+		},
 	},
 
 	completion = {
 		-- start completion immediately
 		keyword_length = 1,
 	},
-
 	sources = {
+		-- copilot source
+		{ name = "copilot" },
+		-- other sources
 		{ name = "nvim_lsp" },
+		-- { name = "spell" },
 		{ name = "nvim_lua" },
 		{ name = "luasnip" },
 		{ name = "path" },
@@ -54,12 +65,13 @@ cmp.setup({
 		fields = { "kind", "abbr", "menu" },
 		format = function(entry, vim_item)
 			local source_names = {
-				path = "Path",
 				buffer = "Buffer",
 				cmdline = "Cmdline",
-				luasnip = "LuaSnip",
-				nvim_lua = "Lua",
+				copilot = "Copilot",
+				luasnip = "Snippet",
 				nvim_lsp = "LSP",
+				nvim_lua = "API",
+				path = "Path",
 			}
 
 			vim_item.menu = ("%-10s [%s]"):format(vim_item.kind, source_names[entry.source.name] or entry.source.name)
@@ -70,8 +82,33 @@ cmp.setup({
 				vim_item.kind = vim.lsp.protocol.CompletionItemKind[kind_idx]
 			end
 
+			if entry.source.name == "copilot" then
+				vim_item.kind = " "
+				return vim_item
+			end
+
 			return vim_item
 		end,
+	},
+
+	sorting = {
+		priority_weight = 2,
+		comparators = {
+			require("copilot_cmp.comparators").prioritize,
+			require("copilot_cmp.comparators").score,
+
+			-- Below is the default comparitor list and order for nvim-cmp
+			cmp.config.compare.offset,
+			-- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+			cmp.config.compare.exact,
+			cmp.config.compare.score,
+			cmp.config.compare.recently_used,
+			cmp.config.compare.locality,
+			cmp.config.compare.kind,
+			cmp.config.compare.sort_text,
+			cmp.config.compare.length,
+			cmp.config.compare.order,
+		},
 	},
 
 	-- DO NOT ENABLE
@@ -80,6 +117,15 @@ cmp.setup({
 		native_menu = false,
 		ghost_text = true,
 	},
+})
+
+-- Set configuration for specific filetype.
+cmp.setup.filetype("gitcommit", {
+	sources = cmp.config.sources({
+		{ name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
+	}, {
+		{ name = "buffer" },
+	}),
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
