@@ -1,12 +1,13 @@
 #!/bin/sh
 # dependencies: mpc, cmus, playerctl
-# media-control is a script that acts like playerctl, but controls MPD
-# instead of MPRIS if MPD is active.
+# media-control is a script that acts like playerctl, but controls
+# terminal players directly instead of through MPRIS.
 
 #active=$(mpc current | wc -l)
 active=$(cmus-remote -C status | wc -l)
+
 # If output is only one line, likely that mpd is actively playing
-if [ $active -gt 1 ]; then
+if [ "$active" -gt 1 ]; then
 	# translate playerctl commands to mpc commands
 	case "$1" in
 	play-pause)
@@ -24,24 +25,24 @@ if [ $active -gt 1 ]; then
 	stop)
 		cmus-remote -s
 		;;
-    # for lockscreen
-    status)
-        echo $(cmus-remote -C status | grep status | sed 's@status\ p@\P@g')
-        ;;
-    pause)
-        cmus-remote -U
-        ;;
-    play)
-        cmus-remote -p
-        ;;
+	# for lockscreen
+	status)
+		cmus-remote -C status | grep status | sed 's@status\ p@\P@g'
+		;;
+	pause)
+		cmus-remote -U
+		;;
+	play)
+		cmus-remote -p
+		;;
 	*)
+		# mpc "$@"
 		cmus-remote "$@"
 		;;
 	esac
 elif command -v playerctl >/dev/null; then
 	playerctl "$@"
 else
-	# shellcheck disable=SC2016 # I don't want expansion in this string
-	#echo 'mpd is not running, and playerctl is not in your $PATH'
-	echo 'cmus is not running, and playerctl is not in your $PATH'
+	# echo "mpd is not running, and playerctl is not in your \$PATH"
+	echo "cmus is not running, and playerctl is not in your \$PATH"
 fi

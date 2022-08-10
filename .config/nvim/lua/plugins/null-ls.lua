@@ -1,25 +1,11 @@
+-- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
+
 local ok, null_ls = pcall(require, "null-ls")
 local b = null_ls.builtins
 
 if not ok then
 	return
 end
-
-local sources = {
-	-- formatting
-	-- diagnostics
-	--b.completion.spell,
-	--b.diagnostics.actionlint,
-	--b.diagnostics.codespell,
-	--b.diagnostics.misspell,
-	--b.diagnostics.shellcheck,
-	--b.formatting.ktlint,
-	--b.formatting.markdownlint,
-	--b.formatting.prettierd,
-	b.formatting.black,
-	b.formatting.stylua,
-	b.diagnostics.flake8,
-}
 
 -- local with_root_file = function(...)
 --     local files = { ... }
@@ -28,32 +14,55 @@ local sources = {
 --     end
 -- end
 
+local sources = {
+	-- TODO Completions?
+	--b.completion.spell,
+	-- code_actions
+	b.code_actions.gitsigns,
+	-- b.code_actions.proselint,
+	-- b.code_actions.shellcheck,
+	-- formatting
+	b.formatting.black,
+	b.formatting.prettierd,
+	b.formatting.shfmt,
+	-- b.formatting.beautysh,
+	b.formatting.stylua,
+	--b.formatting.ktlint,
+	--b.formatting.markdownlint,
+	-- diagnostics
+	b.diagnostics.flake8,
+	b.diagnostics.zsh,
+	--b.diagnostics.shellcheck,
+	--b.diagnostics.misspell,
+	--b.diagnostics.codespell,
+	--b.diagnostics.actionlint,
+	-- hover
+	-- b.hover.dictionary,
+}
+
 -- local sources = {
---     -- formatting
---     b.formatting.prettier,
---     b.formatting.fish_indent,
---     b.formatting.shfmt,
---     b.formatting.clang_format,
---     b.formatting.trim_whitespace.with({
---         filetypes = { "tmux", "snippets" },
---     }),
---     b.formatting.stylua.with({
---         condition = with_root_file("stylua.toml"),
---     }),
---     b.formatting.cbfmt.with({
---         condition = with_root_file(".cbfmt.toml"),
---     }),
---     -- diagnostics
---     b.diagnostics.selene.with({
---         condition = with_root_file("selene.toml"),
---     }),
---     b.diagnostics.write_good,
---     b.diagnostics.markdownlint,
---     -- code actions
---     b.code_actions.gitsigns,
---     b.code_actions.gitrebase,
---     -- hover
---     b.hover.dictionary,
+-- 	-- formatting
+-- 	b.formatting.jq,
+-- 	b.formatting.uncrustify,
+-- 	b.formatting.clang_format,
+-- 	b.formatting.trim_whitespace.with({
+-- 		filetypes = { "tmux", "snippets" },
+-- 	}),
+-- 	b.formatting.stylua.with({
+-- 		condition = with_root_file("stylua.toml"),
+-- 	}),
+-- 	b.formatting.cbfmt.with({
+-- 		condition = with_root_file(".cbfmt.toml"),
+-- 	}),
+-- 	-- diagnostics
+-- 	b.diagnostics.selene.with({
+-- 		condition = with_root_file("selene.toml"),
+-- 	}),
+-- 	b.diagnostics.write_good,
+-- 	b.diagnostics.cppcheck,
+-- 	b.diagnostics.yamllint,
+-- 	-- code actions
+-- 	b.code_actions.gitrebase,
 -- }
 
 -- NOTE: Neovim >= 0.8

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # for mic mute: https://askubuntu.com/questions/26068/how-do-you-mute-from-the-command-line/1163416#1163416
 # dependencies: pactl, light, notify-send
 
