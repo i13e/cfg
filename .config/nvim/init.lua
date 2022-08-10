@@ -1,5 +1,14 @@
+-- NOTE: Remove impatient when this is merged:
+-- https://github.com/neovim/neovim/pull/15436
+
 if not pcall(require, "impatient") then
 	print("impatient was not loaded")
+end
+
+if vim.g.neovide then
+	vim.g.neovide_cursor_trail_legnth = 0
+	vim.g.neovide_cursor_animation_length = 0
+	vim.o.guifont = "Jetbrains Mono"
 end
 
 local core_modules = {
@@ -8,7 +17,6 @@ local core_modules = {
 	"mappings",
 	-- "keymaps",
 	"autocmd",
-	"new-autocmd",
 }
 
 -- Using pcall we can handle better any loading issues

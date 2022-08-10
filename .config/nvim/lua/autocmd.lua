@@ -52,36 +52,6 @@ augroups.misc = {
 		end,
 	},
 
-	-- TODO : delete these 3 autocmds
-	-- update_file = { -- If you stop typing for a while it will save it!
-	--     event = {"CursorHold", "CursorHoldI"},
-	--     pattern = "*",
-	--     callback = function()
-	--         -- https://stackoverflow.com/a/69669289/2571881
-	--         local buffer_name = vim.api.nvim_buf_get_name(0)
-	--         if (buffer_name ~= '' or ~= nil) then
-	--             vim.cmd('<buffer> silent! update')
-	--         end
-	--     end
-	-- },
-
-	-- -- https://www.reddit.com/r/neovim/comments/mn7coe/
-	-- lsp_diagnostic = {
-	--     event = "CursorHold",
-	--     pattern = "*",
-	--     callback = function()
-	--         vim.lsp.diagnostic.show_line_diagnostics()
-	--     end,
-	-- },
-	--
-	-- ls_signature = {
-	--     event = "CursorHoldI",
-	--     pattern = "*",
-	--     callback = function()
-	--         vim.lsp.buf.signature_help()
-	--     end,
-	-- },
-
 	unlist_terminal = {
 		event = "TermOpen",
 		pattern = "*",
