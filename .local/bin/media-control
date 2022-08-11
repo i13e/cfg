@@ -1,7 +1,7 @@
 #!/bin/sh
+# media-control is a script that wraps around playerctl and controls
+# active terminal music players directly instead of through MPRIS.
 # dependencies: mpc, cmus, playerctl
-# media-control is a script that acts like playerctl, but controls
-# terminal players directly instead of through MPRIS.
 
 #active=$(mpc current | wc -l)
 active=$(cmus-remote -C status | wc -l)

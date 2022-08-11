@@ -14,8 +14,7 @@ end
 local core_modules = {
 	"plugins",
 	"options",
-	"mappings",
-	-- "keymaps",
+	"keymaps",
 	"autocmd",
 }
 

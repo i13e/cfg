@@ -6,6 +6,10 @@
 # If .zprofile wasn't sourced, source it.
 [ -z "$XDG_CONFIG_HOME" ] && . "$HOME/.zprofile"
 
+# https://wiki.archlinux.org/title/GNOME/Keyring#Launching_gnome-keyring-daemon_outside_desktop_environments_(KDE,_GNOME,_XFCE,_...)
+#dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
+#dbus-update-activation-environment --all
+
 # Run startup scripts.
 xrdb "$XDG_CONFIG_HOME/x11/xresources" & xrdbpid=$!
 layout              # set the layout & background of the screen

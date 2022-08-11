@@ -50,7 +50,7 @@ brightness)
 	case $2 in
 	up) light -A "$value" ;;
 	max) light -S 100 ;;
-	down) light -U "$value" ;;
+	down) light -U $value ;;
 	min) light -S 0 ;;
 	esac
 	bright=$(light | cut -d. -f1)

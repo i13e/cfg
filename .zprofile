@@ -15,11 +15,12 @@ export PATH="$HOME/.local/bin:$PATH"
 #mkdir -p "$HOME/.local/share/keyrings"
 
 ## Default programs.
-export VISUAL="/usr/bin/nvim"
+#export VISUAL="emacsclient -nw -c -a ''"
+export VISUAL="nvim"
 export EDITOR="$VISUAL"
 export TERMINAL="$HOME/.local/bin/alacritty.sh"
-export BROWSER="/usr/bin/brave"
-export PAGER="/usr/bin/less"
+export BROWSER="brave"
+export PAGER="less"
 
 ## $HOME Clean-up.
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -57,7 +58,7 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 ## Other program settings.
 #export DICS="/usr/share/stardict/dic/"
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
-export LESS='-isRFMx4 --mouse --wheel-lines=5'
+export LESS='-isRFMx4 --mouse --wheel-lines=5' # giMRSwz-4
 #export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 #export MANPAGER='nvim +Man!'
 export LIBVA_DRIVER_NAME=iHD

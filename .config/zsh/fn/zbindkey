@@ -6,12 +6,12 @@ zmodload zsh/zutil
 
 local -a remove keymap array
 
-zparseopts -D r=remove M:=keymap A:=array
+zparseopts -D r:=remove M:=keymap A:=array
 
 function escape-single-key() {
     local -A name=(
         up kcuu1   down kcud1   left kcub1   right kcuf1
-        home khome  end kend  delete kdch1
+        home khome  end kend  delete kdch1  insert kich1
     )
 
     if (( $#1 == 1 )) {
