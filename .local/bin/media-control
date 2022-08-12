@@ -3,46 +3,57 @@
 # active terminal music players directly instead of through MPRIS.
 # dependencies: mpc, cmus, playerctl
 
-#active=$(mpc current | wc -l)
-active=$(cmus-remote -C status | wc -l)
+mpd_active=$(mpc current | wc -l)
+cmus_active=$(cmus-remote -C status | wc -l)
 
-# If output is only one line, likely that mpd is actively playing
-if [ "$active" -gt 1 ]; then
-	# translate playerctl commands to mpc commands
+# If output is greater than one line, likely that mpd is actively playing
+# Translate playerctl commands to mpc/cmus commands.
+if [ "$mpd_active" -gt 1 ]; then
 	case "$1" in
-	play-pause)
-		#mpc toggle
-		cmus-remote -u
-		;;
-	previous)
-		#mpc prev
-		cmus-remote -r
-		;;
-	next)
-		#mpc "$@"
-		cmus-remote -n
-		;;
-	stop)
-		cmus-remote -s
-		;;
-	# for lockscreen
-	status)
-		cmus-remote -C status | grep status | sed 's@status\ p@\P@g'
-		;;
-	pause)
-		cmus-remote -U
-		;;
-	play)
-		cmus-remote -p
-		;;
+	# Command the player to play
+	play) mpc "$@" ;;
+	# Command the player to pause
+	pause) mpc "$@" ;;
+	# Command the player to toggle between play/pause
+	play-pause) mpc toggle ;;
+	# Command the player to stop
+	stop) mpc "$@" ;;
+	# Command the player to skip to the next track
+	next) mpc "$@" ;;
+	# Command the player to skip to the previous track
+	previous) mpc prev ;;
+	# Command the player to go to the position or seek forward/backward OFFSET in seconds
+	position) mpc seek "$2$3" ;;
+	# Get the play status of the player
+	status) mpc "$@" ;;
+	# Print or set the loop status. Can be "None", "Track", or "Playlist".
+	loop) mpc repeat ;;
+	# Print or set the shuffle status. Can be "On", "Off", or "Toggle".
+	shuffle) ;;
 	*)
-		# mpc "$@"
-		cmus-remote "$@"
+		echo "Usage: $0 {play|pause|next|previous}"
+		exit 1
 		;;
 	esac
+elif [ "$cmus_active" -gt 1 ]; then
+	case "$1" in
+	play) cmus-remote -p ;;
+	pause) cmus-remote -U ;;
+	play-pause) cmus-remote -u ;;
+	stop) cmus-remote -s ;;
+	previous) cmus-remote -r ;;
+	next) cmus-remote -n ;;
+	position) cmus-remote --seek "$2$3" ;;
+	status) cmus-remote -C status | grep status | sed 's@status\ p@\P@g' ;;
+	loop) cmus-remote --repeat ;;
+	shuffle) ;;
+	*) cmus-remote "$@" ;;
+	esac
 elif command -v playerctl >/dev/null; then
-	playerctl "$@"
+	case "$1" in
+	position) playerctl position "$3$2" ;;
+	*) playerctl "$@" ;;
+	esac
 else
-	# echo "mpd is not running, and playerctl is not in your \$PATH"
-	echo "cmus is not running, and playerctl is not in your \$PATH"
+	echo "cmus and mpd are not running, and playerctl is not in your \$PATH"
 fi
