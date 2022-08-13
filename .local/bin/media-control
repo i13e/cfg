@@ -3,7 +3,7 @@
 # active terminal music players directly instead of through MPRIS.
 # dependencies: mpc, cmus, playerctl
 
-mpd_active=$(mpc current | wc -l)
+mpd_active=$(mpc current 2>/dev/null | wc -l)
 cmus_active=$(cmus-remote -C status | wc -l)
 
 # If output is greater than one line, likely that player is active.

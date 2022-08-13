@@ -31,6 +31,7 @@ import string
 
 files = sys.argv[1:]
 
+
 # this is the same method mpv uses to decide this
 def is_url(filename):
     parts = filename.split("://", 1)

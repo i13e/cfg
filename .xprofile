@@ -11,15 +11,15 @@
 #dbus-update-activation-environment --all
 
 # Run startup scripts.
-xrdb "$XDG_CONFIG_HOME/x11/xresources" & xrdbpid=$!
-layout              # set the layout & background of the screen
-remaps      	    # run the remaps script (switching caps/esc)
+xrdb "$XDG_CONFIG_HOME/x11/xresources" #& xrdbpid=$!
+layout                                 # set the layout & background of the screen
+remaps                                 # run the remaps script (switching caps/esc)
 
-# beet bpd &
 # gammastep-indicator
 # Autostart programs.
 autostart="syncthing --no-browser
 picom --experimental-backends
+playerctld
 lxpolkit
 unclutter
 gammastep
@@ -27,7 +27,7 @@ sxhkd
 "
 
 printf "%s" "$autostart" | while IFS="" read -r program; do
-    pgrep -fl "$program" || $program &
+	pgrep -fl "$program" || $program &
 done #>/dev/null 2>&1
 
 # As a bash array.
@@ -37,4 +37,4 @@ done #>/dev/null 2>&1
 # done >/dev/null 2>&1
 
 ## Ensure that xrdb has finished.
-[ -n "$xrdbpid" ] && wait "$xrdbpid"
+#[ -n "$xrdbpid" ] && wait "$xrdbpid"

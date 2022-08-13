@@ -56,7 +56,7 @@ super + e ; m
 # Toggle color temperature (redshift)
 super + e ; r
 	pkill -USR1 '^gammastep$'
-# Task manager (htop)
+# System monitor (htop)
 super + e ; s
     $TERMINAL -e btm
 # Task manager (task/ptask)
@@ -64,7 +64,7 @@ super + e ; s
 #    task
 
 
-# Emacs Programs
+## Emacs Programs
 # Launch Emacs
 control + e ; e
 	emacsclient -c -a 'emacs'
@@ -91,8 +91,7 @@ control + e ; v
 	emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'
 
 
-## System
-# Function Keys unbound F10-12
+## TODO System
 # Control brightness
 super + {F1,F2}
     levels brightness {down,up}
@@ -104,10 +103,11 @@ super + F4
     $TERMINAL -e pulsemixer
 # Control audio
 super + {F6,F7,F8,F9}
-	playerctl {stop,previous,play-pause,next}
+	playerctl {-a pause,previous,play-pause,next}
 # View webcam
 super + F11
-    mpv
+    mpv --untimed --no-cache --no-osc --no-config --title=webcam \
+    --profile=low-latency --no-input-default-bindings /dev/video0
 # Rerun keyboard mapping scripts if new keyboard is attached
 super + F12
     remaps
@@ -149,7 +149,8 @@ super + Print
     dmenurecord kill
 # Toggles a webcam in the bottom right for screencasting.
 super + shift + Print
-    mpv --untimed --no-cache --no-osc --no-config --profile=low-latency --no-input-default-bindings --title=webcam /dev/video0
+    mpv --untimed --no-cache --no-osc --no-config --title=webcam \
+    --profile=low-latency --no-input-default-bindings /dev/video0
 # Kills any recording started in the above way
 super + Delete
     dmenurecord kill
@@ -158,63 +159,67 @@ super + Delete
 #     killall screenkey || screenkey &
 
 
-# XF86 Keys (bound in order on my keyboard)
+## XF86 Keys (bound in order on my keyboard)
 # Brightness Up/Down
 {_,super +}XF86MonBrightness{Up,Down}
     levels brightness {up,max,down,min}
-# Brightness Up/Down
 {_, super +}XF86{HomePage,Explorer}
     levels brightness {up,max,down,min}
 # Launch calculator
 XF86{Calculator,LaunchB}
     qalculate-gtk
-# Launch Thunderbird ($TERMINAL -e neomutt)
+# Launch Email client ($TERMINAL -e neomutt)
 XF86{LaunchA,Mail}
     thunderbird
 # Toggle redshift
 XF86{Tools,KbdBrightnessDown}
 	pkill -USR1 '^gammastep$'
-# Audiokeys
+# Audio control keys
 XF86{KbdBrightnessUp,AudioStop}
     playerctl -a pause
 XF86Audio{Prev,Play,Next}
 	playerctl {previous,play-pause,next}
-# Volume & Mic keys
+# {_,Mic} Volume control keys
 {_,super +}XF86Audio{Mute,RaiseVolume,LowerVolume}
 	levels {volume,mic} {mute,up,down}
 # Toggle mic mute
 XF86AudioMicMute
     levels mic mute
-# Change display
+# Select screen/display to use
 XF86Display
 	displayselect
 # TODO XF86WLAN
 # TODO XF86Bluetooth
-# Re-run remaps script
+# Re-run keyboard mapping script
 XF86Favorites
-    remaps & notify-send " Keyboard remapping…" "Re-running keyboard defaults for any newly plugged-in keyboards."
-# XF86Audio{Rewind,Forward}
-#     playerctl {rewind,forward}
-# Launch browser
+    remaps & notify-send " Keyboard remapping…" #"Re-running mapping script"
+
+
+## Extras (not found on my keyboard)
+# Seek {for,back}ward in song
+XF86Audio{Rewind,Forward}
+    playerctl position {10-,10+}
+# Music player ($TERMINAL -e ncmpcpp)
+XF86AudioMedia
+    $TERMINAL -e cmus
+# # Choose to lock screen, logout, shutdown, reboot, etc
+# XF86PowerOff
+#     sysact.sh
+# XF86Sleep
+#     sudo -A zzz
+# Web browser
 XF86WWW
     $BROWSER
 # Launch terminal
 XF86DOS
     $TERMINAL
-# Open system acions
-# XF86PowerOff
-#     sysact.sh
-XF86AudioMedia
-    $TERMINAL "-e cmus"
-# XF86Sleep
-#     sudo -A zzz
-# TODO ADD xset dpms force off
+# Open screensaver
 XF86ScreenSaver
-    lock.sh
-# Launch task manager (htop)
+    xset dpms force off
+# System monitor (htop)
 XF86TaskPane
     $TERMINAL -e btm
-# PCmanfm or lf
+# File Browser (PCManfm)
 XF86MyComputer
     $TERMINAL -e lf /
 XF86Launch1

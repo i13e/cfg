@@ -29,28 +29,29 @@ fi
 
 ## CONFIGURATION ##############################################################
 
-STATUS=$(media-control status || true)
+#STATUS=$(playerctl -a status 2>/dev/null | grep "Playing" || true)
+STATUS=$(playerctl status >/dev/null 2>&1 || true)
 
 ## Run before starting the locker
 pre_lock() {
 
-	# Pause music (if enabled)
-	[ "$STATUS" = "Playing" ] && media-control pause
+	# Pause music
+	[ "$STATUS" = "Playing" ] && playerctl -a pause
 
 	# Pause notifications
 	dunstctl set-paused true
-	# TODO wayland equivalent?
 
 	# Ensure picom is running otherwise blur won't work
-	pgrep -x picom || picom --experimental-backends &
-	# TODO rewrite to support wayland
+	if [ "$XDG_SESSION_TYPE" = x11 ]; then
+		pgrep -x picom >/dev/null || picom --experimental-backends &
+	fi
 
 	# Kill these just in case
 	pkill -x rofi
 	pkill -x xcolor
 
 	# Clear gpg-cache and ssh keys prior to lock. pam-gnupg starts it up again after unlock
-	gpg-connect-agent --no-autostart reloadagent /bye
+	gpg-connect-agent --no-autostart reloadagent /bye >/dev/null
 
 	# Clear all clipboard & selections
 	[ "$XDG_SESSION_TYPE" = x11 ] && xsel -dbps --logfile /dev/null
@@ -159,7 +160,7 @@ lock() {
 post_lock() {
 
 	# Resume music (if enabled)
-	[ "$STATUS" = "Playing" ] && media-control play
+	[ "$STATUS" = "Playing" ] && playerctl play
 
 	# Unpause notifications
 	dunstctl set-paused false
