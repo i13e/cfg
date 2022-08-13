@@ -1,191 +1,225 @@
-# The keys NOT bound here by sxhkd are:
+# References:
+# https://my-take-on.tech/2020/07/03/some-tricks-for-sxhkd-and-bspwm/
+# https://github.com/rcarrerah/dotfiles/blob/master/sxhkdrc
+# Requires: xdotool, playerctl, sysact, levels
+
+# TODO The keys NOT bound here by sxhkd are:
 # The t thru p keys on the top row
 # The f thru ; keys on the home row
 # The b key on the bottom row (hides the bar in either case)
 
-#
-# wm independent hotkeys
-#
-
+## WM-independent hotkeys
 # Terminal emulator
 super + Return
 	$TERMINAL
 # Launcher
 super + shift + Return
 	dmenu_run -p 'Run: '
-super + x
-	kill `xdotool getwindowfocus getwindowpid`
-super + shift + x
-	kill -9 `xdotool getwindowfocus getwindowpid`
-super + shift + f
-	pcmanfm
-#super + Caps_Lock
-#	remaps
-# Toggle redshift
-super + r
-	pkill -USR1 '^redshift$'
-# Open $BROWSER
-super + shift + b
-	$BROWSER
-# sysact
+# {_,force} close window
+super + {_,shift +} x
+	xdotool getwindowfocus {windowquit,windowclose}
+# Choose to lock screen, logout, shutdown, reboot, etc
 super + {_,shift +} {BackSpace, q}
     sysact.sh
-#
-# Function Keys unbound F1-F5,10,11,12
-#
 
-# Audiokeys
-super + {F6,F7,F8,F9}
-	media-control {stop,previous,play-pause,next}
 
-#
-# XF86 Keys
-#
-
-# Launch calculator
-XF86{Calculator,LaunchB}
-    qalculate-gtk
-# Launch browser
-XF86WWW
+## Basic Programs
+# # Address book ($TERMINAL -e abook)
+# super + e ; a
+#     abook
+# Web browser (Librewolf)
+super + e ; b
     $BROWSER
-# Launch terminal
-XF86DOS
-    $TERMINAL
-# Launch task manager
-XF86TaskPane
+# Chat client ($TERMINAL -e irssi)
+super + e ; c
+    ferdium
+# # Calendar (calendar/cal)
+# super + e ; c
+#    cal
+# Email client ($TERMINAL -e neomutt)
+super + e ; e
+    thunderbird
+# File manager ($TERMINAL -e lf)
+super + e ; f
+	pcmanfm
+# Music player ($TERMINAL -e cmus)
+super + e ; m
+    spotify
+# # Note taking (keepnote/vimwiki)
+# super + e ; n
+# RSS feed reader ($TERMINAL -e newsboat)
+# super + e ; n
+#     newsboat
+# # Password manager ($TERMINAL -e passmenu)
+# super + e ; p
+#     rbw
+# Toggle color temperature (redshift)
+super + e ; r
+	pkill -USR1 '^gammastep$'
+# Task manager (htop)
+super + e ; s
     $TERMINAL -e btm
-# Toggle redshift
-XF86{Tools,KbdBrightnessDown}
-	pkill -USR1 '^redshift$'
-# Change display
-XF86Display
-	displayselect
-# Re-run remaps script
-XF86Favorites
-    remaps & notify-send " Keyboard remapping…" "Re-running keyboard defaults for any newly plugged-in keyboards."
-# Volume & Mic keys
-{_,super +}XF86Audio{Mute,RaiseVolume,LowerVolume}
-	levels {volume,mic} {mute,up,down}
-# Toggle mic mute
-XF86AudioMicMute
-    levels mic mute
+# Task manager (task/ptask)
+# super + e ; t
+#    task
+
+
+# Emacs Programs
+# Launch Emacs
+control + e ; e
+	emacsclient -c -a 'emacs'
+# Launch ibuffer inside Emacs
+control + e ; b
+	emacsclient -c -a 'emacs' --eval '(ibuffer)'
+# Launch dired inside Emacs
+control + e ; d
+	emacsclient -c -a 'emacs' --eval '(dired nil)'
+# Launch erc inside Emacs
+control + e ; i
+	emacsclient -c -a 'emacs' --eval '(erc)'
+# Launch mu4e inside Emacs
+control + e ; m
+	emacsclient -c -a 'emacs' --eval '(mu4e)'
+# Launch elfeed inside Emacs
+control + e ; n
+	emacsclient -c -a 'emacs' --eval '(elfeed)'
+# Launch eshell inside Emacs
+control + e ; s
+	emacsclient -c -a 'emacs' --eval '(eshell)'
+# Launch vterm inside Emacs
+control + e ; v
+	emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'
+
+
+## System
+# Function Keys unbound F10-12
+# Control brightness
+super + {F1,F2}
+    levels brightness {down,up}
+# Select screen/display to use
+super + F3
+    displayselect
+# Audio system control
+super + F4
+    $TERMINAL -e pulsemixer
+# Control audio
+super + {F6,F7,F8,F9}
+	playerctl {stop,previous,play-pause,next}
+# View webcam
+super + F11
+    mpv
+# Rerun keyboard mapping scripts if new keyboard is attached
+super + F12
+    remaps
+# # Select an emoji to copy to clipboard
+# super + apostrophe
+#     dmenuunicode
+# # Show contents of clipboard/primary selection
+# super + Insert
+#     showclip
+
+
+## Audio controls (MPRIS)
+# Mod + F4: Pulsemixer, Mod + m ncmpcpp
+# {Next,Previous} track
+super + {comma,period}
+    playerctl {previous,next}
+# {Toggle,Force} pause
+super + {_,shift +} p
+	 playerctl {play-pause,-a pause}
+# Mute volume
+super + shift + m
+    levels volume mute
+# {inc,dec}rease {_,mic} volume
+super + {_,shift +} {minus,equal}
+    levels {volume,mic} {down,up}
+# Seek {for,back}ward in song
+super + {_,shift +} {bracketleft,bracketright}
+    playerctl position {10,60}{-,+}
+
+## Recording
+# Take a screenshot
+Print
+    maim pic-full-$(date '+%y%m%d-%H%M-%S').png
+# Select area to screenshot
+shift + Print
+    maimpick
+# Opens dmenu menu to select kind of audio/video recording
+super + Print
+    dmenurecord kill
+# Toggles a webcam in the bottom right for screencasting.
+super + shift + Print
+    mpv --untimed --no-cache --no-osc --no-config --profile=low-latency --no-input-default-bindings --title=webcam /dev/video0
+# Kills any recording started in the above way
+super + Delete
+    dmenurecord kill
+# # Toggle screenkey (if installed) to show keypresses
+# super + Scroll_Lock
+#     killall screenkey || screenkey &
+
+
+# XF86 Keys (bound in order on my keyboard)
 # Brightness Up/Down
 {_,super +}XF86MonBrightness{Up,Down}
     levels brightness {up,max,down,min}
 # Brightness Up/Down
 {_, super +}XF86{HomePage,Explorer}
     levels brightness {up,max,down,min}
-# Open system acions
-XF86PowerOff
-    sysact.sh
+# Launch calculator
+XF86{Calculator,LaunchB}
+    qalculate-gtk
+# Launch Thunderbird ($TERMINAL -e neomutt)
+XF86{LaunchA,Mail}
+    thunderbird
+# Toggle redshift
+XF86{Tools,KbdBrightnessDown}
+	pkill -USR1 '^gammastep$'
 # Audiokeys
-XF86Audio{Stop,Prev,Play,Next}
-	media-control {stop,previous,play-pause,next}
-XF86KbdBrightnessUp
-    media-control stop
-#3-XF86LaunchA
-#3-Mail
-#XF86WLAN
-#XF86Bluetooth
-
-#
-# Emacs programs launched using the key chord CTRL+e followed by 'key'
-#
-
-# Launch Emacs
-#control + e ; e
-# 	emacsclient -c -a 'emacs'
-# Launch ibuffer inside Emacs
-#control + e ; b
-#	emacsclient -c -a 'emacs' --eval '(ibuffer)'
-# Launch dired inside Emacs
-#control + e ; d
-#	emacsclient -c -a 'emacs' --eval '(dired nil)'
-# Launch erc inside Emacs
-#control + e ; i
-#	emacsclient -c -a 'emacs' --eval '(erc)'
-# Launch mu4e inside Emacs
-#control + e ; m
-#	emacsclient -c -a 'emacs' --eval '(mu4e)'
-# Launch elfeed inside Emacs
-#control + e ; n
-#	emacsclient -c -a 'emacs' --eval '(elfeed)'
-# Launch eshell inside Emacs
-#control + e ; s
-#	emacsclient -c -a 'emacs' --eval '(eshell)'
-# Launch vterm inside Emacs
-#control + e ; v
-#	emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'
-
-#super + e
-#	$TERMINAL -e neomutt; pkill -RTMIN+12 $STATUSBAR
-#super + m
-#	$TERMINAL -e ncmpcpp 2>~/.config/ncmpcpp/ncmpcpp.log
-#super + n
-#	$TERMINAL -e newsboat
-#super + c
-#	$TERMINAL -e calcurse -D ~/.config/calcurse
-#super + v
-#	$TERMINAL -e nvim -c VimwikiIndex
-#super + shift + a
-#	$TERMINAL -e alsamixer || pulsemixer; pkill -RTMIN+10 $STATUSBAR
-#super + shift + c
-#	mpv --no-osc --no-config --no-input-default-bindings --input-conf=/dev/null --title='mpvfloat' /dev/video0
-#super + w
-#	$TERMINAL -e sudo nmtui
-#super + BackSpace
-#    rofi -show run drun
-# Et cetera...
-#super + grave
-#	dmenuunicode
-#super + Scroll_Lock
-#	killall screenkey || screenkey
-#super + Insert
-#	showclip
-#super + x
-#	ifinstalled light-locker && ( light-locker-command -l & xset dpms force off ; mpc pause ; pauseallmpv )
-#XF86Launch1
-#	xset dpms force off
-#XF86TouchpadToggle
-#	(synclient | grep "TouchpadOff.*1" && synclient TouchpadOff=0) || synclient TouchpadOff=1
-#XF86Touchpad{Off,On}
-#	synclient TouchpadOff={1,0}
-
-# Recording
-# Take screenshot
-#Print
-#	maim pic-full-$(date '+%y%m%d-%H%M-%S').png
-# Pick screenshot type
-#shift + Print
-#	maimpick
-# Print: Record audio or video; Del: kill recording
-#super + Print
-#	dmenurecord
-#super + Delete
-#	dmenurecord kill
-
-# Pause audio
-#super + p
-#	mpc toggle
-#super + shift + p
-#	mpc pause; pauseallmpv
-# Changes to next/previous tracks
-#super + {comma,period}
-#	mpc {prev,next}
-# Restart track
-#super + shift + less
-#	mpc seek 0%
-# Seek foward in song
-#super + {_,shift +} bracketright
-#	mpc seek +{10,120}
-# Seek backward in song
-#super + {_,shift +} bracketleft
-#	mpc seek -{10,120}
-# Increase volume
-#super + {equal,plus}
-#	amixer sset Master {5,15}%+; pkill -RTMIN+10 dwmblocks
-# Decrease volume
-#super {_,shift +} + minus
-#	amixer sset Master {5,15}%-; pkill -RTMIN+10 dwmblocks
-#super + shift + m
-#	amixer sset Master toggle; pkill -RTMIN+10 dwmblocks
+XF86{KbdBrightnessUp,AudioStop}
+    playerctl -a pause
+XF86Audio{Prev,Play,Next}
+	playerctl {previous,play-pause,next}
+# Volume & Mic keys
+{_,super +}XF86Audio{Mute,RaiseVolume,LowerVolume}
+	levels {volume,mic} {mute,up,down}
+# Toggle mic mute
+XF86AudioMicMute
+    levels mic mute
+# Change display
+XF86Display
+	displayselect
+# TODO XF86WLAN
+# TODO XF86Bluetooth
+# Re-run remaps script
+XF86Favorites
+    remaps & notify-send " Keyboard remapping…" "Re-running keyboard defaults for any newly plugged-in keyboards."
+# XF86Audio{Rewind,Forward}
+#     playerctl {rewind,forward}
+# Launch browser
+XF86WWW
+    $BROWSER
+# Launch terminal
+XF86DOS
+    $TERMINAL
+# Open system acions
+# XF86PowerOff
+#     sysact.sh
+XF86AudioMedia
+    $TERMINAL "-e cmus"
+# XF86Sleep
+#     sudo -A zzz
+# TODO ADD xset dpms force off
+XF86ScreenSaver
+    lock.sh
+# Launch task manager (htop)
+XF86TaskPane
+    $TERMINAL -e btm
+# PCmanfm or lf
+XF86MyComputer
+    $TERMINAL -e lf /
+XF86Launch1
+	xset dpms force off
+XF86TouchpadToggle
+	(synclient | grep "TouchpadOff.*1" && synclient TouchpadOff=0) || synclient TouchpadOff=1
+XF86Touchpad{Off,On}
+	synclient TouchpadOff={1,0}

@@ -15,12 +15,12 @@ volume)
 	esac
 	vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | cut -d% -f1)
 	muted=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
-	if [ "$vol" -le 25 ]; then
+	if [ "$muted" = yes ]; then
+		notify-send -h string:x-canonical-private-synchronous:audio "婢 Muted: " -h int:value:"$vol"
+	elif [ "$vol" -le 25 ]; then
 		notify-send -h string:x-canonical-private-synchronous:audio "奄 Volume: " -h int:value:"$vol"
 	elif [ "$vol" -le 75 ]; then
 		notify-send -h string:x-canonical-private-synchronous:audio "奔 Volume: " -h int:value:"$vol"
-	elif [ "$muted" = yes ]; then
-		notify-send -h string:x-canonical-private-synchronous:audio "婢 Muted: " -h int:value:"$vol"
 	else
 		notify-send -h string:x-canonical-private-synchronous:audio "墳 Volume: " -h int:value:"$vol"
 	fi
@@ -50,7 +50,7 @@ brightness)
 	case $2 in
 	up) light -A "$value" ;;
 	max) light -S 100 ;;
-	down) light -U $value ;;
+	down) light -U "$value" ;;
 	min) light -S 0 ;;
 	esac
 	bright=$(light | cut -d. -f1)
@@ -62,14 +62,6 @@ brightness)
 		notify-send -h string:x-canonical-private-synchronous:bright " Brightness: " -h int:value:"$bright"
 	fi
 	exit 0
-	;;
-mpc)
-	case $2 in
-	up) mpc volume +"$value" ;;
-	down) mpc volume -"$value" ;;
-	esac
-	vol=$(mpc volume | awk -F "\t|%|:" '{ print $2 }' | tr -d " ")
-	#label="MPD"
 	;;
 *)
 	echo "Not the right arguments: $1"

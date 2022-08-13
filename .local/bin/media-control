@@ -6,9 +6,9 @@
 mpd_active=$(mpc current | wc -l)
 cmus_active=$(cmus-remote -C status | wc -l)
 
-# If output is greater than one line, likely that mpd is actively playing
-# Translate playerctl commands to mpc/cmus commands.
+# If output is greater than one line, likely that player is active.
 if [ "$mpd_active" -gt 1 ]; then
+	# Translate playerctl commands to mpc/cmus commands.
 	case "$1" in
 	# Command the player to play
 	play) mpc "$@" ;;
@@ -24,14 +24,16 @@ if [ "$mpd_active" -gt 1 ]; then
 	previous) mpc prev ;;
 	# Command the player to go to the position or seek forward/backward OFFSET in seconds
 	position) mpc seek "$2$3" ;;
+	# Print or set the volume to LEVEL from 0.0 to 1.0
+	volume) mpc volume "$2$3" ;;
 	# Get the play status of the player
 	status) mpc "$@" ;;
 	# Print or set the loop status. Can be "None", "Track", or "Playlist".
 	loop) mpc repeat ;;
 	# Print or set the shuffle status. Can be "On", "Off", or "Toggle".
-	shuffle) ;;
+	shuffle) mpc shuffle ;;
 	*)
-		echo "Usage: $0 {play|pause|next|previous}"
+		echo "Not the right arguments: $1"
 		exit 1
 		;;
 	esac
@@ -41,17 +43,21 @@ elif [ "$cmus_active" -gt 1 ]; then
 	pause) cmus-remote -U ;;
 	play-pause) cmus-remote -u ;;
 	stop) cmus-remote -s ;;
-	previous) cmus-remote -r ;;
 	next) cmus-remote -n ;;
+	previous) cmus-remote -r ;;
 	position) cmus-remote --seek "$2$3" ;;
+	volume) cmus-remote --volume "$2$3" ;;
 	status) cmus-remote -C status | grep status | sed 's@status\ p@\P@g' ;;
 	loop) cmus-remote --repeat ;;
-	shuffle) ;;
+	shuffle) cmus-remote --shuffle ;;
 	*) cmus-remote "$@" ;;
 	esac
 elif command -v playerctl >/dev/null; then
 	case "$1" in
 	position) playerctl position "$3$2" ;;
+	volume) playerctl set-volume "$3$2" ;;
+	repeat) ;;
+	shuffle) playerctl shuffle toggle ;;
 	*) playerctl "$@" ;;
 	esac
 else
