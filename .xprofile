@@ -16,6 +16,7 @@ layout                                 # set the layout & background of the scre
 remaps                                 # run the remaps script (switching caps/esc)
 
 # gammastep-indicator
+# emacs --daemon
 # Autostart programs.
 autostart="syncthing --no-browser
 picom --experimental-backends

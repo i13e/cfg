@@ -16,101 +16,117 @@ super + Return
 super + shift + Return
 	dmenu_run -p 'Run: '
 # {_,force} close window
-super + {_,shift +} x
+super + {_,shift +} q
 	xdotool getwindowfocus {windowquit,windowclose}
 # Choose to lock screen, logout, shutdown, reboot, etc
-super + {_,shift +} {BackSpace, q}
+super + {_,shift +} BackSpace
     sysact.sh
 
 
 ## Basic Programs
 # # Address book ($TERMINAL -e abook)
-# super + e ; a
+# super + x ; a
 #     abook
 # Web browser (Librewolf)
-super + e ; b
+super + x ; b
     $BROWSER
 # Chat client ($TERMINAL -e irssi)
-super + e ; c
+super + x ; c
     ferdium
 # # Calendar (calendar/cal)
-# super + e ; c
-#    cal
+# super + x ; c
+#     cal
 # Email client ($TERMINAL -e neomutt)
-super + e ; e
+super + x ; e
     thunderbird
 # File manager ($TERMINAL -e lf)
-super + e ; f
+super + x ; f
 	pcmanfm
 # Music player ($TERMINAL -e cmus)
-super + e ; m
+super + x ; m
     spotify
-# # Note taking (keepnote/vimwiki)
-# super + e ; n
+# # Note taking (keepnote/nvim -c VimwikiIndex)
+# super + x ; n
+#     program
 # RSS feed reader ($TERMINAL -e newsboat)
-# super + e ; n
+# super + x ; n
 #     newsboat
 # # Password manager ($TERMINAL -e passmenu)
-# super + e ; p
+# super + x ; p
 #     rbw
 # Toggle color temperature (redshift)
-super + e ; r
+super + x ; r
 	pkill -USR1 '^gammastep$'
 # System monitor (htop)
-super + e ; s
+super + x ; s
     $TERMINAL -e btm
 # Task manager (task/ptask)
-# super + e ; t
-#    task
+# super + x ; t
+#     task
 
 
 ## Emacs Programs
 # Launch Emacs
-control + e ; e
+super + e ; e
 	emacsclient -c -a 'emacs'
 # Launch ibuffer inside Emacs
-control + e ; b
+super + e ; b
 	emacsclient -c -a 'emacs' --eval '(ibuffer)'
 # Launch dired inside Emacs
-control + e ; d
+super + e ; d
 	emacsclient -c -a 'emacs' --eval '(dired nil)'
 # Launch erc inside Emacs
-control + e ; i
+super + e ; i
 	emacsclient -c -a 'emacs' --eval '(erc)'
 # Launch mu4e inside Emacs
-control + e ; m
+super + e ; m
 	emacsclient -c -a 'emacs' --eval '(mu4e)'
 # Launch elfeed inside Emacs
-control + e ; n
+super + e ; n
 	emacsclient -c -a 'emacs' --eval '(elfeed)'
 # Launch eshell inside Emacs
-control + e ; s
+super + e ; s
 	emacsclient -c -a 'emacs' --eval '(eshell)'
 # Launch vterm inside Emacs
-control + e ; v
+super + e ; v
 	emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'
 
 
-## TODO System
+## System
 # Control brightness
 super + {F1,F2}
     levels brightness {down,up}
 # Select screen/display to use
 super + F3
     displayselect
-# Audio system control
+# Control audio (pavucontrol)
 super + F4
     $TERMINAL -e pulsemixer
-# Control audio
+# Control playback
 super + {F6,F7,F8,F9}
 	playerctl {-a pause,previous,play-pause,next}
+# TODO
+# super + F10
+#     command
+# # Transmission torrent client
+# super + F6
+#     torwrap
+# # Toggle on/off transmission client via dmenu
+# super + F7
+#     tdtoggle
+# # Check mail, if mutt-wizard is configured.
+# super + F8
+#     mw -Y
+# # {_,Un}mount an external drive
+# super + {F9,F10}
+#     dmenu{_,un}mount
 # View webcam
 super + F11
     mpv --untimed --no-cache --no-osc --no-config --title=webcam \
     --profile=low-latency --no-input-default-bindings /dev/video0
 # Rerun keyboard mapping scripts if new keyboard is attached
 super + F12
-    remaps
+    remaps & notify-send " Keyboard remapping…" #"Re-running mapping script"
 # # Select an emoji to copy to clipboard
 # super + apostrophe
 #     dmenuunicode
@@ -119,8 +135,7 @@ super + F12
 #     showclip
 
 
-## Audio controls (MPRIS)
-# Mod + F4: Pulsemixer, Mod + m ncmpcpp
+## Volume & Playback Control (MPRIS)
 # {Next,Previous} track
 super + {comma,period}
     playerctl {previous,next}
@@ -137,7 +152,8 @@ super + {_,shift +} {minus,equal}
 super + {_,shift +} {bracketleft,bracketright}
     playerctl position {10,60}{-,+}
 
-## Recording
+
+## Screen Capture & Recording
 # Take a screenshot
 Print
     maim pic-full-$(date '+%y%m%d-%H%M-%S').png
@@ -147,7 +163,7 @@ shift + Print
 # Opens dmenu menu to select kind of audio/video recording
 super + Print
     dmenurecord kill
-# Toggles a webcam in the bottom right for screencasting.
+# View webcam
 super + shift + Print
     mpv --untimed --no-cache --no-osc --no-config --title=webcam \
     --profile=low-latency --no-input-default-bindings /dev/video0
@@ -171,7 +187,7 @@ XF86{Calculator,LaunchB}
 # Launch Email client ($TERMINAL -e neomutt)
 XF86{LaunchA,Mail}
     thunderbird
-# Toggle redshift
+# Toggle color temperature (redshift)
 XF86{Tools,KbdBrightnessDown}
 	pkill -USR1 '^gammastep$'
 # Audio control keys

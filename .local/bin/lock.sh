@@ -29,19 +29,18 @@ fi
 
 ## CONFIGURATION ##############################################################
 
-#STATUS=$(playerctl -a status 2>/dev/null | grep "Playing" || true)
 STATUS=$(playerctl status >/dev/null 2>&1 || true)
 
 ## Run before starting the locker
 pre_lock() {
 
-	# Pause music
-	[ "$STATUS" = "Playing" ] && playerctl -a pause
+	# Pause all players
+	playerctl -a pause
 
 	# Pause notifications
 	dunstctl set-paused true
 
-	# Ensure picom is running otherwise blur won't work
+	# Ensure picom is running, otherwise blur won't work
 	if [ "$XDG_SESSION_TYPE" = x11 ]; then
 		pgrep -x picom >/dev/null || picom --experimental-backends &
 	fi
@@ -61,7 +60,6 @@ pre_lock() {
 	#echo pause >/tmp/signal_bar
 
 	## If using locker w/o screen coverage (e.g. xtrlock, slock with unlockscreen patch)
-
 	#nsxiv -bf ~/.cache/i3lock/$currentWall &
 	#unclutter -idle 0 -jitter 99999 & # hide cursor
 }
@@ -159,7 +157,7 @@ lock() {
 ## Run after the locker exits
 post_lock() {
 
-	# Resume music (if enabled)
+	# Resume most recent players (if active)
 	[ "$STATUS" = "Playing" ] && playerctl play
 
 	# Unpause notifications

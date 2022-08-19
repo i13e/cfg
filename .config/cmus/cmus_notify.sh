@@ -16,4 +16,7 @@ elif [ "$status" = paused ]; then
 fi
 
 # Tell cover script to update
-#echo upd >/tmp/cmus_cover.fifo
+echo upd >/tmp/cmus_cover.jpg
+
+# # It's scrobblin' time
+# cmusfm "$@"
