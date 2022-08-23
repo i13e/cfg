@@ -37,10 +37,6 @@ lsp.set_preferences({
 	},
 })
 
-vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#B48EAD" })
--- local cmp_sources = lsp.defaults.cmp_sources()
--- table.insert(cmp_sources, { name = "copilot" })
-
 local icons = {
 	Text = "", -- 
 	Method = "",
@@ -69,6 +65,8 @@ local icons = {
 	TypeParameter = "",
 	Copilot = "", -- copilot
 }
+
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#B48EAD" })
 
 lsp.setup_nvim_cmp({
 	formatting = {

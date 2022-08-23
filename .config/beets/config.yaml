@@ -1,87 +1,180 @@
-# Main beets config
-directory: ~/music
-library: ~/music/musiclibrary.db
-threaded: yes
-artist_credit: yes
+# Config file for beets.
+# Requires: beets-extrafiles-git, ImageMagick, TODO
+
+# Global options
+directory: ~/music # Destination
+library: ~/music/musiclibrary.db # Database
+
+# List of useful plugins.
+# Commented out (#) plugins are not in use.
+plugins: [
+    badfiles, # Check audio file integrity.
+    bucket, # Group your files into bucket directories that cover different ranges.
+    # check, # Automatically checksum your files to detect corruption.
+    # convert, # Transcode music, embed album art and export to a different directory.
+    # duplicates, # List duplicate tracks or albums.
+    edit, # Edit metadata from a text editor.
+    embedart, # Embed album art images into files’ metadata.
+    export, # Export data from queries to a format.
+    extrafiles, # Helps bring non-music files along during import.
+    fetchart, # Fetch album cover art from various sources.
+    fromfilename, # Guess metadata for untagged tracks from their filenames.
+    # follow, # Lets you check for new albums from artists you like.
+    fuzzy, # Search albums and tracks with fuzzy string matching.
+    # hook, # Run a command when an event is emitted by beets.
+    importadded, # Use file modification times for the "added" field in the database.
+    info, # Print music files’ tags to the console.
+    lastgenre, # Fetch genres based on Last.fm tags.
+    lyrics, # Automatically fetch song lyrics.
+    mbsync, # Fetch updated metadata from MusicBrainz.
+    # missing, # List missing tracks.
+    parentwork, # Fetch work titles and works they are part of.
+    play, # Play beets queries in your music player.
+    replaygain, # Calculate volume normalization for players that support it.
+    scrub, # Clean extraneous metadata from music files.
+    the, # Move patterns in path formats (i.e., move “a” and “the” to the end).
+  ]
+
+parentwork:
+  force: no
+  auto: yes
+
+ignore_hidden: yes # Ignore hidden files and folders when importing.
+asciify_path: yes # Convert all non-ASCII characters in paths to ASCII equivalents.
+art_filename: cover # Filename for album art.
+threaded: yes # Indicating whether the autotagger should use multiple threads.
+
+original_date: yes # Use the original date for the release.
+#artist_credit: yes
+per_disc_numbering: no # For some reason Android can't handle this.
+
 ui:
   color: yes
-  #colors:
-          #    text_success: green
-          #text_warning: yellow
-          #text_error: red
-          #text_highlight: red
-          #text_highlight_minor: lightgray
-          #action_default: turquoise
-          #action: blue
-original_date: yes
-#per_disc_numbering: yes
 
-# Plugins and config
-plugins: acousticbrainz bpd duplicates edit embedart export fetchart fromfilename fuzzy info lastgenre lyrics mbsync play rewrite replaygain scrub
-# lastimport smartplaylist THE FTINTITLE
-#chroma:
-#auto: no
-embedart:
-  remove_art_file: yes
-  ifempty: yes
-fetchart:
-  auto: yes
-  maxwidth: 1200
-  enforce_ratio: 10px
-#lastfm:
-  #user:
+# Paths
+
+# Create folders with the first letters of the band names.
+bucket:
+  bucket_alpha_regex: [A-Z]
+
+# Directory and naming scheme.
+paths:
+  default: /%bucket{%the{$albumartist}}/%the{$albumartist}/$album%aunique{}/$track $title
+  singleton: /%bucket{%the{$artist}}/%the{$artist}/Non-Album/$title
+  comp: Compilations/$album%aunique{}/$track $title
+  albumtype:soundtrack: Soundtracks/$album%aunique{}/$track $title
+# which files to copy
+extrafiles:
+  patterns:
+    all: "*.*"
+max_filename_length: 255 # 0 = unlimited.
+
+# Import
+import:
+  write: yes # Write metadata to files on import.
+  #copy: yes # Keep your current directory structure.
+  move: yes # Move the files. Otherwise there will be duplicates.
+  resume: yes # Controls whether interrupted imports should be resumed.
+  #incremental: no # Don't record imported directories.
+  #incremental_skip_later: no # Don't record skipped directories
+  from_scratch: no # Delete existing metadata when a match is applied.
+  quiet_fallback: skip # Quiet mode fallback when no strong match is found
+  none_rec_action: ask # What to do when there is no recommendation.
+  timid: no # Controlling whether the importer runs in timid mode.
+  #log: /path/to/store/import.log
+  default_action: apply # What action will be taken without any input.
+  languages: en # Prefer English names.
+  detail: no # Show detailed information about each match.
+  group_albums: no # Group based on file metadata
+  autotag: yes # Automatically match metadata to existing files.
+  duplicate_action: ask # Controls how duplicates are treated on import.
+
+# Musicbrainz
+musicbrainz:
+  searchlimit: 20 # default: 5
+  extra_tags: [catalognum, country, label, media, year]
+  # genres: no
+match:
+  preferred:
+    media: ["Digital Media|File"] # Priorize digital media.
+    countries: ["XW", "US", "GB|UK"]
+    #orignal_year: yes # Prefer older releases over re-releases.
+  # Ignore video-based media
+  ignored_media:
+    [
+      "Data CD",
+      "DVD",
+      "DVD-Video",
+      "Blu-ray",
+      "HD-DVD",
+      "VCD",
+      "SVCD",
+      "UMD",
+      "VHS",
+    ]
+
+  strong_rec_thresh: 0.75
+
+  medium_rec_thresh: 0.125 # The medium_rec_thresh and rec_gap_thresh options work similarly.
+
+# Last.fm
 lastgenre:
   auto: yes
   canonical: yes
+
+# Lyrics
 lyrics:
   auto: yes
-play:
-  command: mpv $args --no-video --no-audio-display --force-window=no --no-resume-playback --pause=no
+  fallback: ""
+  force: no
+
+# Pictures
+fetchart:
+  auto: yes # Automatically fetch album art.
+  cautious: yes # ignore filenames not in "cover_names".
+  minwidth: 1000
+  maxwidth: 1500
+  quality: 75 # JPEG quality. (65-75)
+  enforce_ratio: yes # Only allow images with 1:1 aspect ratio.
+  store_source: yes # Store the art source in the beets database.
+  high_resolution: no # Use high resolution art if available.
+  cover_format: jpg # Format to use for cover art images.
+embedart:
+  auto: no # Enable automatic album art embedding.
+  compare_threshold: 50 # Enable similarity checking before embedding. (10-100)
+  ifempty: yes # Avoid embedding album art for files that already have art embedded.
+  maxwidth: 1000 # Max width to downscale images before embedding them.
+  quality: 75 # JPEG quality. (65-75)
+  remove_art_file: no # Remove album art file after it has been embedded.
+# Replaygain
 replaygain:
-  backend: gstreamer
-# Really ugly way of keeping folders correct but if it works it works
-rewrite:
-  albumartist Viktor Vaughn: MF DOOM
-  albumartist King Geedorah: MF DOOM
-  albumartist Quasimoto: Madlib
-  albumartist Makaveli: 2Pac
-  artist .*jimi hendrix.*: Jimi Hendrix
-  albumartist .*masta ace.*: Masta Ace
-  albumartist .*natalia lafourcade.*: Natalia Lafourcade
-  albumartist .*black thought.*: Black Thought
-  albumartist .*kanye west.*: Kanye West
-  artist .*sun ra.*: Sun Ra
-  albumartist .*scarface.*: Scarface
-  albumartist .*marvin gaye.*: Marvin Gaye
-  albumartist Underground Kingz: UGK
-  albumartist .*ravel.*: Maurice Ravel
-  albumartist .*brahms.*: Johannes Brahms
-  albumartist .*gershwin.*: George Gershwin
-  albumartist .*snoop dogg.*: Snoop Dogg
-  albumartist .*kool g. rap.*: Kool G Rap
-  albumartist .*Prince and the Revolution.*: Prince
-  albumartist Jaÿ‐Z: Jay-Z
-  #smartplaylist:
-  #relative_to: ~/music
-  #playlist_dir: ~/music/playlists
-  #playlists:
-    #- name: all.m3u
-       #query: ""
+  auto: yes # Enable automatic replaygain analysis.
+  backend: gstreamer # Choose between gstreamer and ffmpeg.
+  overwrite: no # Overwrite existing replaygain values.
+  targetlevel: 89 # Target replaygain level.
+  per_disc: no # Enable per-disc replaygain analysis.
 
-# DELETE? the,
-#paths:
-  #default: %the{$albumartist}/($year) - $album%aunique{}$myAlbumType/%if{$isMultidisc,$disc - }$track - $mySongartist$title
-  #singleton: "Singles/$artist/$title"
-  #comp: Compilations/%the{$albumartist}/($year) - $album%aunique{}/$myDisc$track - $artist - $title
-  #albumtype:soundtrack: Soundtracks/%the{$albumartist}/$album%aunique ($year)/$myDisc$track - $artist - $title
-#item_fields:
-# 'Nine Inch Nails - ' or '' depending if the artist differs from the album artist
-#  mySongartist: artist + ' - ' if artist != albumartist and artist != '' else ''
-# Release with multiple discs? For boolean operations
-#  isMultidisc: 1 if disctotal > 1 else 0
-# Changes the case of the album type
-#  myAlbumType: ('' if albumtype == '' else ' [' + ('EP' if albumtype == 'ep' else albumtype.capitalize()) + ']')
-# '1 - ' or '' depending if there are multiple discs or not
-#  myDisc: ('' if disctotal <= 1 else str(disc) + ' - ')
-
-#id3v23: yes
+# Misc
+play:
+  command: mpv $args --no-video --no-audio-display --force-window=no --pause=no
+# # Export
+# convert: # By default, the command places converted files into the destination directory and leaves your library pristine.
+#   auto: no # Import transcoded versions of your files automatically during imports.
+#   command: ffmpeg -i $source -sample_fmt s16 -ar 44100 $dest
+#   extension: flac
+#   source: /mnt/external/work/roon-export
+#   dest: /mnt/external/work/converted
+#     # The directory where the files will be converted (or copied) to. Default: none.
+#     # With this option enabled, the importer will transcode all (in the default configuration) non-MP3 files
+#     # over the maximum bitrate before adding them to your library.
+#   #tmpdir: none # The directory where temporary files will be stored during import. Default: none (system default),
+#   copy_album_art: no # Since the covers are embedded in the files when Roon exports them, this configuration is not necessary.
+#   embed: no # Embed album art in converted items. Default: yes.
+#   #id3v23: inherit # Can be used to override the global id3v23 option. Default: inherit.
+#   never_convert_lossy_files:
+#     yes
+#     # Cross-conversions between lossy codecs—such as mp3, ogg vorbis, etc.
+#     # Makes little sense as they will decrease quality even further.
+#     # If set to yes, lossy files are always copied.
+#   quiet: false # Prevent the plugin from announcing every file it processes. Default: false.
+#   threads: 1 # The number of threads to use for parallel encoding.
