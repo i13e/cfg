@@ -12,11 +12,10 @@ Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint 
 
 | Component           | Application                   |
 | ------------------- | ----------------------------- |
-| OS                  | Arch Linux                    |
-| WM                  | qtile                         |
-| Shell               | zsh                           |
+| OS                  | [Arch](https://archlinux.org) |
+| WM                  | [Qtile](https://qtile.org)    |
+| Shell               | [Zsh](https://zsh.org)        |
 | Terminal            | alacritty                     |
-| Bar                 | polybar                       |
 | Launcher            | dmenu                         |
 | Compositor          | picom                         |
 | File Manager        | lf, pcmanfm                   |
