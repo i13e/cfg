@@ -2,7 +2,7 @@
     name = Ian Breckenridge
     email = 62034540+i13e@users.noreply.github.com
     ; signingkey = CF74CE671D8462B5
-    signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdaDzybauBvk72Vhd9ovTRNRwiPezXB+GO/qx0OwJyM 62034540+i13e@users.noreply.github.com
+    signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdaDzybauBvk72Vhd9ovTRNRwiPezXB+GO/qx0OwJyM 62034540+i13e@users.noreply.github.com"
 [gpg]
     format = ssh
 [commit]
@@ -54,3 +54,5 @@
     insteadOf = gist:
 [url "https://bitbucket.org/"]
     insteadOf = bb:
+[gpg "ssh"]
+	allowedSignersFile = /home/ianb/.config/git/allowed_signers
