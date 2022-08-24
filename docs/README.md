@@ -10,25 +10,25 @@ Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint 
 
 ## Info
 
-| Component           | Application                   |
-| ------------------- | ----------------------------- |
-| OS                  | [Arch](https://archlinux.org) |
-| WM                  | [Qtile](https://qtile.org)    |
-| Shell               | [Zsh](https://zsh.org)        |
-| Terminal            | alacritty                     |
-| Launcher            | dmenu                         |
-| Compositor          | picom                         |
-| File Manager        | lf, pcmanfm                   |
-| Media Player        | cmus, mpv                     |
-| Image Viewer        | imv                           |
-| PDF Reader          | zathura                       |
-| Text Editor         | neovim                        |
-| Browser             | firefox, w3m                  |
-| RSS                 | newsboat                      |
-| Process Viewer      | btm                           |
-| Fetch               | pfetch                        |
-| Notification Daemon | dunst                         |
-| Color Scheme        | [Nord](https://nordtheme.com) |
+| Component           | Application                                                 |
+| ------------------- | ----------------------------------------------------------- |
+| OS                  | [Arch Linux](https://archlinux.org)                         |
+| WM                  | [Qtile](https://qtile.org)                                  |
+| Shell               | [Zsh](https://zsh.org)                                      |
+| Terminal            | alacritty                                                   |
+| Launcher            | dmenu                                                       |
+| Compositor          | picom                                                       |
+| File Manager        | lf, pcmanfm                                                 |
+| Media Player        | cmus, mpv                                                   |
+| Image Viewer        | imv                                                         |
+| PDF Reader          | zathura                                                     |
+| Text Editor         | neovim                                                      |
+| Browser             | firefox, w3m                                                |
+| RSS                 | newsboat                                                    |
+| Process Viewer      | btm                                                         |
+| Fetch               | pfetch                                                      |
+| Notification Daemon | dunst                                                       |
+| Color Scheme        | [Nord](https://nordtheme.com) with extra dark color #242831 |
 
 ## Installation
 
