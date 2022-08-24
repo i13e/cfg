@@ -18,6 +18,7 @@ remaps                                 # run the remaps script (switching caps/e
 # gammastep-indicator
 # emacs --daemon
 # Autostart programs.
+# https://www.shellcheck.net/wiki/SC3030
 autostart="syncthing --no-browser
 picom --experimental-backends
 playerctld
