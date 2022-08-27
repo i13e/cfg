@@ -32,8 +32,8 @@ Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint 
 
 ## Installation
 
-Install config tracking in your $HOME by running this command in bash, zsh, or
-sh:
+Install my config files with tracking in your $HOME by running this command in
+any POSIX-compliant shell:
 
 ```shell
 if command -v curl >/dev/null 2>&1; then
@@ -43,7 +43,7 @@ else
 fi
 ```
 
-The installer backs up existing config files, ... It asks for confirmation on every step so that you are always in control. Running the script requires curl or wget, as it will install necessary dependencies itself (i.e. git, sudo, zsh).
+The installer backs up existing config files, ... and asks for confirmation on every step so that you are always in control. Running the script requires curl or wget, otherwise the script will install necessary dependencies itself (i.e. git, sudo, zsh).
 
 ## Notes
 
