@@ -164,13 +164,12 @@ keys = [
     Key("M-f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
     # Key("M-<space>", lazy.window.bring_to_front()),
     # Key([mod], "s", lazy.layout.toggle_split()),
-
     # Reload config / restart qtile
     Key("M-r", lazy.reload_config()),
     Key("M-S-r", lazy.restart()),
     # Key("M-S-<BackSpace>", lazy.shutdown()),
     Key("M-v", lazy.validate_config()),
-    ## The essentials
+    # The essentials
     # Spawn terminal
     Key("M-<Return>", lazy.spawn(TERM)),
     # Close window
@@ -247,51 +246,87 @@ keys = [
     # lazy.layout.rotate()),
 ]
 
-# 10 十
 # Define groups
 groups = [
     Group(
-        "1", label="一", matches=[Match(wm_class=["brave", "librewolf"])], layout="stack"
+        "1",
+        label="一",
+        matches=[
+            Match(wm_class=["brave", "librewolf"]),
+        ],
+        layout="stack",
     ),
-    Group("2", label="二", matches=[Match(wm_class=["code", "emacs"])], layout="bsp"),
-    Group("3", label="三", matches=[Match(wm_class=["pcmanfm"])], layout="bsp"),
+    Group(
+        "2",
+        label="二",
+        matches=[
+            Match(wm_class=["code", "emacs"]),
+        ],
+        layout="bsp",
+    ),
+    Group(
+        "3",
+        label="三",
+        matches=[
+            Match(wm_class=["pcmanfm"]),
+        ],
+        layout="bsp",
+    ),
     Group(
         "4",
         label="四",
-        matches=[Match(wm_class=["geary", "ptask", "thunderbird"])],
+        matches=[
+            Match(wm_class=["geary", "ptask", "thunderbird"]),
+        ],
         layout="bsp",
     ),
     Group(
         "5",
         label="五",
-        matches=[Match(wm_class=["joplin", "libreoffice", "zathura"])],
+        matches=[
+            Match(wm_class=["joplin", "libreoffice", "zathura"]),
+        ],
         layout="bsp",
     ),
     Group(
         "6",
         label="六",
-        matches=[Match(wm_class=["ferdium"])],
+        matches=[
+            Match(wm_class=["ferdium"]),
+        ],
         layout="bsp",  # max
     ),
     Group(
         "7",
         label="七",
-        matches=[Match(wm_class=["spotify", "lollypop", "cmus"])],
+        matches=[
+            Match(wm_class=["spotify", "lollypop", "cmus"]),
+        ],
         layout="bsp",
     ),
     Group(
         "8",
         label="八",
-        matches=[Match(wm_class=["gimp", "obs", "steam", "lutris"])],
+        matches=[
+            Match(wm_class=["gimp", "obs", "steam", "lutris"]),
+        ],
         layout="bsp",
     ),
     Group(
         "9",
         label="九",
         matches=[
-            Match(wm_class=["nm-connection-editor", "blueman-manager", "pavucontrol"])
+            # Match(wm_class=["nm-connection-editor", "blueman-manager", "pavucontrol"]),
         ],
         # layout="floating",
+    ),
+    Group(
+        "10",
+        label="十",
+        matches=[
+            Match(wm_class=["..."]),
+        ],
+        layout="floating",
     ),
 ]
 
@@ -524,30 +559,29 @@ def template(position):
         return widget.TextBox(
             text="",
             foreground=colors[14],
-            fontsize=48,
+            fontsize=28,
         )
     if position == "l":
         return widget.TextBox(
             text="",
             foreground=colors[14],
-            fontsize=48,
+            fontsize=28,
         )
     return widget.Sep(
-        padding=10,
+        # padding=10,
         foreground=colors[2],
         linewidth=0,
-        size_percent=50,
+        # size_percent=50,
     )
 
 
 def bars(monitor):
-    "define my statusbar and the widgets therein"
     widgets = [
         widget.TextBox(
             text="ﮂ",
             foreground=colors[13],
             fontsize=28,
-            padding=20,
+            padding=10,
             mouse_callbacks={"Button3": lambda: qtile.cmd_spawn(TERM)},
         ),
         template("l"),
@@ -599,7 +633,7 @@ def bars(monitor):
             foreground=colors[12],
             for_current_screen=True,
             width=bar.CALCULATED,
-            empty_group_string="零",  # 〇
+            empty_group_string="零",
             max_chars=20,
             mouse_callbacks={
                 "Button2": lambda: qtile.cmd_spawn("xdotool getwindowfocus windowkill")
@@ -734,7 +768,7 @@ def bars(monitor):
             text="⏻",
             foreground=colors[13],
             fontsize=28,
-            padding=20,
+            padding=10,
             mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("sysact.sh")},
         ),
     ]
@@ -811,8 +845,11 @@ def _unswallow(window):
 @hook.subscribe.client_new
 def modify_window(client):
     "Go to group when app opens on matched group"
-    # if (client.window.get_wm_transient_for() or client.window.get_wm_type() in floating_types):
-    #    client.floating = True
+    # if (
+    #     client.window.get_wm_transient_for()
+    #     or client.window.get_wm_type() in floating_types
+    # ):
+    #     client.floating = True
 
     for group in groups:  # follow on auto-move
         match = next((m for m in group.matches if m.compare(client)), None)

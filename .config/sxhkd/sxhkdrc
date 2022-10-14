@@ -3,7 +3,25 @@
 # https://github.com/rcarrerah/dotfiles/blob/master/sxhkdrc
 # Requires: xdotool, playerctl, sysact, levels
 
-# TODO The keys NOT bound here by sxhkd are:
+# TODO The keys NOT bound here by sxhkd are (+ shift):
+# Q W E R T Y U I O
+# A S D F '
+# Z X C V B N /
+#
+# SXHKD
+# BOUND q
+# BOUND p [ ]
+# BOUND m , .
+# backspace return
+#
+# QTILE
+# BOUND g h j k l ;
+# space
+#
+# DONE [ ] { }
+# DONE F1-F12
+# TODO A S D F
+# G H J K L ;
 # The t thru p keys on the top row
 # The f thru ; keys on the home row
 # The b key on the bottom row (hides the bar in either case)
@@ -16,7 +34,7 @@ super + Return
 super + shift + Return
 	dmenu_run -p 'Run: '
 # {_,force} close window
-super + {_,shift +} q
+super + {_,shift +} x
 	xdotool getwindowfocus {windowquit,windowclose}
 # Choose to lock screen, logout, shutdown, reboot, etc
 super + {_,shift +} BackSpace
@@ -25,43 +43,43 @@ super + {_,shift +} BackSpace
 
 ## Basic Programs
 # # Address book ($TERMINAL -e abook)
-# super + x ; a
+# super + q ; a
 #     abook
 # Web browser (Librewolf)
-super + x ; b
+super + q ; b
     $BROWSER
 # Chat client ($TERMINAL -e irssi)
-super + x ; c
+super + q ; c
     ferdium
 # # Calendar (calendar/cal)
-# super + x ; c
+# super + q ; c
 #     cal
 # Email client ($TERMINAL -e neomutt)
-super + x ; e
+super + q ; e
     thunderbird
 # File manager ($TERMINAL -e lf)
-super + x ; f
+super + q ; f
 	pcmanfm
 # Music player ($TERMINAL -e cmus)
-super + x ; m
+super + q ; m
     spotify
 # # Note taking (keepnote/nvim -c VimwikiIndex)
-# super + x ; n
+# super + q ; n
 #     program
 # RSS feed reader ($TERMINAL -e newsboat)
-# super + x ; n
+# super + q ; n
 #     newsboat
 # # Password manager ($TERMINAL -e passmenu)
-# super + x ; p
+# super + q ; p
 #     rbw
 # Toggle color temperature (redshift)
-super + x ; r
+super + q ; r
 	pkill -USR1 '^gammastep$'
 # System monitor (htop)
-super + x ; s
+super + q ; s
     $TERMINAL -e btm
 # Task manager (task/ptask)
-# super + x ; t
+# super + q ; t
 #     task
 
 
@@ -143,8 +161,8 @@ super + {comma,period}
 super + {_,shift +} p
 	 playerctl {play-pause,-a pause}
 # Mute volume
-super + shift + m
-    levels volume mute
+super + {_,shift} + m
+    levels {volume,mic} mute
 # {inc,dec}rease {_,mic} volume
 super + {_,shift +} {minus,equal}
     levels {volume,mic} {down,up}

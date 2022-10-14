@@ -4,5 +4,14 @@
     "extensions.autoUpdate": "onlyEnabledExtensions",
     "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "workbench.colorTheme": "Nord"
+    "workbench.colorTheme": "Nord",
+    "editor.inlineSuggest.enabled": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": false,
+        "plaintext": false,
+        "markdown": true
+    }
 }

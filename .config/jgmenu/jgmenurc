@@ -1,7 +1,7 @@
 stay_alive           = 0
 tint2_look           = 0
 position_mode        = pointer
-terminal_exec        = alacritty
+terminal_exec        = $TERMINAL
 terminal_args        = -e
 menu_width           = 200
 menu_padding_top     = 10

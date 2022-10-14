@@ -5,6 +5,7 @@ status=$(cmus-remote -Q | grep status | awk '{print $2}')
 title=$(cmus-remote -C "format_print %t")
 song_path=$(cmus-remote -C "format_print %f")
 #ffmpeg -y -i $song_path /tmp/cmus_cover.fifo > /dev/null 2>&1
+
 ffmpeg -y -i "$song_path" -filter:v scale=-2:250 -an /tmp/cmus_cover.jpg
 
 if [ "$status" = playing ]; then
