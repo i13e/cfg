@@ -19,6 +19,7 @@ remaps                                 # run the remaps script (switching caps/e
 # emacs --daemon
 # Autostart programs.
 # https://www.shellcheck.net/wiki/SC3030
+# -t tty"$XDG_VTNR" to match only on current tty
 autostart="syncthing --no-browser
 picom --experimental-backends
 playerctld
@@ -26,6 +27,7 @@ lxpolkit
 unclutter
 gammastep
 sxhkd
+dunst
 "
 
 printf "%s" "$autostart" | while IFS="" read -r program; do

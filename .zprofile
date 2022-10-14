@@ -42,6 +42,7 @@ export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
 # export PASSWORD_STORE_DIR="XDG_DATA_HOME/password-store"
 # export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 # TODO export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
+export GHCUP_USE_XDG_DIRS=true
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export GOPATH="$XDG_DATA_HOME/go"

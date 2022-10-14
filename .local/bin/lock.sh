@@ -4,7 +4,7 @@
 ## security features, Wayland, and be POSIX-compliant.
 ## Requires: i3lock-color, imagemagick, picom, xss-lock
 
-#trap 'kill -9 -$$ %1 %2' EXIT INT
+# trap 'kill -9 -$$ %1 %2' EXIT INT
 
 ### Generate User Pic for lockscreen.
 USER_PIC="$HOME/images/icons/avatar_highres.png" # where your user pic resides
@@ -38,7 +38,7 @@ pre_lock() {
 	playerctl -a pause
 
 	# Pause notifications
-	dunstctl set-paused true
+	pgrep -x dunst && dunstctl set-paused true
 
 	# Ensure picom is running, otherwise blur won't work
 	if [ "$XDG_SESSION_TYPE" = x11 ]; then
@@ -57,11 +57,11 @@ pre_lock() {
 	[ "$XDG_SESSION_TYPE" = wayland ] && wl-copy -c
 
 	# TODO is this needed?
-	#echo pause >/tmp/signal_bar
+	# echo pause >/tmp/signal_bar
 
 	## If using locker w/o screen coverage (e.g. xtrlock, slock with unlockscreen patch)
-	#nsxiv -bf ~/.cache/i3lock/$currentWall &
-	#unclutter -idle 0 -jitter 99999 & # hide cursor
+	# nsxiv -bf ~/.cache/i3lock/$currentWall &
+	# unclutter -idle 0 -jitter 99999 & # hide cursor
 }
 
 ## Variables for lockers
@@ -74,7 +74,7 @@ RIGHT="#88C0D0"  # blue color
 WRONG="#BF616A"  # red color
 
 ## Options to pass to xsecurelock
-#XSECURELOCK_SAVER="/home/barbaross/.local/bin/background.sh"
+# XSECURELOCK_SAVER="/home/barbaross/.local/bin/background.sh"
 xlock() {
 	XSECURELOCK_AUTH_BACKGROUND_COLOR="$BG" \
 		XSECURELOCK_BACKGROUND_COLOR="$BG" \
@@ -149,10 +149,10 @@ lock() {
 		--time-size=14 \
 		--date-size=16 \
 		--greeter-size=18
-} #--no-verify --blur 5 --screen 1 --ind-pos="w/2:h/2-42"
+} # --no-verify --blur 5 --screen 1 --ind-pos="w/2:h/2-42"
 
-#slock -m "$(lock_msg.sh)" || lock
-#i3lock -i ~/Pictures/noise_lock_452f2f.png -e -t -u -n || lock
+# slock -m "$(lock_msg.sh)" || lock
+# i3lock -i ~/Pictures/noise_lock_452f2f.png -e -t -u -n || lock
 
 ## Run after the locker exits
 post_lock() {
@@ -161,7 +161,7 @@ post_lock() {
 	[ "$STATUS" = "Playing" ] && playerctl play
 
 	# Unpause notifications
-	dunstctl set-paused false
+	pgrep -x dunst && dunstctl set-paused false
 
 	#echo resume >/tmp/signal_bar
 	#task sync
