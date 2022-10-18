@@ -2,12 +2,6 @@
 
 Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
 
-## Table of Contents
-
-1. [Info](#info)
-2. [Installation](#installation)
-3. [Notes](#notes)
-
 ## Info
 
 | Component           | Application                                                   |
