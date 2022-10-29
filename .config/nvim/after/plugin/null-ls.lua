@@ -15,36 +15,75 @@ end
 -- end
 
 local sources = {
-	-- TODO Completions?
-	--b.completion.spell,
-	-- code_actions
-	b.code_actions.gitsigns,
-	-- b.code_actions.proselint,
-	-- b.code_actions.shellcheck,
-	-- formatting
-	b.formatting.black,
-	b.formatting.prettierd,
-	b.formatting.shfmt,
-	-- b.formatting.beautysh,
+	-- Lua
 	b.formatting.stylua,
-	--b.formatting.ktlint,
-	--b.formatting.markdownlint,
-	-- diagnostics
-	b.diagnostics.flake8,
+	-- b.diagnostics.luacheck,
+
+	-- Shell
+	b.formatting.shfmt,
 	b.diagnostics.zsh,
-	--b.diagnostics.shellcheck,
-	--b.diagnostics.misspell,
-	--b.diagnostics.codespell,
-	--b.diagnostics.actionlint,
-	-- hover
+	-- b.diagnostics.shellcheck.with({ diagnostics_format = "#{m} [#(c)]" }),
+	-- b.code_actions.shellcheck,
+
+	-- Docker
+	-- b.diagnostics.hadolint,
+
+	-- b.diagnostics.ansiblelint,
+
+	-- Golang
+	-- b.diagnostics.staticcheck,
+	-- b.formatting.gofumpt,
+
+	-- JS
+	-- b.formatting.eslint_d,
+	-- b.diagnostics.eslint_d,
+	-- b.code_actions.eslint_d,
+
+	-- Protobuf
+	-- b.formatting.protolint,
+	-- b.diagnostics.protolint,
+
+	-- Rust
+	-- b.formatting.rustfmt,
+
+	b.code_actions.gitsigns,
+
+	-- All
+	b.formatting.trim_whitespace,
+	b.diagnostics.todo_comments,
+
+	-- b.completion.spell,
+	-- b.code_actions.gitrebase,
+	-- b.code_actions.proselint,
+	-- b.code_actions.statix
+	-- Completion (handled by cmp)
+	-- b.diagnostics.actionlint,
+	b.diagnostics.codespell,
+	-- b.diagnostics.cppcheck,
+	b.diagnostics.flake8,
+	-- b.diagnostics.misspell,
+	-- b.diagnostics.write_good,
+	-- Formatting
+	-- b.formatting.beautysh,
+	b.formatting.black,
+	-- b.formatting.clang_format,
+	-- b.formatting.jq,
+	-- b.formatting.ktlint,
+	-- b.formatting.markdownlint,
+	b.formatting.cbfmt,
+	b.formatting.prettierd,
+	b.formatting.clang_format,
+	b.formatting.sqlfluff.with({
+		extra_args = { "--dialect", "mysql" }, -- change to your dialect
+	}),
+	-- b.formatting.trim_newlines,
+	-- b.formatting.trim_whitespace,
+	-- b.formatting.uncrustify,
+	-- Hover
 	-- b.hover.dictionary,
 }
 
--- local sources = {
--- 	-- formatting
--- 	b.formatting.jq,
--- 	b.formatting.uncrustify,
--- 	b.formatting.clang_format,
+-- 	b.diagnostics.yamllint,
 -- 	b.formatting.trim_whitespace.with({
 -- 		filetypes = { "tmux", "snippets" },
 -- 	}),
@@ -58,12 +97,6 @@ local sources = {
 -- 	b.diagnostics.selene.with({
 -- 		condition = with_root_file("selene.toml"),
 -- 	}),
--- 	b.diagnostics.write_good,
--- 	b.diagnostics.cppcheck,
--- 	b.diagnostics.yamllint,
--- 	-- code actions
--- 	b.code_actions.gitrebase,
--- }
 
 -- NOTE: Neovim >= 0.8
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/wiki/Avoiding-LSP-formatting-conflicts

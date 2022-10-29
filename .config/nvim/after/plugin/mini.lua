@@ -2,52 +2,45 @@
 -- https://github.com/echasnovski/nvim/blob/master/lua/ec/configs/mini.lua
 -- https://github.com/echasnovski/mini.nvim/blob/main/doc/mini.txt
 
-require("mini.comment").setup({
-	-- Module mappings. Use `''` (empty string) to disable one.
-	mappings = {
-		-- Toggle comment (like `gcip` - comment inner paragraph) for both
-		-- Normal and Visual modes
-		comment = "gc",
+-- require("mini.sessions").setup({ directory = "~/.config/nvim/misc/sessions" })
+require("mini.starter").setup()
 
-		-- Toggle comment on current line
-		comment_line = "gcc",
+vim.api.nvim_exec(
+	[[hi default MiniCursorWord cterm=underline gui=underline
+      hi default link MiniCursorwordCurrent MiniCursorWord]],
+	true
+)
+vim.schedule(function()
+	-- require('mini.ai').setup({
+	--   custom_textobjects = {
+	--     F = require('mini.ai').gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }),
+	--   },
+	-- })
+	require("mini.align").setup()
+	-- require('mini.bufremove').setup()
+	require("mini.comment").setup()
+	-- require('mini.completion').setup({
+	--   lsp_completion = {
+	--     source_func = 'omnifunc',
+	--     auto_setup = false,
+	--     process_items = function(items, base)
+	--       -- Don't show 'Text' and 'Snippet' suggestions
+	--       items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
+	--       return MiniCompletion.default_process_items(items, base)
+	--     end,
+	--   },
+	-- })
+	require("mini.cursorword").setup()
+	-- require('mini.indentscope').setup()
+	require("mini.jump").setup()
+	-- require('mini.jump2d').setup()
 
-		-- Define 'comment' textobject (like `dgc` - delete whole comment block)
-		textobject = "gc",
-	},
-	-- Hook functions to be executed at certain stage of commenting
-	hooks = {
-		-- Before successful commenting. Does nothing by default.
-		pre = function() end,
-		-- After successful commenting. Does nothing by default.
-		post = function() end,
-	},
-})
-require("mini.pairs").setup({
-	-- In which modes mappings from this `config` should be created
-	modes = { insert = true, command = true, terminal = true },
-
-	-- Global mappings. Each right hand side should be a pair information, a
-	-- table with at least these fields (see more in |MiniPairs.map|):
-	-- - <action> - one of 'open', 'close', 'closeopen'.
-	-- - <pair> - two character string for pair to be used.
-	-- By default pair is not inserted after `\`, quotes are not recognized by
-	-- `<CR>`, `'` does not insert pair after a letter.
-	-- Only parts of tables can be tweaked (others will use these defaults).
-	mappings = {
-		["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
-		["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
-		["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
-
-		[")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
-		["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
-		["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
-
-		['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^\\].", register = { cr = false } },
-		["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
-		["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\].", register = { cr = false } },
-	},
-})
+	-- require('mini.misc').setup()
+	require("mini.pairs").setup({ modes = { insert = true, command = true, terminal = true } })
+	-- require('mini.surround').setup({ search_method = 'cover_or_next' })
+	-- require('mini.test').setup()
+	require("mini.trailspace").setup()
+end)
 
 require("mini.surround").setup({
 	-- vim-surround style mappings
@@ -55,30 +48,10 @@ require("mini.surround").setup({
 	-- 'ysiw('    foo -> ( foo )
 	-- 'ysiw)'    foo ->  (foo)
 	custom_surroundings = {
-		-- ['('] = { output = { left = '( ', right = ' )' } },
-		-- ['['] = { output = { left = '[ ', right = ' ]' } },
-		-- ['{'] = { output = { left = '{ ', right = ' }' } },
-		-- ['<'] = { output = { left = '< ', right = ' >' } },
-		["("] = {
-			input = { find = "%(%s-.-%s-%)", extract = "^(.%s*).-(%s*.)$" },
-			output = { left = "( ", right = " )" },
-		},
-		["["] = {
-			input = { find = "%[%s-.-%s-%]", extract = "^(.%s*).-(%s*.)$" },
-			output = { left = "[ ", right = " ]" },
-		},
-		["{"] = {
-			input = { find = "{%s-.-%s-}", extract = "^(.%s*).-(%s*.)$" },
-			output = { left = "{ ", right = " }" },
-		},
-		["<"] = {
-			input = { find = "<%s-.-%s->", extract = "^(.%s*).-(%s*.)$" },
-			output = { left = "< ", right = " >" },
-		},
 		S = {
 			-- lua bracketed string mapping
 			-- 'ysiwS'  foo -> [[foo]]
-			input = { find = "%[%[.-%]%]", extract = "^(..).*(..)$" },
+			input = { "%[%[().-()%]%]" },
 			output = { left = "[[", right = "]]" },
 		},
 	},
@@ -176,7 +149,12 @@ local btoggle = function()
 	toggle(vim.api.nvim_get_current_buf())
 end
 
-vim.keymap.set("", '<leader>"', "<cmd>lua require'plugins.indent'.btoggle()<CR>", { silent = true })
+vim.keymap.set(
+	"",
+	'<leader>"',
+	"<cmd>lua require'plugins.indent'.btoggle()<CR>",
+	{ silent = true, desc = "toggle 'mini.indentscope' on/off" }
+)
 
 return {
 	toggle = toggle,

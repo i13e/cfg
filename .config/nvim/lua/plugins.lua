@@ -1,7 +1,7 @@
 local fn = vim.fn
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 
 -- Automatically install packer
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
 	PACKER_BOOTSTRAP = fn.system({
 		"git",
@@ -11,13 +11,13 @@ if fn.empty(fn.glob(install_path)) > 0 then
 		"https://github.com/wbthomason/packer.nvim",
 		install_path,
 	})
+	print("Installing packer close and reopen Neovim...")
+	vim.cmd([[packadd packer.nvim]])
 end
 
-vim.cmd([[packadd packer.nvim]])
-
 -- Use a protected call so we don't error out on first use
-local status_ok, packer = pcall(require, "packer")
-if not status_ok then
+local status, packer = pcall(require, "packer")
+if not status then
 	return
 end
 
@@ -30,7 +30,7 @@ packer.init({
 	},
 	profile = {
 		enable = true,
-		threshold = 1, -- the amount in ms that a plugins load time must be over for it to be included in the profile
+		threshold = 0,
 	},
 })
 

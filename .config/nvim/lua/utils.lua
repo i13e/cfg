@@ -1,13 +1,5 @@
 -- https://github.com/ibhagwan/nvim-lua/blob/main/lua/utils.lua
-
 local fn = vim.fn -- access vim functions
---local execute = vim.api.nvim_command
---local opt = vim.opt -- global
---local g = vim.g -- global for let options
---local wo = vim.wo -- window local
---local bo = vim.bo -- buffer local
---local cmd = vim.cmd -- vim commands
---local api = vim.api -- access vim api
 
 -- function _G.reload(package)
 -- 	package.loaded[package] = nil
@@ -66,10 +58,10 @@ end
 
 -- https://www.reddit.com/r/vim/comments/p7xcpo/comment/h9nw69j/
 --M.MarkdownHeaders = function()
---   local filename = vim.fn.expand("%")
---   local lines = vim.fn.getbufline('%', 0, '$')
---   local lines = vim.fn.map(lines, {index, value -> {"lnum": index + 1, "text": value, "filename": filename}})
---   local vim.fn.filter(lines, {_, value -> value.text =~# '^#\+ .*$'})
+--   local filename = fn.expand("%")
+--   local lines = fn.getbufline('%', 0, '$')
+--   local lines = fn.map(lines, {index, value -> {"lnum": index + 1, "text": value, "filename": filename}})
+--   local fn.filter(lines, {_, value -> value.text =~# '^#\+ .*$'})
 --   vim.cmd("call setqflist(lines)")
 --   vim.cmd("copen")
 --end
@@ -80,12 +72,12 @@ end
 -- https://bit.ly/3HqvgRT
 M.CountWordFunction = function()
 	local hlsearch_status = vim.v.hlsearch
-	local old_query = vim.fn.getreg("/") -- save search register
-	local current_word = vim.fn.expand("<cword>")
-	vim.fn.setreg("/", current_word)
-	local wordcount = vim.fn.searchcount({ maxcount = 1000, timeout = 500 }).total
-	local current_word_number = vim.fn.searchcount({ maxcount = 1000, timeout = 500 }).current
-	vim.fn.setreg("/", old_query) -- restore search register
+	local old_query = fn.getreg("/") -- save search register
+	local current_word = fn.expand("<cword>")
+	fn.setreg("/", current_word)
+	local wordcount = fn.searchcount({ maxcount = 1000, timeout = 500 }).total
+	local current_word_number = fn.searchcount({ maxcount = 1000, timeout = 500 }).current
+	fn.setreg("/", old_query) -- restore search register
 	print("[" .. current_word_number .. "/" .. wordcount .. "]")
 	-- Below we are using the nvim-notify plugin to show up the count of words
 	vim.cmd([[highlight CurrenWord ctermbg=LightGray ctermfg=Red guibg=LightGray guifg=Black]])
@@ -152,7 +144,7 @@ M.flash_cursorline = function()
 	print(vim.opt.cursorline:get())
 	vim.opt.cursorline = true
 	vim.cmd([[hi CursorLine guifg=#FFFFFF guibg=#FF9509]])
-	vim.fn.timer_start(400, function()
+	fn.timer_start(400, function()
 		vim.cmd([[hi CursorLine guifg=NONE guibg=NONE]])
 		if cursorline_state == false then
 			vim.opt.cursorline = false
@@ -162,7 +154,7 @@ end
 
 -- https://www.reddit.com/r/neovim/comments/rnevjt/comment/hps3aba/
 M.ToggleQuickFix = function()
-	if vim.fn.getqflist({ winid = 0 }).winid ~= 0 then
+	if fn.getqflist({ winid = 0 }).winid ~= 0 then
 		vim.cmd([[cclose]])
 	else
 		vim.cmd([[copen]])
@@ -182,28 +174,11 @@ M.dosToUnix = function()
 end
 vim.cmd([[command! Dos2unix lua require('core.utils').dosToUnix()]])
 
-M.squeeze_blank_lines = function()
-	-- references: https://vi.stackexchange.com/posts/26304/revisions
-	if vim.bo.binary == false and vim.opt.filetype:get() ~= "diff" then
-		local old_query = vim.fn.getreg("/") -- save search register
-		M.preserve("sil! 1,.s/^\\n\\{2,}/\\r/gn") -- set current search count number
-		local result = vim.fn.searchcount({ maxcount = 1000, timeout = 500 }).current
-		local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-		M.preserve("sil! keepp keepj %s/^\\n\\{2,}/\\r/ge")
-		M.preserve("sil! keepp keepj %s/^\\s\\+$/\\r/ge")
-		M.preserve("sil! keepp keepj %s/\\v($\\n\\s*)+%$/\\r/e")
-		if result > 0 then
-			vim.api.nvim_win_set_cursor(0, { (line - result), col })
-		end
-		vim.fn.setreg("/", old_query) -- restore search register
-	end
-end
-
 M.preserve = function(arguments)
 	local arguments = string.format("keepjumps keeppatterns execute %q", arguments)
 	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
 	vim.api.nvim_command(arguments)
-	local lastline = vim.fn.line("$")
+	local lastline = fn.line("$")
 	if line > lastline then
 		line = lastline
 	end
@@ -222,22 +197,22 @@ M.changeheader = function()
 		require("notify")("Current file not modifiable!")
 		return
 	end
-	if vim.fn.line("$") >= 7 then
-		os.setlocale("en_US.UTF-8") -- show Sun instead of dom (portuguese)
-		local time = os.date("%a, %d %b %Y %H:%M:%S")
+	if fn.line("$") >= 7 then
+		os.setlocale("en_US.UTF-8")
+		local time = os.date("%a, %d %b %Y %R")
 		local l = 1
 		while l <= 7 do
-			vim.fn.setline(l, vim.fn.substitute(vim.fn.getline(l), "\\c\\vlast (change|update): \\zs.*", time, "g"))
+			fn.setline(l, fn.substitute(fn.getline(l), "\\c\\vlast (change|update): \\zs.*", time, "g"))
 			l = l + 1
 		end
 	end
 end
 
 M.is_executable = function()
-	local file = vim.fn.expand("%:p")
-	local type = vim.fn.getftype(file)
+	local file = fn.expand("%:p")
+	local type = fn.getftype(file)
 	if type == "file" then
-		local perm = vim.fn.getfperm(file)
+		local perm = fn.getfperm(file)
 		if string.match(perm, "x", 3) then
 			return true
 		else
@@ -295,7 +270,7 @@ M.choose_colors = function()
 		vim.cmd(cmd)
 	end
 
-	-- local colors = vim.fn.getcompletion("", "color")
+	-- local colors = fn.getcompletion("", "color")
 
 	local opts = {
 
@@ -331,7 +306,7 @@ end
 function M.open_qf()
 	local qf_name = "quickfix"
 	local qf_empty = function()
-		return vim.tbl_isempty(vim.fn.getqflist())
+		return vim.tbl_isempty(fn.getqflist())
 	end
 	if not qf_empty() then
 		vim.cmd("copen")
