@@ -30,17 +30,6 @@ augroups.misc = {
 		end,
 	},
 
-	-- TODO https://stackoverflow.com/a/60338380/2571881
-	-- Mode_changed = {
-	-- 	event = "ModeChanged",
-	-- 	pattern = { "*:i*", "i*:*" },
-	-- 	callback = function()
-	-- 		if vim.bo.filetype ~= "markdown" then
-	-- 			vim.o.relativenumber = vim.v.event.new_mode:match("^i") == nil
-	-- 		end
-	-- 	end,
-	-- },
-
 	-- change_header = {
 	-- 	event = "BufWritePre",
 	-- 	pattern = "*",
@@ -55,11 +44,6 @@ augroups.misc = {
 		callback = function()
 			require("mini.trailspace").trim()
 			require("mini.trailspace").trim_last_lines()
-			-- vim.cmd([[%s/\s\+$//e]])
-			-- vim.cmd([[%s/\n\+\%$//e]])
-			-- require("utils").preserve([[%s/\s\+$//e]])
-			-- require("utils").preserve([[%s/\n\+\%$//e]])
-			-- { "BufWritePre", "*.[ch]", [[%s/\%$/\r/e]] },
 		end,
 	},
 
@@ -92,12 +76,6 @@ augroups.misc = {
 	--     callback = function()
 	--     ReloadConfig()
 	--     end,
-	-- },
-
-	-- TODO compile_python = {
-	-- 	event = "BufWritePost",
-	-- 	pattern = "*.py",
-	-- 	command = [[!python -m py_compile %]],
 	-- },
 
 	reload_sxhkd = {
@@ -141,13 +119,6 @@ augroups.misc = {
 		pattern = "[^l]*",
 		command = [[cwindow | wincmd j]],
 	},
-	-- TODO auto_working_directory = {
-	-- 	event = "BufEnter",
-	-- 	pattern = "*",
-	-- 	callback = function()
-	-- 		vim.cmd("silent! lcd %:p:h")
-	-- 	end,
-	-- },
 }
 
 augroups.yankpost = {
@@ -190,15 +161,6 @@ augroups.quit = {
 		end,
 	},
 }
-
--- TODO augroups.lsp = {
--- 	highlight_lsp = {
--- 		event = "CursorHold",
--- 		pattern = "*",
--- 		callback = vim.lsp.buf.document_highlight,
--- 		desc = "highlight lsp preferences",
--- 	},
--- }
 
 for group, commands in pairs(augroups) do
 	local augroup = vim.api.nvim_create_augroup("AU_" .. group, { clear = true })
