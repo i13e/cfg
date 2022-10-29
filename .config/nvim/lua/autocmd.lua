@@ -6,8 +6,9 @@ augroups.buf_write_pre = {
 	mkdir_before_saving = {
 		event = { "BufWritePre", "FileWritePre" },
 		pattern = "*",
-		-- TODO: Replace vimscript function
-		command = [[ silent! call mkdir(expand("<afile>:p:h"), "p") ]],
+		callback = function(ctx)
+			vim.fn.mkdir(vim.fn.fnamemodify(ctx.file, ":p:h"), "p")
+		end,
 	},
 	clear_search_highlighting = {
 		event = "InsertEnter",
@@ -21,7 +22,15 @@ augroups.buf_write_pre = {
 
 augroups.misc = {
 
-	-- https://stackoverflow.com/a/60338380/2571881
+	Packer_Update = {
+		event = "BufWritePost",
+		pattern = "plugins.lua",
+		callback = function()
+			vim.cmd([[source <afile> | PackerCompile]])
+		end,
+	},
+
+	-- TODO https://stackoverflow.com/a/60338380/2571881
 	-- Mode_changed = {
 	-- 	event = "ModeChanged",
 	-- 	pattern = { "*:i*", "i*:*" },
@@ -44,10 +53,12 @@ augroups.misc = {
 		event = "BufWritePre",
 		pattern = "*",
 		callback = function()
-			vim.cmd([[%s/\s\+$//e]])
-			vim.cmd([[%s/\n\+\%$//e]])
-			--require("utils").preserve([[%s/\s\+$//e]])
-			--require("utils").preserve([[%s/\n\+\%$//e]])
+			require("mini.trailspace").trim()
+			require("mini.trailspace").trim_last_lines()
+			-- vim.cmd([[%s/\s\+$//e]])
+			-- vim.cmd([[%s/\n\+\%$//e]])
+			-- require("utils").preserve([[%s/\s\+$//e]])
+			-- require("utils").preserve([[%s/\n\+\%$//e]])
 			-- { "BufWritePre", "*.[ch]", [[%s/\%$/\r/e]] },
 		end,
 	},
@@ -68,7 +79,7 @@ augroups.misc = {
 
 	fix_commentstring = {
 		event = "BufEnter",
-		pattern = "*config,*rc,*conf,sxhkdrc,bspwmrc",
+		pattern = "*config,*rc,*conf",
 		callback = function()
 			vim.bo.commentstring = "#%s"
 			vim.cmd("set syntax=config")
@@ -83,11 +94,11 @@ augroups.misc = {
 	--     end,
 	-- },
 
-	compile_python = {
-		event = "BufWritePost",
-		pattern = "*.py",
-		command = [[!python -m py_compile %]],
-	},
+	-- TODO compile_python = {
+	-- 	event = "BufWritePost",
+	-- 	pattern = "*.py",
+	-- 	command = [[!python -m py_compile %]],
+	-- },
 
 	reload_sxhkd = {
 		event = "BufWritePost",
@@ -97,10 +108,10 @@ augroups.misc = {
 
 	make_scripts_executable = {
 		event = "BufWritePost",
-		pattern = "*.{sh,py,zsh}",
+		pattern = "*.sh,*.py,*.zsh",
 		callback = function()
 			local file = vim.fn.expand("%p")
-			local status = require("core.utils").is_executable()
+			local status = require("utils").is_executable()
 			if status ~= true then
 				vim.fn.setfperm(file, "rwxr-x---")
 			end
@@ -111,11 +122,6 @@ augroups.misc = {
 		event = "BufWritePost",
 		pattern = "Xresources,Xdefaults,xresources,xdefaults",
 		command = [[!xrdb -merge %]],
-	},
-	updated_xdefaults = {
-		event = "BufWritePost",
-		pattern = "~/.Xdefaults",
-		command = [[!xrdb -merge ~/.Xdefaults]],
 	},
 
 	restore_cursor_position = {
@@ -135,12 +141,12 @@ augroups.misc = {
 		pattern = "[^l]*",
 		command = [[cwindow | wincmd j]],
 	},
-	-- auto_working_directory = {
-	--     event = "BufEnter",
-	--     pattern = "*",
-	--     callback = function()
-	--         vim.cmd("silent! lcd %:p:h")
-	--     end,
+	-- TODO auto_working_directory = {
+	-- 	event = "BufEnter",
+	-- 	pattern = "*",
+	-- 	callback = function()
+	-- 		vim.cmd("silent! lcd %:p:h")
+	-- 	end,
 	-- },
 }
 
@@ -174,18 +180,25 @@ augroups.yankpost = {
 	},
 }
 
--- Note: some Filetype's have their own ftplugin, that's why you cannot see help and qf here
 augroups.quit = {
 	quit_with_q = {
 		event = "FileType",
 		pattern = { "checkhealth", "fugitive", "git*", "lspinfo" },
 		callback = function()
-			-- vim.api.nvim_win_close(0, true) -- TODO: Replace vim command with this
 			vim.api.nvim_buf_set_keymap(0, "n", "q", "<cmd>close!<cr>", { noremap = true, silent = true })
 			vim.bo.buflisted = false
 		end,
 	},
 }
+
+-- TODO augroups.lsp = {
+-- 	highlight_lsp = {
+-- 		event = "CursorHold",
+-- 		pattern = "*",
+-- 		callback = vim.lsp.buf.document_highlight,
+-- 		desc = "highlight lsp preferences",
+-- 	},
+-- }
 
 for group, commands in pairs(augroups) do
 	local augroup = vim.api.nvim_create_augroup("AU_" .. group, { clear = true })
