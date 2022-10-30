@@ -122,7 +122,6 @@ augroups.misc = {
 }
 
 augroups.yankpost = {
-
 	save_cursor_position = {
 		event = { "VimEnter", "CursorMoved" },
 		pattern = "*",

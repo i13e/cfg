@@ -13,6 +13,7 @@ require("mason.settings").set({
 
 local lsp = require("lsp-zero")
 local cmp = require("cmp")
+local cmp_mappings = lsp.defaults.cmp_mappings()
 
 -- lsp.ensure_installed({
 -- 	"html",
@@ -67,6 +68,21 @@ local icons = {
 }
 
 vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#B48EAD" })
+local has_words_before = function()
+	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+		return false
+	end
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+end
+
+cmp_mappings["<Tab>"] = vim.schedule_wrap(function(fallback)
+	if cmp.visible() and has_words_before() then
+		cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+	else
+		fallback()
+	end
+end)
 
 lsp.setup_nvim_cmp({
 	formatting = {
@@ -113,6 +129,7 @@ lsp.setup_nvim_cmp({
 		winhighlight = "Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None",
 		zindex = 1001,
 	},
+	mapping = cmp_mappings,
 })
 
 -- Set configuration for specific filetype.

@@ -16,8 +16,8 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Use a protected call so we don't error out on first use
-local status, packer = pcall(require, "packer")
-if not status then
+local ok, packer = pcall(require, "packer")
+if not ok then
 	return
 end
 
@@ -30,72 +30,42 @@ packer.init({
 	},
 	profile = {
 		enable = true,
-		threshold = 0,
 	},
 })
 
 -- Install plugins
 return packer.startup(function(use)
-	local config = function(name)
-		return string.format("require('plugins.%s')", name)
-	end
-
-	local use_with_config = function(path, name)
-		use({ path, config = config(name) })
-	end
-
 	-- speed up 'require', must be the first plugin
 	use("lewis6991/impatient.nvim")
 
 	-- Packer can manage itself as an optional plugin
 	use("wbthomason/packer.nvim")
 
+	-- Common dependency for Lua plugins
+	use({ "nvim-lua/plenary.nvim", event = "VimEnter" })
+
+	-- Colorful icons
+	use({ "kyazdani42/nvim-web-devicons", event = "VimEnter" })
+
 	-- Analyze startuptime
 	use({ "dstein64/vim-startuptime", cmd = "StartupTime" })
 
-	-- plenary is required by gitsigns and telescope
-	-- lazy load so gitsigns doesn't abuse our startup time
-	use({ "nvim-lua/plenary.nvim", event = "VimEnter" })
-
-	-- optional for fzf-lua, telescope, nvim-tree
-	use({ "kyazdani42/nvim-web-devicons", event = "VimEnter" })
-
-	use({
-		"zbirenbaum/copilot.lua",
-		event = "VimEnter",
-		config = function()
-			vim.defer_fn(function()
-				require("copilot").setup()
-			end, 100)
-		end,
-	})
-	-- mini vim plugin collection
-	use({
-		"echasnovski/mini.nvim",
-		config = config("mini"),
-		event = "VimEnter",
-	})
+	-- Collection of minimal and fast Lua modules
+	use("echasnovski/mini.nvim")
 
 	-- needs no introduction
-	use({ "tpope/vim-fugitive", config = config("fugitive"), event = "VimEnter" })
+	use({ "tpope/vim-fugitive", event = "VimEnter" })
 
 	-- Add git related info in the signs columns and popups
-	use_with_config("lewis6991/gitsigns.nvim", "gitsigns")
+	use("lewis6991/gitsigns.nvim")
 
+	-- smooth scrolling
+	use("karb94/neoscroll.nvim")
 	-- use({
-	-- 	"karb94/neoscroll.nvim",
-	-- 	opt = true,
-	-- 	event = "WinScrolled",
-	-- 	keys = {
-	-- 		"<C-u>",
-	-- 		"<C-d>", -- '<C-b>', '<C-f>',
-	-- 		"<C-y>",
-	-- 		"<C-e>",
-	-- 		"zt",
-	-- 		"zz",
-	-- 		"zb",
-	-- 	},
-	-- 	config = config("neoscroll"),
+	-- 	"gen740/SmoothCursor.nvim",
+	-- 	config = function()
+	-- 		require("smoothcursor").setup()
+	-- 	end,
 	-- })
 
 	--use("tpope/vim-repeat")
@@ -104,19 +74,18 @@ return packer.startup(function(use)
 	--use("christoomey/vim-tmux-navigator")
 	--use("j-hui/fidget.nvim")
 
-	use("bfredl/nvim-luadev") -- FIXME
-	use("ziglang/zig.vim")
+	-- use("bfredl/nvim-luadev")
+	-- use("ziglang/zig.vim")
 
 	use({
 		"VonHeikemen/lsp-zero.nvim",
-		config = config("lspzero"),
-		after = "copilot.lua",
 		requires = {
 			-- LSP Support
 			"neovim/nvim-lspconfig",
-			-- "onsails/lspkind.nvim",
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
+			-- "onsails/lspkind.nvim",
+			-- "glepnir/lspsaga.nvim",
 
 			-- Autocompletion
 			{
@@ -126,15 +95,27 @@ return packer.startup(function(use)
 					"hrsh7th/cmp-buffer",
 					"hrsh7th/cmp-cmdline",
 					"hrsh7th/cmp-nvim-lsp",
-					-- "hrsh7th/cmp-nvim-lsp-document-symbol"
-					-- "hrsh7th/cmp-nvim-lsp-signature-help",
 					"hrsh7th/cmp-nvim-lua",
 					"hrsh7th/cmp-path",
+					-- "hrsh7th/cmp-nvim-lsp-document-symbol"
+					-- "hrsh7th/cmp-nvim-lsp-signature-help",
 					-- "octaltree/cmp-look",
 					-- "ray-x/cmp-treesitter",
 					"saadparwaiz1/cmp_luasnip",
-					-- "tamago324/cmp-zsh"
-					"zbirenbaum/copilot-cmp",
+					-- "tamago324/cmp-zsh",
+					{
+						"zbirenbaum/copilot.lua",
+						config = function()
+							require("copilot").setup()
+						end,
+					},
+					{
+						"zbirenbaum/copilot-cmp",
+						-- after = { "copilot.lua" },
+						config = function()
+							require("copilot_cmp").setup()
+						end,
+					},
 				},
 			},
 
@@ -146,27 +127,17 @@ return packer.startup(function(use)
 
 	-- nvim-treesitter
 	-- verify a compiler exists before installing
-	--if require("utils").have_compiler() then
 	use({
 		"nvim-treesitter/nvim-treesitter",
-		config = config("treesitter"),
 		run = ":TSUpdate",
-		--event = "BufRead",
+		requires = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+			"nvim-treesitter/playground",
+		},
 	})
-	use({
-		"nvim-treesitter/nvim-treesitter-textobjects",
-		after = { "nvim-treesitter" },
-	})
-	-- debugging treesitter
-	use({
-		"nvim-treesitter/playground",
-		after = { "nvim-treesitter" },
-		cmd = { "TSPlaygroundToggle" },
-	})
-	--end
 
-	-- nvim-tree
-	use({ "kyazdani42/nvim-tree.lua", config = config("nvim-tree"), cmd = { "NvimTreeToggle", "NvimTreeFindFile" } })
+	-- File tree explorer
+	use({ "kyazdani42/nvim-tree.lua", cmd = { "NvimTreeToggle", "NvimTreeFindFile" } })
 
 	-- use({
 	--     "nvim-neo-tree/neo-tree.nvim",
@@ -181,16 +152,19 @@ return packer.startup(function(use)
 	--     end,
 	-- })
 
-	-- Telescope
+	-- Terminal and REPLs
+	use({
+		"akinsho/toggleterm.nvim",
+		-- keys = { "gxx", "gx", "<C-\\>" },
+		-- cmd = { "T" },
+	})
+
+	-- Fuzzy finder
 	use({
 		"nvim-telescope/telescope.nvim",
 		requires = {
-			{ "nvim-lua/plenary.nvim" },
-			-- { "nvim-lua/popup.nvim" },
-			{ "nvim-telescope/telescope-fzy-native.nvim" },
+			"nvim-telescope/telescope-fzy-native.nvim",
 		},
-		setup = config("telescope.mappings"),
-		config = config("telescope"),
 		opt = true,
 	})
 
@@ -198,39 +172,32 @@ return packer.startup(function(use)
 	-- use = { 'junegunn/fzf', run = './install --bin', }
 	use({
 		"ibhagwan/fzf-lua",
-		setup = config("fzf-lua.mappings"),
-		config = config("fzf-lua"),
 		opt = true,
 	})
 
 	-- better quickfix
-	use({ "kevinhwang91/nvim-bqf", config = config("bqf"), ft = { "qf" } })
+	use({ "kevinhwang91/nvim-bqf" })
 
-	-- Code linting and formatting
+	-- Code linting & formatting
 	use({
 		"jose-elias-alvarez/null-ls.nvim",
-		config = config("null-ls"),
-		after = { "lsp-zero" },
+		after = { "nvim-lspconfig" },
 		event = "VimEnter",
 	})
 
 	-- Debug Adapter Protocol
 	use({
-		{
-			"mfussenegger/nvim-dap",
-			config = config("dap"),
-			keys = { "<F5>", "<F8>", "<F9>" },
+		"mfussenegger/nvim-dap",
+		requires = {
+			"mfussenegger/nvim-dap-python",
+			"rcarriga/nvim-dap-ui",
+			"jbyuki/one-small-step-for-vimkind",
 		},
-		{ "rcarriga/nvim-dap-ui", config = config("dap.ui"), after = { "nvim-dap" } },
-		{ "jbyuki/one-small-step-for-vimkind", after = { "nvim-dap" } },
+		keys = { "<F5>", "<F8>", "<F9>" },
 	})
 
-	-- key bindings cheatsheet
-	use({
-		"folke/which-key.nvim",
-		event = "VimEnter",
-		config = config("which_key"),
-	})
+	-- Show keybindings
+	use({ "folke/which-key.nvim", event = "VimEnter" })
 
 	-- Colorscheme
 	use("shaunsingh/nord.nvim")
@@ -249,8 +216,8 @@ return packer.startup(function(use)
 		config = require("lualine").setup(),
 	})
 
-	-- Dashboard (start screen)
-	-- use_with_config("goolord/alpha-nvim", "alpha-nvim")
+	-- bufferline
+	use("akinsho/bufferline.nvim")
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins

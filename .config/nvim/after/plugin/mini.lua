@@ -33,7 +33,7 @@ vim.schedule(function()
 	require("mini.cursorword").setup()
 	-- require('mini.indentscope').setup()
 	require("mini.jump").setup()
-	-- require('mini.jump2d').setup()
+	require("mini.jump2d").setup()
 
 	-- require('mini.misc').setup()
 	require("mini.pairs").setup({ modes = { insert = true, command = true, terminal = true } })

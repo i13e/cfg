@@ -11,7 +11,7 @@ local map_fzf = function(mode, key, f, options, buffer)
 		if not pcall(require, "fzf-lua") then
 			require("packer").loader("fzf-lua")
 		end
-		require("plugins.fzf-lua")[f](options or {})
+		require("fzf-lua")[f](options or {})
 	end
 
 	local map_options = {
@@ -139,21 +139,16 @@ map_fzf("n", "<leader>gB", "git_branches", { desc = "git branches" })
 map_fzf("n", "<leader>gc", "git_bcommits", { desc = "git commits (buffer)" })
 map_fzf("n", "<leader>gC", "git_commits", { desc = "git commits (project)" })
 -- Full screen git status
-map_fzf(
-	"n",
-	"<leader>gS",
-	"git_status_tmuxZ",
-	{
-		desc = "git status (fullscreen)",
-		winopts = {
-			fullscreen = true,
-			preview = {
-				vertical = "down:70%",
-				horizontal = "right:70%",
-			},
+map_fzf("n", "<leader>gS", "git_status_tmuxZ", {
+	desc = "git status (fullscreen)",
+	winopts = {
+		fullscreen = true,
+		preview = {
+			vertical = "down:70%",
+			horizontal = "right:70%",
 		},
-	}
-)
+	},
+})
 
 -- yadm repo
 local yadm_git_dir = "$HOME/dots/yadm-repo"
