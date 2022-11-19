@@ -1,167 +1,294 @@
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
+# Define an associative array for aliases
+# TODO https://stackoverflow.com/questions/22097130/delete-all-broken-symbolic-links-with-a-line
+# TODO https://stackoverflow.com/questions/19331497/set-environment-variables-from-file-of-key-value-pairs?rq=1
+# FIXME https://stackoverflow.com/a/11512211/15593672
+#find /path/to/dir -type f -exec chmod 640 {} \;
+#find /path/to/dir -type d -exec chmod 750 {} \;
+#zsh delete broken symlinks from directory stackoverflow
+typeset -A real_aliases=(
+# Verbosity and settings that you almost always will want.
+    chgrp 'chgrp --preserve-root -vc'
+    chmod 'chmod --preserve-root -vc'
+    chown 'chown --preserve-root -vc'
+    cp 'cp -iv'
+    df 'df -h'
+    du 'ncdu -ch'
+    ffmpeg 'ffmpeg -hide_banner'
+    mkdir 'mkdir -pv'
+    mv 'mv -iv'
+    path 'echo -e ${PATH//:/\\n}'
+    ports 'ss -tulpn'
+    rm 'rm -Iv'
+    yt 'yt-dlp --embed-metadata -i'
+    yta 'yt -x -f bestaudio/best'
+# Colorize commands when possible.
+    grep 'grep --color=auto'
+    egrep 'egrep --color=auto'
+    fgrep 'fgrep --color=auto'
+    diff 'diff --color=auto'
+    ip 'ip -color=auto'
+# These common commands are too long! Abbreviate them.
+    cleanup 'pacman -Rns $(pacman -Qtdq) ; paccache -ruk0'
+    clr ' clear'
+    mpv 'umpv'
+    doom '$XDG_CONFIG_HOME/emacs/bin/doom'
+    ipp 'curl -s https://ipinfo.io/ | jq .ip'
+    jctl 'journalctl'
+    mk 'make'
+    open ' xdg-open'
+    pfetch 'wget -qO- https://raw.github.com/dylanaraps/pfetch/master/pfetch | sh'
+    q ' exit'
+    sctl 'systemctl'
+    sha 'shasum -a 256'
+    ta 'tmux attach -t'
+    tl 'tmux list-sessions'
+    ts 'tmux new-session -s'
+    unlock 'sudo rm /var/lib/pacman/db.lck'
+    wttr 'curl https://wttr.in/'
+    xx 'atool -x'
+    del 'gio trash'
+)
+for key val in "${(@kv)real_aliases}"; do
+    alias "$key=$val"
+done
 
-alias q=exit
-alias clr=clear
+global_aliases=(
+  :: ':>!'
+
+  B '`git rev-parse --abbrev-ref HEAD`'
+
+  V "|& less"
+  G "|& egrep --color"
+  S "|& sort"
+  R "|& sort -rn"
+  L "|& wc -l | sed 's/^\ *//'"
+
+  H  "|& head"
+  T  "|& tail"
+  H1 "H -n 1"
+  T1 "T -n 1"
+
+  ZF '*(.L0)'     # zero-length regular files
+  ZD '*(/L0)'     # zero-length directories
+
+  AE '{,.}*'      # all files, including dot files
+  AF '**/*(.)'    # all regular files
+  AD '**/*(/)'    # all directories
+  AS '**/*(@)'    # all symlinks
+
+  OF '*(.om[-1])' # oldest regular file
+  OD '*(/om[-1])' # oldest directory
+  OS '*(@om[-1])' # oldest symlink
+
+  NF '*(.om[1])'  # newest regular file
+  ND '*(/om[1])'  # newest directory
+  NS '*(@om[1])'  # newest symlink
+)
+for key val in "${(@kv)global_aliases}"; do
+    alias -g "$key=$val"
+done
+
+
+zsource /usr/share/doc/pkgfile/command-not-found.zsh
+alias -s {ape,avi,flv,m4a,mkv,mov,mp3,mp4,mpeg,mpg,ogg,ogm,wav,webm}=mpv
+alias -s git="git clone"
+# Pass aliases with sudo
+# TODO move? https://wiki.archlinux.org/index.php/Sudo#Passing_aliases
 alias sudo='sudo '
-alias rm='rm -Iv'
-alias cp='cp -iv'
-alias mv='mv -iv'
-alias mkdir='mkdir -pv'
-alias wget='wget -c --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
-alias path='echo -e ${PATH//:/\\n}'
-alias btm='btm --battery'
-alias ports='sudo ss -tulanp'
+#alias sudo='sudo -v; sudo '
 
-# youtube-dlp
-alias ydl='youtube-dlp -o "./%(title)s.%(ext)s"'
-alias yhd='youtube-dlp -f "[height<=720]" -o "~/Videos/%(uploader)s/%(title)s.%(ext)s" --no-playlist '
-alias ymp3='youtube-dlp -f "bestaudio" -o "~/Music/%(uploader)s/%(title)s.%(ext)s" --no-playlist -x --audio-format mp3 --embed-thumbnail '
-alias ypl3='youtube-dlp -f "bestaudio" -o "~/Music/%(uploader)s/%(playlist)s/%(title)s.%(ext)s" -x --audio-format mp3 --embed-thumbnail'
-alias yt='youtube-dl --add-metadate -i'
-alias yta='yt -x -f bestaudio/best'
+#${${commands[nvim]:t}:-vi}
+# Use $XINITRC variable if file exists.
+[ -f "$XINITRC" ] && alias startx="startx $XINITRC"
 
-# arch
-alias unlock='sudo rm /var/lib/pacman/db.lck' # remove pacman lock
-alias cleanup='paru -Rns $(paru -Qtdq) ; paccache -ruk0'
+(( $+commands[nvim] )) && alias {vim,vi}='nvim' vi{diff,mdiff}='nvim -d'
+(( $+commands[exa] )) && alias exa='exa --icons --git --group-directories-first --color-scale'
+(( $+commands[prettyping] )) && alias ping='prettyping -nolegend'
+
+# Call sudo for some system commands.
+for command in ss mount umount sv pacman updatedb su shutdown poweroff reboot ufw systemctl journalctl ; do
+	alias $command="sudo $command"
+done; unset command
+
+# Git aliases
+    # cdg='cd `git rev-parse --show-toplevel`'
+    # git='noglob git'
+    # gb='git branch -av'
+    # gop='git open'
+    # gbl='git blame'
+    # fixpush='killall ssh-agent; eval `ssh-agent`'
+    # gc='git commit'
+    # gcm='git commit -m'
+    # gca='git commit --amend'
+    # gcf='git commit --fixup'
+    # gcl='git clone'
+    # gco='git checkout'
+    # gcoo='git checkout --'
+    # gf='git fetch'
+    # gi='git init'
+    # gL='gl --stat'
+    # gp='git push'
+    # gpl='git pull --rebase --autostash'
+    # gss='git status --short .'
+    # gs='git status'
+    # gst='git stash'
+    # gr='git reset HEAD'
+    # gv='git rev-parse'
+    # gd='git diff'
+    # gds='git diff --staged'
+    # ga='git add --patch'
+    # gc='git commit --verbose'
+    # gpf='git push --force-with-lease'
+    # gpu='git push --set-upstream-origin \`git rev-parse --abbrev-ref HEAD\`'
+
+alias xpropc='xprop | grep WM_CLASS' # display xprop class
+alias spotify="/usr/bin/spotify --force-device-scale-factor=1.3"
+#if os = arch
 alias pacfind='pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S'
-
-alias mk="make"
 alias gurl='curl --compressed'
-alias sha='shasum -a 256'
 alias sync='syncthing -browser-only'
-
 alias mount='mount |column -t'
-# Editor
-#alias vim='nvim'
 #alias em='/usr/bin/emacs -nw'
 #alias e="emacsclient -c -a 'emacs'"
 #alias em='devour emacsclient -c -a emacs'
 #alias et='emacsclient -t -a emacs'
-#alias doom='~/.config/emacs/bin/doom'
 
-# NOTE: personal aliases
-alias cfg='/usr/bin/git --git-dir=$HOME/.config/cfg/ --work-tree=$HOME'
-alias moshlax='mosh munchlax -- tmux a'
-alias build='rm -f ~/docs/code/sites/ianb/dst/.files && ssg6 ~/docs/code/sites/ianb/src ~/docs/code/sites/ianb/dst "Ian B." "https://ianb.io"'
-alias deploy='rsync -avzhP --delete-after --chmod=755 ~/docs/code/sites/ianb/dst/ munchlax:/var/www/ianb'
 
-alias ipp='curl ipinfo.io/ip'
-alias lofi='mpv --volume=50 --no-video --no-audio-display --pause=no --force-window=no "https://www.youtube.com/watch?v=5qap5aO4i9A"'
-#alias sudo='sudo -v; sudo '
-#alias miccheck='arecord -vvv -f dat /dev/null'
-# Add flags to existing aliases.
-#alias ls="${aliases[ls]:-ls} -A"
-# dfc & ncdu aliases
-alias df='dfc -s'
-alias du='ncdu --color dark'
-# broot
-alias br='br -dhp'
-alias bs='br --sizes'
+#alias lofi='mpv --volume=50 --no-video --no-audio-display --pause=no --force-window=no "https://www.youtube.com/watch?v=5qap5aO4i9A"'
+
+# TODO Add aliases for new tools
+# TODO will I still use these tools?
+#alias df='dfc -s'
+#alias du='ncdu --color dark'
+
 # gpg encryption
 # verify signature for isos
-alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+alias gpg-check="gpg --keyserver-options auto-key-retrieve --verify"
 # receive the key of a developer
-alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+alias gpg-retrieve="gpg --keyserver-options auto-key-retrieve --receive-keys"
 ## get top process eating memory
 alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 ## get top process eating cpu ##
 alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
-alias shutdown='sudo shutdown'
-alias reboot='sudo reboot'
 
-# An rsync that respects gitignore
+
+
+# DESC: Colorized man pages.
+function man() {
+	env \
+        LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
+        LESS_TERMCAP_md="$(printf "\e[1;34m")" \
+        LESS_TERMCAP_me="$(printf "\e[0m")" \
+        LESS_TERMCAP_se="$(printf "\e[0m")" \
+        LESS_TERMCAP_so="$(printf "\e[01;35m")" \
+        LESS_TERMCAP_ue="$(printf "\e[0m")" \
+        LESS_TERMCAP_us="$(printf "\e[1;32m")" \
+		man "$@"
+}
+
+# function lf() {
+#     local tempfile="$(mktemp)"
+#     command lf -command "map Q \$echo \$PWD >$tempfile; lf -remote \"send \$id quit\"" "$@"
+#
+#     if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n $(pwd))" ]]; then
+#           cd -- "$(cat "$tempfile")" || return
+#     fi
+#     command rm -f -- "$tempfile" 2>/dev/null
+# }
+
+# DESC: An rsync that respects gitignore.
 function rcp {
-  # -a = -rlptgoD
-  #   -r = recursive
-  #   -l = copy symlinks as symlinks
-  #   -p = preserve permissions
-  #   -t = preserve mtimes
-  #   -g = preserve owning group
-  #   -o = preserve owner
-  # -z = use compression
-  # -P = show progress on transferred file
-  # -J = don't touch mtimes on symlinks (always errors)
-  rsync -azPJ \
-    --include=.git/ \
-    --filter=':- .gitignore' \
-    --filter=":- $XDG_CONFIG_HOME/git/ignore" \
-    "$@"
-}; compdef rcp=rsync
+    # -a = -rlptgoD
+    #   -r = recursive
+    #   -l = copy symlinks as symlinks
+    #   -p = preserve permissions
+    #   -t = preserve mtimes
+    #   -g = preserve owning group
+    #   -o = preserve owner
+    # -z = use compression
+    # -P = show progress on transferred file
+    # -J = don't touch mtimes on symlinks (always errors)
+    rsync -azPJ \
+        --include=.git/ \
+        --filter=':- .gitignore' \
+        --filter=":- $XDG_CONFIG_HOME/git/ignore" \
+        "$@"
+    }; compdef rcp=rsync
 alias rcpd='rcp --delete --delete-after'
 alias rcpu='rcp --chmod=go='
 alias rcpdu='rcpd --chmod=go='
 
 
-
-
-
-
 alias y='xclip -selection clipboard -in'
 alias p='xclip -selection clipboard -out'
 
-alias jc='journalctl -xe'
-alias sc=systemctl
-alias ssc='sudo systemctl'
-alias jctl='sudo journalctl'
-alias sctl='sudo systemctl'
-
-# save search engines in chrome/brave/etc
+# DESC: save search engines in chrome/brave/etc
 #sqlite3 -csv ~/.config/BraveSoftware/Brave-Browser/Default/Web\ Data 'select short_name,keyword,url from keywords' > ~/search-engines.csv
-#update neovim plugins, bootstrap
-#nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-# check if installed
 
+# TODO rework this.
 if (( $+commands[devour] )); then
-    alias z='devour zathura';
-    alias m='devour umpv';
+    alias zath='devour zathura';
+    # alias umpv='devour umpv';
     alias sxiv='devour nsxiv -a';
 
     # open a twitch stream in mpv
-    function twitch { streamlink --twitch-disable-hosting --twitch-disable-reruns\
-        --twitch-disable-ads -p "devour mpv -" "http://twitch.tv/$@" 480p }
-fi
-if (( $+commands[exa] )); then
-    alias ls='exa -al --color=always --color-scale --git --group-directories-first';
-    alias la='exa -a --color=always --group-directories-first'  # all files and dirs
-    alias ll='exa -l --color=always --group-directories-first'  # long format
-    alias tree='exa -aTI .git';
+    function twitch {
+        streamlink --twitch-disable-hosting --twitch-disable-reruns \
+        --twitch-disable-ads -p "devour umpv -" "http://twitch.tv/$@" 480p
+    }
 fi
 
-if (( $+commands[paru] )); then
+# When present, use exa instead of ls
+[ -x /usr/bin/exa ] && alias \
+    ls='exa -al' \
+    ll='exa -l' \
+    la='exa -a' \
+    lx='ll -sextension' \
+    lk='ll -ssize' \
+    lt='ll -smodified' \
+    lc='ll -schanged' \
+    tree='exa -TlI ".cache|music|cache|node_modules|vendor|.git"'
+
+if [ -x /usr/bin/paru ]; then
+    # Alias for update scripts
     alias upd='checkupd && autosnap-wrapper && hostupd'
 fi
 
-if (( $+commands[fasd] )); then
-  # fuzzy completion with 'z' when called without args
-  unalias z 2>/dev/null
-  function z {
-    [ $# -gt 0 ] && _z "$*" && return
-    cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
-  }
-fi
+# DESC: make directory and enter it
+function take() {
+  mkdir -p $@ && cd ${@:$#}
+} ; compdef take=mkdir
 
-autoload -U zmv
+function chmod_calc() {
+    local -a permission=(${(s::)${_PMS:-"rwxrwxrwx"}})
+    local -a binary=()
 
-# make directory and enter it
-function take {
-  mkdir "$1" && cd "$1";
-}; compdef take=mkdir
+    for i in ${(s::)1}; do
+        binary+=(${(s::)${(l:3::0:)${"$(( [#2]i ))":2}}})
+    done
 
-function zman {
-  PAGER="less -g -I -s '+/^       "$1"'" man zshall;
+    for i j in ${permission:^binary}; do
+        if (( $j )); then
+            echo -n $i
+        else
+            echo -n _
+        fi
+    done
+
+    echo
 }
 
-# Create a reminder with human-readable durations, e.g. 15m, 1h, 40s, etc
-function r {
-  local time=$1; shift
-  sched "$time" "notify-send --urgency=critical 'Reminder' '$@'; ding";
+# DESC: Create a reminder with human-readable durations, e.g. 15m, 1h, 40s, etc
+function remind {
+    local time=$1; shift
+    sched "$time" "notify-send --urgency=critical 'Reminder' '$@'; ding"
 }; compdef r=sched
 
-function cheat { curl cht.sh/$1 }
+function cheat {
+    curl -s "cheat.sh/$(echo -n "$*" | jq -sRr @uri)"
+}
 
 function lie {
     if [[ "$1" == "not" ]]
@@ -174,22 +301,8 @@ function lie {
     export export GIT_COMMITTER_DATE="$1"
 }
 
+# DESC:
 # https://news.ycombinator.com/item?id=18898898
-function pycd { pushd `python -c "import os.path, $1; print(os.path.dirname($1.__file__))"`; }
-
-# https://news.ycombinator.com/item?id=9869613
-function up {
-    if [[ "$#" < 1 ]] ; then
-        cd ..
-    else
-        CDSTR=""
-        for i in {1..$1} ; do
-            CDSTR="../$CDSTR"
-        done
-        cd $CDSTR
-    fi
+function pycd() {
+    pushd `python -c "import os.path, $1; print(os.path.dirname($1.__file__))"`
 }
-
-# set terminal window title
-function precmd { print -Pn "\e]0;%~\a"; }
-function preexec { print -Pn "\e]0;${1//\%/%%}\a"; }
