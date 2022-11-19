@@ -41,13 +41,13 @@
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     clean = git-lfs clean -- %f
-[url "git@github.com:"]
-    insteadOf = https://github.com/
-[url "https://github.com/"]
-    insteadOf = gh:
-[url "https://gitlab.com/"]
-    insteadOf = gl:
-[url "https://gist.github.com/"]
-    insteadOf = gist:
-[url "https://bitbucket.org/"]
-    insteadOf = bb:
+; [url "git@github.com:"]
+;     insteadOf = https://github.com/
+; [url "https://github.com/"]
+;     insteadOf = gh:
+; [url "https://gitlab.com/"]
+;     insteadOf = gl:
+; [url "https://gist.github.com/"]
+;     insteadOf = gist:
+; [url "https://bitbucket.org/"]
+;     insteadOf = bb:
