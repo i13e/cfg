@@ -1,6 +1,21 @@
-# Dotfiles for i13e
+# Dotfiles
 
-Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
+These are my personal dotfiles, which I use to customize my terminal and shell setup.
+
+## Installation
+
+Install my config files with tracking in your $HOME by running this command in
+any POSIX-compliant shell:
+
+```shell
+if command -v curl >/dev/null 2>&1; then
+    sh -c "$(curl -fsSL https://raw.github.com/i13e/cfg/master/.local/bin/install.sh)"
+else
+    sh -c "$(wget -nv -O - https://raw.github.com/i13e/cfg/master/.local/bin/install.sh)"
+fi
+```
+
+The installer backs up existing config files, ... and asks for confirmation on every step so that you are always in control. Running the script requires curl or wget, otherwise the script will install necessary dependencies itself (i.e. git, sudo, zsh).
 
 ## Info
 
@@ -24,22 +39,23 @@ Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint 
 | Notification Daemon | dunst                                                         |
 | Color Scheme        | [Nord](https://nordtheme.com) with extra dark color `#242831` |
 
-## Installation
-
-Install my config files with tracking in your $HOME by running this command in
-any POSIX-compliant shell:
-
-```shell
-if command -v curl >/dev/null 2>&1; then
-    sh -c "$(curl -fsSL https://raw.github.com/i13e/cfg/master/.local/bin/install.sh)"
-else
-    sh -c "$(wget -nv -O - https://raw.github.com/i13e/cfg/master/.local/bin/install.sh)"
-fi
-```
-
-The installer backs up existing config files, ... and asks for confirmation on every step so that you are always in control. Running the script requires curl or wget, otherwise the script will install necessary dependencies itself (i.e. git, sudo, zsh).
-
 ## Notes
 
 - The install script is currently **unfinished** and will break your system if you attempt to use it.
 - Update zsh/mpv plugins as submodules with: `cfg submodule update --remote`
+
+## Customization
+
+You can customize the dotfiles to your personal preferences by modifying the files in the repository
+
+## Contribute
+To contribute to this repository, please create a new branch and make your changes, then submit a pull
+request for review.
+
+## License
+
+This repository is licensed under the GPLv3 License.
+
+## Questions
+
+If you have any questions, please open an issue or contact me at username@domain.com.
