@@ -1,6 +1,6 @@
 # Dotfiles
 
-These are my personal dotfiles, which I use to customize my terminal and shell setup.
+These are my personal dotfiles, which I use to customize my terminal and shell setup. Feel free to use and modify them as you see fit.
 
 ## Installation
 
