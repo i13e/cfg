@@ -702,7 +702,7 @@ def bars(monitor):
             background=colors[14],
             foreground=colors[7],
             app_key="7834197c2338888258f8cb94ae14ef49",
-            zip=zipcode,
+            zip="11215",
             language="en",
             metric=False,
             format="{icon} {temp:.0f}°{units_temperature}",

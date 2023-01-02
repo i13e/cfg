@@ -63,7 +63,6 @@ cfg config status.showUntrackedFiles no
 # cfg remote set-url origin git@github.com:i13e/cfg.git
 # git push -u origin/master
 # cfg branch --set-upstream-to=origin/master
-# else skip
 
 # make folders mkdir ~/vids dl ?
 
@@ -73,19 +72,17 @@ cfg submodule update --init
 ## Install Repo's Package List.
 
 # Install packages
-# sudo pacman -S --needed --noconfirm $(cat pkglist.txt)
+# sudo pacman -S --noconfirm $(cat pkglist.txt)
 # Install packages from AUR
 # git clone https://aur.archlinux.org/paru-bin.git "/tmp/paru-bin"
 
 # paru -S scripts, tools, etc
 paru -S --noconfirm ttf-jetbrains-mono neovim zsh ttf-nerd-fonts-symbols-2048-em brave-bin vivid tealdeer fd zoxide picom
+# python-psutil mypy python-dbus-next jq
+# xwallpaper TRAY
 # would you like to use your own package list or install the repo default?
 # install pkg list from repo
 # switch shell to start using tools
-
-#printf "Password: " ; read -r myPass ; echo "Password is: $myPass"
-
-## Wrap up.
 
 # Change the $USER's shell to Zsh
 if command -v zsh >/dev/null 2>&1; then

@@ -21,7 +21,7 @@ remaps                                 # run the remaps script (switching caps/e
 # https://www.shellcheck.net/wiki/SC3030
 # -t tty"$XDG_VTNR" to match only on current tty
 autostart="syncthing --no-browser
-picom --experimental-backends
+picom
 playerctld
 lxpolkit
 unclutter
