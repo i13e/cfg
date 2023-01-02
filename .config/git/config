@@ -7,12 +7,14 @@
 [tag]
     gpgSign = true
 [core]
-    editor = $EDITOR
+    ; editor = $EDITOR
     whitespace = trailing-space
 [init]
     defaultBranch = master
 [github]
     user = i13e
+; [gitlab]
+    ; user = i13e
 [push]
     default = current
     autoSquash = true
@@ -20,34 +22,26 @@
 [pull]
     rebase = true
 [alias]
-    a = add
-    ap = add --patch
-    c = commit
-    cm = commit -m
-    ca = commit --amend
-    cf = commit --fixup
-    cl = clone
-    co = checkout
-    coo = checkout --
-    f = fetch
-    i = init
-    unstage = reset HEAD --
+	unadd = reset HEAD
+	ranked-authors = !git authors | sort | uniq -c | sort -n
+	emails = !git log --format="%aE" | sort -u
+	email-domains = !git log --format="%aE" | awk -F'@' '{print $2}' | sort -u
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
     la = "!git config -l | grep alias | cut -c 7-"
-[color]
-    ui = true
 [filter "lfs"]
     required = true
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     clean = git-lfs clean -- %f
-; [url "git@github.com:"]
-;     insteadOf = https://github.com/
-; [url "https://github.com/"]
-;     insteadOf = gh:
-; [url "https://gitlab.com/"]
-;     insteadOf = gl:
-; [url "https://gist.github.com/"]
-;     insteadOf = gist:
-; [url "https://bitbucket.org/"]
-;     insteadOf = bb:
+[url "https://github.com/"]
+    insteadOf = gh://
+[url "git@github.com:"]
+    insteadOf = gh:
+[url "git@github.com:i13e/"]
+    insteadOf = gh:/
+[url "https://gitlab.com/"]
+    insteadOf = gl://
+[url "https://gist.github.com/"]
+    insteadOf = gist://
+[url "https://bitbucket.org/"]
+    insteadOf = bb://
