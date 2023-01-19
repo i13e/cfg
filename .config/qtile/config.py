@@ -292,7 +292,7 @@ groups = [
         "6",
         label="六",
         matches=[
-            Match(wm_class=["ferdium"]),
+            Match(wm_class=["ferdium", "signal"]),
         ],
         layout="bsp",  # max
     ),

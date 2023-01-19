@@ -55,7 +55,8 @@ fzf_lua.setup({
 		width = 0.80,
 		row = 0.35,
 		col = 0.55,
-		-- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'}, {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
+		-- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'},
+		-- {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
 		preview = {
 			layout = "flex",
 			flip_columns = 130,
@@ -88,8 +89,9 @@ fzf_lua.setup({
 		},
 	},
 	files = {
-        -- uncomment to override .gitignore
-        -- fd_opts = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
+		-- uncomment to override .gitignore
+		-- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
+		fzf_opts = { ["--tiebreak"] = "end" },
 		action = { ["ctrl-l"] = fzf_lua.actions.arg_add },
 	},
 	grep = {
@@ -145,6 +147,7 @@ function M.git_bcommits(opts)
 			vim.api.nvim_set_current_win(curwin)
 		end
 	end
+
 	opts.actions = {
 		["ctrl-v"] = diffthis(fzf_lua.actions.git_buf_vsplit),
 	}
@@ -155,6 +158,7 @@ function M.git_status_tmuxZ(opts)
 	local function tmuxZ()
 		vim.cmd("!tmux resize-pane -Z")
 	end
+
 	opts = opts or {}
 	opts.fn_pre_win = function(_)
 		if not opts.__want_resume then

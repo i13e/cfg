@@ -18,12 +18,11 @@ export KEYTIMEOUT=1
 #  4 -> solid underscore
 #  5 -> blinking vertical bar
 #  6 -> solid vertical bar
-function zle-keymap-select() {
-    if [[ ${KEYMAP} == vicmd || $1 = 'block' ]] {
-        printf '\e[2 q' >"$TTY"
-    } elif [[ ${KEYMAP} == (main|viins|'') || $1 = 'beam' ]] {
-        printf '\e[5 q' >"$TTY"
-    }
+zle-keymap-select () {
+    case $KEYMAP in
+        vicmd) printf "\e[2 q" >"$TTY" ;;
+        viins|main|*|"") printf "\e[5 q" >"$TTY" ;;
+    esac
 }
 zle -N zle-keymap-select
 
@@ -31,7 +30,7 @@ zle -N zle-keymap-select
 # active. Only then are the values from $terminfo valid.
 if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )) {
     function zle-line-init() {
-        printf '\e[5 q' >"$TTY" # reset to beam cursor on new prompt
+        printf '\e[5 q' >"$TTY"     # reset cursor on new prompt
         echoti smkx
     }
     function zle-line-finish() {
@@ -41,11 +40,9 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )) {
     zle -N zle-line-finish
 }
 
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
+zle -N beginning-of-somewhere beginning-or-end-of-somewhere
+zle -N end-of-somewhere beginning-or-end-of-somewhere
 
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
 
 # TODO Guidelines for adding key bindings:
 #   - Do not add hardcoded escape sequences, they are not easily portable.
@@ -54,23 +51,79 @@ zle -N down-line-or-beginning-search
 #   - All keys from the $key[] mapping are obviously okay.
 #   - tab, '\ec', '^I', '^R', and '^T' are bound by FZF
 
-local -A keybindings=(
-    'Home'   beginning-of-line
-    'End'    end-of-line
-    'Delete' delete-char
-    'Up'     history-substring-search-up
-    'Down'   history-substring-search-down
+# Bind all of these to EMACS/VIINS mode.
+# #k# Perform abbreviation expansion
+# '^x.' zleiab
+# #k# Display list of abbreviations that would expand
+# '^xb' help-show-abk
+# #k# mkdir -p <dir> from string under cursor or marked area
+# '^xM' inplaceMkDirs
+# #k# display help for keybindings and ZLE
+# '^xz' help-zle
+# #k# Insert files and test globbing
+# "^xf" insert-files
+# #k# Edit the current line in \kbd{\$EDITOR}
+# '\ee' edit-command-line
+# #k# search history backward for entry beginning with typed text
+# '^xp' history-beginning-search-backward-end
+# #k# search history forward for entry beginning with typed text
+# '^xP' history-beginning-search-forward-end
+# #k# search history backward for entry beginning with typed text
+# PageUp history-beginning-search-backward-end
+# #k# search history forward for entry beginning with typed text
+# PageDown history-beginning-search-forward-end
+# "^x^h" commit-to-history
+# #k# Kill left-side word or everything up to next slash
+# '\ev' slash-backward-kill-word
+# #k# Kill left-side word or everything up to next slash
+# '\e^h' slash-backward-kill-word
+# #k# Kill left-side word or everything up to next slash
+# '\e^?' slash-backward-kill-word
+# #k# Trigger menu-complete
+# '\ei' menu-complete  # menu completion via esc-i
+# #k# Insert a timestamp on the command line (yyyy-mm-dd)
+# '^xd' insert-datestamp
+# #k# Insert last typed word
+# "\em" insert-last-typed-word
+# #k# A smart shortcut for \kbd{fg<enter>}
+# '^z' grml-zsh-fg
+# #k# prepend the current command with "sudo"
+# "^os" sudo-command-line
+# #k# jump to after first word (for adding options)
+# '^x1' jump_after_first_word
+# #k# complete word from history with menu
+# "^x^x" hist-complete
 
-    "C-A" beginning-of-line
-    "C-E" end-of-line
-    'C-Right'     forward-word
-    'C-Left'      backward-word
+local -A keybindings=(
+    # Bind to function keys.
+    'Home'   vi-beginning-of-line # beginning-of-line
+    'End'    vi-end-of-line # end-of-line
+    'Insert' overwrite-mode # vi-insert
+    'Delete' vi-delete-char # delete-char
+    'Up'     history-substring-search-up # up-line-or-{,beginning-}search
+    'Down'   history-substring-search-down # down-line-or-{,beginning-}search
+    'Left'   vi-backward-char # backward-char
+    'Right'  vi-forward-char # forward-char
+
+    # Emacs flavored control keys.
+    'C-A' beginning-of-line
+    'C-E' end-of-line
+    'C-K' kill-line
+    'C-L' clear-screen
+    'C-R' history-incremental-search-backward
+    'C-U' kill-whole-line
+    'C-W' backward-kill-word
+    'C-Y' yank
+
+    'C-Right' forward-word
+    'C-Left' backward-word
     'C-Backspace' backward-kill-word
-    'Space' magic-space  # Expand history by space
-    'C-D'   delete-char  # Delete chararcter under cursor
+    'Space' magic-space  # Expand history on space
+    'C-D'   delete-char  # Delete character under cursor
     'C-W'   kill-region
 
     'M-.'   insert-last-word
+
     # Single line mode puts the current content on the stack and opens a temporary prompt
     # Allows editing of previous lines in multi-line mode
     'M-Q' push-line-or-edit
@@ -81,22 +134,52 @@ local -A keybindings=(
 zbindkey -M vicmd "Backspace" backward-delete-char
 
 
+# TODO alt+E: open $EDITOR
+
 # Jump by parameter boundary
 # Reference: https://blog.lilydjwg.me/2013/11/14/zsh-move-by-shell-arguments.41712.html
-() {
-    local -a to_bind=(forward-word backward-word backward-kill-word)
-    local widget
-    for widget ($to_bind) {
-        autoload -Uz $widget-match
-        zle -N $widget-match
-    }
-    zstyle ':zle:*-match' word-style shell
-}
+zload {forward,backward{,-kill}}-word-match
+zstyle ':zle:*-match' word-style shell
 keybindings+=(
-    'M-Right' forward-word-match
-    'M-Left'  backward-word-match
+    'C-Left'  backward-word-match
+    'C-Right' forward-word-match
+    #'C-Up'
+    #'C-Down'
     'C-Backspace' backward-kill-word-match
 )
+
+function _run_ls() {
+    ls
+    return
+}
+zle -N _run_ls ; keybindings+=('C-x l' _run_ls)
+
+function _run_with_sudo() {
+    if [[ -n "$BUFFER" ]]; then
+        [[ "$BUFFER" =~ "^sudo.*" ]] && return
+        BUFFER="sudo $BUFFER"
+    else
+        [[ "$(fc -ln -1)" =~ '^sudo.*' ]] && return
+        BUFFER="sudo $(fc -ln -1)"
+    fi
+    zle end-of-line ; return
+}
+zle -N _run_with_sudo ; keybindings+=('C-x v' _run_with_sudo)
+
+
+function cd-back() { cd-rotate +1 } ; zle -N cd-back
+function cd-forward() { cd-rotate -0 } ; zle -N cd-forward
+function cd-up() { pushd ..; redraw-prompt; } ; zle -N cd-up
+
+keybindings+=(
+    'M-Left'  cd-back       # alt+left   cd into the prev directory
+    'M-Right' cd-forward    # alt+right  cd into the next directory
+    'M-Up'    cd-up         # alt+up     cd into the parent directory
+    # 'M-Down'  cd-down       # alt+down   cd into the child directory
+)
+
+zle -N lfcd; keybindings+=('C-O' lfcd)
+zle -N fancy-ctrl-z; keybindings+=('C-Z' fancy-ctrl-z)
 
 ## fuzzy related bindings
 # Fast directory jumping
@@ -114,23 +197,21 @@ keybindings+=(
 # Search History
 function fz-history-widget() {
     local query="
-SELECT commands.argv
-FROM   history
-    LEFT JOIN commands
+    SELECT commands.argv
+        FROM   history
+        LEFT JOIN commands
         ON history.command_id = commands.rowid
-    LEFT JOIN places
+        LEFT JOIN places
         ON history.place_id = places.rowid
-GROUP BY commands.argv
-ORDER BY places.dir != '${PWD//'/''}',
-    commands.argv LIKE '${BUFFER//'/''}%' DESC,
-    Count(*) DESC
-"
+        GROUP BY commands.argv
+        ORDER BY places.dir != '${PWD//'/''}',
+        commands.argv LIKE '${BUFFER//'/''}%' DESC,
+        Count(*) DESC
+        "
     # Ensure that the entire history is searched
     # NOTE: This relies on fzf-tab
     local selected=$(fc -rl 1 | ftb-tmux-popup -n "2.." --tiebreak=index --prompt="cmd> " ${BUFFER:+-q$BUFFER})
-    if [[ "$selected" != "" ]] {
-        zle vi-fetch-history -n $selected
-    }
+    [[ "$selected" != "" ]] && zle vi-fetch-history -n $selected
 }
 zle -N fz-history-widget
 keybindings[C-r]=fz-history-widget
@@ -142,17 +223,22 @@ function fz-find() {
     local selected dir cut
     cut=$(grep -oP '[^* ]+(?=\*{1,2}$)' <<< $BUFFER)
     eval "dir=${cut:-.}"
-    if [[ $BUFFER == *"**"* ]] {
+    if [[ $BUFFER == *"**"* ]] ; then
         selected=$(fd -H . $dir | ftb-tmux-popup --tiebreak=end,length --prompt="cd> ")
-    } elif [[ $BUFFER == *"*"* ]] {
+    elif [[ $BUFFER == *"*"* ]] ; then
         selected=$(fd -d 1 . $dir | ftb-tmux-popup --tiebreak=end --prompt="cd> ")
-    }
+    fi
     BUFFER=${BUFFER/%'*'*/}
     BUFFER=${BUFFER/%$cut/$selected}
     zle end-of-line
 }
 zle -N fz-find
 keybindings[M-s]=fz-find
+
+# alt+L: run "ls"
+
+
+
 
 # ZLE related
 
@@ -207,8 +293,7 @@ function rationalise-dot() {
         LBUFFER+=.
     }
 }
-zle -N rationalise-dot
-keybindings[.]=rationalise-dot
+zle -N rationalise-dot; keybindings[.]=rationalise-dot
 
 # Remember the cursor position of the previous command
 # function cached-accept-line() {
@@ -232,25 +317,34 @@ keybindings[.]=rationalise-dot
 # zbindkey "Up"  prev-buffer-or-beginning-search
 
 # Edit the current line with the editor
-autoload -U edit-command-line
-function edit-command-line-as-zsh() {
-    TMPSUFFIX=.zsh
-    edit-command-line
-    unset TMPSUFFIX
-}
-zle -N edit-command-line-as-zsh
-keybindings+=('C-X C-E' edit-command-line-as-zsh)
+zload edit-command-line
+keybindings+=('C-x e' edit-command-line)
 
 # https://wiki.archlinux.org/title/Zsh#Shortcut_to_exit_shell_on_partial_command_line
 function exit_zsh() { exit; }
 zle -N exit_zsh
-keybindings+=('C-X C-X' exit_zsh)
+keybindings+=('C-x c' exit_zsh)
 
-# Omni-Completion
-if (( $+commands[fasd] )); then
-    keybindings+=('C-x C-f' fasd-complete-f)  # C-x C-f to do fasd-complete-f (only files)
-    keybindings+=('C-x C-d' fasd-complete-d)  # C-x C-d to do fasd-complete-d (only directories)
-fi
+# https://github.com/denisidoro/navi
+# _call_navi() {
+#    local -r buff="$BUFFER"
+#    local -r r="$(printf "$(navi --print </dev/tty)")"
+#    zle kill-whole-line
+#    BUFFER=${buff}${r}
+#    CURSOR=$#BUFFER
+# }
+# zle -N _call_navi
+# keybindings+=('C-X C-N' _call_navi)
+#
+# # Jump to the next (*) position
+# _navi_next_pos() {
+#     local -i pos=$BUFFER[(ri)\(*\)]-1
+#     BUFFER=${BUFFER/${BUFFER[(wr)\(*\)]}/}
+#     CURSOR=$pos
+# }
+# zle -N _navi_next_pos
+# keybindings+=('C-X C-V' _call_navi)
+
 
 # https://wiki.archlinux.org/title/Zsh#Clear_the_backbuffer_using_a_key_binding
 function clear-screen-and-scrollback() {
@@ -262,7 +356,7 @@ function clear-screen-and-scrollback() {
     echoti cnorm >"$TTY"
 }
 zle -N clear-screen-and-scrollback
-keybindings+=('C-l' clear-screen-and-scrollback)
+keybindings+=('C-L' clear-screen-and-scrollback)
 
 # Execute M-x
 function execute-command() {

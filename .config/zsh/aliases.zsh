@@ -249,7 +249,7 @@ fi
     lk='ll -ssize' \
     lt='ll -smodified' \
     lc='ll -schanged' \
-    tree='exa -TlI ".cache|music|cache|node_modules|vendor|.git"'
+    tree='exa -Tl --git-ignore'
 
 if [ -x /usr/bin/paru ]; then
     # Alias for update scripts

@@ -3,9 +3,15 @@ if [[ $TERM == dumb || -n $INSIDE_EMACS ]]; then
     unsetopt zle prompt_cr prompt_subst
     whence -w precmd >/dev/null && unfunction precmd
     whence -w preexec >/dev/null && unfunction preexec
-    PS1='$ '
-#elif (( EUID == 0 )); then
+    case $EUID in
+        0) prompt="#" ;;
+        *) prompt="$" ;;
+    esac
+
 fi
+
+export DOTBARE_DIR="$XDG_CONFIG_HOME/cfg"
+export DOTBARE_HOME="$HOME"
 
 # Personal aliases & functions.
 if (( USER == ianb )) ; then

@@ -11,33 +11,33 @@
 
 # Disable the old completion system
 zstyle ':completion:*' use-compctl false
-compctl() {
+function compctl() {
     print -P "\n%F{red}Don't use compctl anymore%f"
 }
 
 # Cache the completion results
 zstyle ':completion:*:complete:*' use-cache true
-#zstyle ':completion:*' cache-path "$ZSH_CACHE"
-zstyle ':completion:*:complete:*' cache-policy _aloxaf_caching_policy
+zstyle ':completion:*' cache-path "$ZSH_CACHE"
+zstyle ':completion:*:complete:*' cache-policy _caching_policy
 _caching_policy() {
-    # Caching policy: if it doesn't exist or is 14 days old, it is considered invalid
+    # if it doesn't exist or is 14 days old, it is considered invalid
     [[ ! -f $1 && -n "$1"(Nm+14) ]]
 }
 
 # Completeness order:
-# _complete - normal complementary function _extensions - select extensions by *. \t select extensions
+# _complete - normal completion function _extensions - select extensions by *. \t select extensions
 # _match - similar to _complete but allows wildcards
 # _expand_alias - expands aliases _ignored - ignored by ignored-patterns
 # zstyle ':completion:*' completer _expand_alias _complete _extensions _match _files
 # Some completer calls are not considered the first time they are called because they are more expensive
-# zstyle -e ':completion:*' completer FIXME'
-#   if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]]; then
-#     _last_try="$HISTNO$BUFFER$CURSOR"
-#     reply=(_expand_alias _complete _extensions _match _files)
-#   else
-#     reply=(_complete _ignored _correct _approximate)
-#   fi'
-zstyle ':completion:*' completer _complete _match _approximate #_list
+zstyle -e ':completion:*' completer '
+   if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]]; then
+     _last_try="$HISTNO$BUFFER$CURSOR"
+     reply=(_expand_alias _complete _extensions _match _files)
+   else
+     reply=(_complete _ignored _correct _approximate)
+   fi'
+#zstyle ':completion:*' completer _complete _match _approximate #_list
 
 # Enhanced filename completion
 # 0 - exact match ( Abc -> Abc ) 1 - capitalization correction ( abc -> Abc )
@@ -52,7 +52,17 @@ zstyle ':completion:*:(argument-rest|files):*' matcher-list '' \
 zstyle ':completion:*' regular false
 
 # Result style
-zstyle ':completion:*' menu yes select # search
+# zstyle ':completion:*:*:*:*:*' menu select
+# zstyle ':completion:*:options' description 'yes'
+# zstyle ':completion:*:options' auto-description '%d'
+# zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
+# zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
+# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+# zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+# zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
+
+zstyle ':completion:*' menu yes select
 zstyle ':completion:*' list-grouped false
 zstyle ':completion:*' list-separator ''
 zstyle ':completion:*' group-name ''
@@ -111,8 +121,6 @@ zstyle ':completion:*:jobs' numbers true
 
 
 
-fpath+=( $ZDOTDIR/completions )
-
 # Don't offer history completion; we have fzf, C-r, and
 # zsh-history-substring-search for that.
 ZSH_AUTOSUGGEST_STRATEGY=(completion)
@@ -132,14 +140,13 @@ setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
 setopt PATH_DIRS           # Perform path search even on command names with slashes.
 setopt AUTO_MENU           # Show completion menu on a successive tab press.
 setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
-#setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a trailing slash.
-#setopt AUTO_PARAM_KEYS
-#setopt FLOW_CONTROL        # Disable start/stop characters in shell editor.
+# setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a trailing slash.
+# setopt AUTO_PARAM_KEYS
+# setopt FLOW_CONTROL        # Disable start/stop characters in shell editor.
 unsetopt MENU_COMPLETE     # Do not autoselect the first completion entry.
 unsetopt COMPLETE_ALIASES  # Completion for aliases
-#unsetopt ALWAYS_TO_END     # Move cursor to the end of a completed word.
+# unsetopt ALWAYS_TO_END     # Move cursor to the end of a completed word.
 unsetopt CASE_GLOB
-setopt no_beep # TODO
 
 # Fuzzy match mistyped completions.
 zstyle ':completion:*:match:*' original only
@@ -200,5 +207,5 @@ zstyle ':completion:*:(scp|rsync):*' group-order users files all-files hosts-dom
 zstyle ':completion:*:ssh:*' tag-order 'hosts:-host:host hosts:-domain:domain hosts:-ipaddr:ip\ address *'
 zstyle ':completion:*:ssh:*' group-order users hosts-domain hosts-host users hosts-ipaddr
 zstyle ':completion:*:(ssh|scp|rsync):*:hosts-host' ignored-patterns '*(.|:)*' loopback ip6-loopback localhost ip6-localhost broadcasthost
-zstyle ':completion:*:(ssh|scp|rsync):*:hosts-domain' ignored-patterns '<->.<->.<->.<->' '^[-[:alnum:]]##(.[-[:alnum:]]##)##' '*@*'
-zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<->.<->.<->|(|::)([[:xdigit:].]##:(#c,2))##(|%*))' '127.0.0.<->' '255.255.255.255' '::1' 'fe80::*'
+#zstyle ':completion:*:(ssh|scp|rsync):*:hosts-domain' ignored-patterns '<->.<->.<->.<->' '^[-[:alnum:]]##(.[-[:alnum:]]##)##' '*@*'
+#zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<->.<->.<->|(|::)([[:xdigit:].]##:(#c,2))##(|%*))' '127.0.0.<->' '255.255.255.255' '::1' 'fe80::*'
