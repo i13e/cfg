@@ -4,7 +4,7 @@ These are my personal dotfiles, which I use to customize my terminal and shell s
 
 > A dotfiles directory is a common way for users to store configuration files for their terminal and shell setup. These files typically have names that start with a . (hence the name "dotfiles"), and they can include settings for tools such as bash, vim, git, and others.
 
-## Installation
+## Installation (not recommended yet)
 
 To install these dotfiles to your home directory, run this command in any 
 POSIX-compliant shell:
