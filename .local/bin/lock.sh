@@ -53,7 +53,7 @@ pre_lock() {
 	gpg-connect-agent --no-autostart reloadagent /bye >/dev/null
 
 	# Clear all clipboard & selections
-	[ "$XDG_SESSION_TYPE" = x11 ] && xsel -dbps --logfile /dev/null
+	[ "$XDG_SESSION_TYPE" = x11 ] && xsel -cbps
 	[ "$XDG_SESSION_TYPE" = wayland ] && wl-copy -c
 
 	# TODO is this needed?
