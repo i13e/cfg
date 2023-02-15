@@ -106,7 +106,7 @@ alias sudo='sudo '
 (( $+commands[prettyping] )) && alias ping='prettyping -nolegend'
 
 # Call sudo for some system commands.
-for command in ss mount umount sv pacman updatedb su shutdown poweroff reboot ufw systemctl journalctl ; do
+for command in ss mount umount sv pacman updatedb su shutdown poweroff reboot ufw sctl jctl; do
 	alias $command="sudo $command"
 done; unset command
 
