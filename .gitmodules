@@ -50,3 +50,7 @@
     path = .local/share/zsh/plugins/dotbare
     url = https://github.com/kazhala/dotbare.git
     shallow = true
+[submodule ".config/spicetify/CustomApps/marketplace"]
+	path = .config/spicetify/CustomApps/marketplace
+	url = https://github.com/spicetify/spicetify-marketplace.git
+	branch = dist

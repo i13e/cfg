@@ -25,7 +25,7 @@ picom
 playerctld
 lxpolkit
 unclutter
-gammastep
+gammastep.sh
 sxhkd
 dunst
 "
