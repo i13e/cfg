@@ -42,15 +42,11 @@
     path = .local/share/zsh/plugins/zsh-autosuggestions
     url = https://github.com/zsh-users/zsh-autosuggestions.git
     shallow = true
-[submodule ".local/share/nvim/site/pack/packer/start/packer.nvim"]
-    path = .local/share/nvim/site/pack/packer/start/packer.nvim
-    url = https://github.com/wbthomason/packer.nvim.git
-    shallow = true
 [submodule ".local/share/zsh/plugins/dotbare"]
     path = .local/share/zsh/plugins/dotbare
     url = https://github.com/kazhala/dotbare.git
     shallow = true
 [submodule ".config/spicetify/CustomApps/marketplace"]
-	path = .config/spicetify/CustomApps/marketplace
-	url = https://github.com/spicetify/spicetify-marketplace.git
-	branch = dist
+    path = .config/spicetify/CustomApps/marketplace
+    url = https://github.com/spicetify/spicetify-marketplace.git
+    branch = dist
