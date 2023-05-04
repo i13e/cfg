@@ -10,6 +10,8 @@ import psutil
 
 # import socket
 import subprocess
+import requests
+import json
 
 from libqtile import bar, hook, layout, qtile, widget
 
@@ -542,6 +544,24 @@ def long_name_parse(text):
     return text
 
 
+def get_location():
+    url = "https://location.services.mozilla.com/v1/geolocate?key=geoclue"
+
+    try:
+        response = requests.get(url, timeout=5)
+        data = json.loads(response.content.decode())
+
+        latitude = data["location"]["lat"]
+        longitude = data["location"]["lng"]
+
+        return {"latitude": latitude, "longitude": longitude}
+    except Exception:
+        return {"latitude": 0, "longitude": 0}
+
+
+location = get_location()
+
+
 # Mouse_callback functions
 def finish_task():
     "mark task as completed"
@@ -702,7 +722,7 @@ def bars(monitor):
             background=colors[14],
             foreground=colors[7],
             app_key="7834197c2338888258f8cb94ae14ef49",
-            zip="11215",
+            coordinates=location,
             language="en",
             metric=False,
             format="{icon} {temp:.0f}°{units_temperature}",
