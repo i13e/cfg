@@ -53,11 +53,3 @@ You can customize the dotfiles to your personal preferences by modifying the fil
 ## Contribute
 To contribute to this repository, please create a new branch and make your changes, then submit a pull
 request for review.
-
-## License
-
-This repository is licensed under the GPLv3 License.
-
-## Questions
-
-If you have any questions, please open an issue or contact me at username@domain.com.
