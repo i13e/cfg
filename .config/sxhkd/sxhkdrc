@@ -29,13 +29,13 @@
 ## WM-independent hotkeys
 # Terminal emulator
 super + Return
-	$TERMINAL
+    $TERMINAL
 # Launcher
 super + shift + Return
-	dmenu_run -p 'Run: '
+    dmenu_run -p 'Run: '
 # {_,force} close window
 super + {_,shift +} x
-	xdotool getwindowfocus {windowquit,windowclose}
+    xdotool getwindowfocus {windowquit,windowclose}
 # Choose to lock screen, logout, shutdown, reboot, etc
 super + {_,shift +} BackSpace
     sysact.sh
@@ -54,12 +54,12 @@ super + q ; c
 # # Calendar (calendar/cal)
 # super + q ; c
 #     cal
-# Email client ($TERMINAL -e neomutt)
-super + q ; e
-    thunderbird
+# # Email client ($TERMINAL -e neomutt)
+# super + q ; e
+    # thunderbird
 # File manager ($TERMINAL -e lf)
 super + q ; f
-	pcmanfm
+    pcmanfm
 # Music player ($TERMINAL -e cmus)
 super + q ; m
     spotify
@@ -74,40 +74,40 @@ super + q ; m
 #     rbw
 # Toggle color temperature (redshift)
 super + q ; r
-	pkill -USR1 '^gammastep$'
+    pkill -USR1 '^gammastep$'
 # System monitor (htop)
 super + q ; s
     $TERMINAL -e btm
-# Task manager (task/ptask)
+# # Task manager (task/ptask)
 # super + q ; t
 #     task
 
 
-## Emacs Programs
-# Launch Emacs
-super + e ; e
-	emacsclient -c -a 'emacs'
-# Launch ibuffer inside Emacs
-super + e ; b
-	emacsclient -c -a 'emacs' --eval '(ibuffer)'
-# Launch dired inside Emacs
-super + e ; d
-	emacsclient -c -a 'emacs' --eval '(dired nil)'
-# Launch erc inside Emacs
-super + e ; i
-	emacsclient -c -a 'emacs' --eval '(erc)'
-# Launch mu4e inside Emacs
-super + e ; m
-	emacsclient -c -a 'emacs' --eval '(mu4e)'
-# Launch elfeed inside Emacs
-super + e ; n
-	emacsclient -c -a 'emacs' --eval '(elfeed)'
-# Launch eshell inside Emacs
-super + e ; s
-	emacsclient -c -a 'emacs' --eval '(eshell)'
-# Launch vterm inside Emacs
-super + e ; v
-	emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'
+# ## Emacs Programs
+# # Launch Emacs
+# super + e ; e
+#     emacsclient -c -a 'emacs'
+# # Launch ibuffer inside Emacs
+# super + e ; b
+#     emacsclient -c -a 'emacs' --eval '(ibuffer)'
+# # Launch dired inside Emacs
+# super + e ; d
+#     emacsclient -c -a 'emacs' --eval '(dired nil)'
+# # Launch erc inside Emacs
+# super + e ; i
+#     emacsclient -c -a 'emacs' --eval '(erc)'
+# # Launch mu4e inside Emacs
+# super + e ; m
+#     emacsclient -c -a 'emacs' --eval '(mu4e)'
+# # Launch elfeed inside Emacs
+# super + e ; n
+#     emacsclient -c -a 'emacs' --eval '(elfeed)'
+# # Launch eshell inside Emacs
+# super + e ; s
+#     emacsclient -c -a 'emacs' --eval '(eshell)'
+# # Launch vterm inside Emacs
+# super + e ; v
+#     emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'
 
 
 ## System
@@ -159,7 +159,7 @@ super + {comma,period}
     playerctl {previous,next}
 # {Toggle,Force} pause
 super + {_,shift +} p
-	 playerctl {play-pause,-a pause}
+    playerctl {play-pause,-a pause}
 # Mute volume
 super + {_,shift} + m
     levels {volume,mic} mute
@@ -203,30 +203,30 @@ super + Delete
 XF86{Calculator,LaunchB}
     qalculate-gtk
 # Launch Email client ($TERMINAL -e neomutt)
-XF86{LaunchA,Mail}
-    thunderbird
+# XF86{LaunchA,Mail}
+#     thunderbird
 # Toggle color temperature (redshift)
 XF86{Tools,KbdBrightnessDown}
-	pkill -USR1 '^gammastep$'
+    pkill -USR1 '^gammastep$'
 # Audio control keys
 XF86{KbdBrightnessUp,AudioStop}
     playerctl -a pause
 XF86Audio{Prev,Play,Next}
-	playerctl {previous,play-pause,next}
+    playerctl {previous,play-pause,next}
 # {_,Mic} Volume control keys
 {_,super +}XF86Audio{Mute,RaiseVolume,LowerVolume}
-	levels {volume,mic} {mute,up,down}
+    levels {volume,mic} {mute,up,down}
 # Toggle mic mute
 XF86AudioMicMute
     levels mic mute
 # Select screen/display to use
 XF86Display
-	displayselect
+    displayselect
 # TODO XF86WLAN
 # TODO XF86Bluetooth
 # Re-run keyboard mapping script
 XF86Favorites
-    remaps & notify-send " Keyboard remapping…" #"Re-running mapping script"
+    remaps & notify-send " Keyboard remapping…"
 
 
 ## Extras (not found on my keyboard)
@@ -257,8 +257,8 @@ XF86TaskPane
 XF86MyComputer
     $TERMINAL -e lf /
 XF86Launch1
-	xset dpms force off
-XF86TouchpadToggle
-	(synclient | grep "TouchpadOff.*1" && synclient TouchpadOff=0) || synclient TouchpadOff=1
-XF86Touchpad{Off,On}
-	synclient TouchpadOff={1,0}
+    xset dpms force off
+# XF86TouchpadToggle
+#     (synclient | grep "TouchpadOff.*1" && synclient TouchpadOff=0) || synclient TouchpadOff=1
+# XF86Touchpad{Off,On}
+#     synclient TouchpadOff={1,0}

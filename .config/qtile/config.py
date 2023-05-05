@@ -588,17 +588,17 @@ def template(position):
             fontsize=28,
         )
     return widget.Sep(
-        # padding=10,
+        padding=0,
         foreground=colors[2],
         linewidth=0,
-        # size_percent=50,
+        size_percent=0,
     )
 
 
 def bars(monitor):
     widgets = [
         widget.TextBox(
-            text="ﮂ",
+            text="󰚄",
             foreground=colors[13],
             fontsize=28,
             padding=10,
@@ -664,9 +664,9 @@ def bars(monitor):
             # distro="Arch",
             foreground=colors[3],
             colour_have_updates=colors[3],
-            display_format=" {updates}",
+            display_format="󰏗 {updates}",
             # colour_no_updates=colors[12],
-            # no_update_string=" 0",
+            # no_update_string="󰏖 0",
             mouse_callbacks={
                 "Button2": lambda: qtile.cmd_spawn("./.local/bin/checkupd")
             },
@@ -702,7 +702,7 @@ def bars(monitor):
         template(" "),
         template("l"),
         widget.TextBox(
-            text="墳 ",
+            text="󰕾 ",
             foreground=colors[8],
             background=colors[14],
         ),
@@ -727,28 +727,27 @@ def bars(monitor):
             metric=False,
             format="{icon} {temp:.0f}°{units_temperature}",
             # https://github.com/sffjunkie/qtile-openweathermap/blob/master/owm.py#L37
-            # NOTE: Missing nf-mdi-weather_partlycloudy_night
             weather_symbols={
-                "01d": "\ufa98",  # Clear sky 滛望
-                "01n": "\ufa93",
-                "02d": "\ufa94",  # Few clouds 杖
-                "02n": "\ue37e",
-                "03d": "\ufa94",  # Scattered Clouds 杖
-                "03n": "\ue37e",
-                "04d": "\ufa8f",  # Broken clouds 摒
-                "04n": "\ufa8f",
-                "09d": "\ufa95",  # Shower Rain 歹
-                "09n": "\ufa95",
-                "10d": "\ufa95",  # Rain 歹
-                "10n": "\ufa95",
-                "11d": "\ufb7c",  # Thunderstorm ﭼ
-                "11n": "\ufb7c",
-                "13d": "\ufa97",  # Snow 流
-                "13n": "\ufa97",
-                "50d": "\ufa90",  # Mist 敖
-                "50n": "\ufa90",
-                "sleetd": "\ufb7d",  # Sleet ﭽ
-                "sleetn": "\ufb7d",
+                "01d": "\U000F0599",  # Clear sky 󰖙 󰖔
+                "01n": "\U000F0594",
+                "02d": "\U000F0595",  # Few clouds 󰖕 󰼱
+                "02n": "\U000F0F31",
+                "03d": "\U000F0595",  # Scattered Clouds 󰖕 󰼱
+                "03n": "\U000F0F31",
+                "04d": "\U000F0590",  # Broken clouds 󰖐 󰼱
+                "04n": "\U000F0F31",
+                "09d": "\U000F0F33",  # Shower Rain 󰼳
+                "09n": "\U000F0F33",
+                "10d": "\U000F0597",  # Rain 󰖗
+                "10n": "\U000F0597",
+                "11d": "\U000F0596",  # Thunderstorm 󰖖
+                "11n": "\U000F0596",
+                "13d": "\U000F0598",  # Snow 󰖘
+                "13n": "\U000F0598",
+                "50d": "\U000F0591",  # Mist 󰖑
+                "50n": "\U000F0591",
+                "sleetd": "\U000F0596",  # Sleet 󰖖
+                "sleetn": "\U000F0596"
             },
         ),
         template("r"),
@@ -756,11 +755,11 @@ def bars(monitor):
         template("l"),
         widget.Battery(
             fontsize=18,
-            full_char="",
-            charge_char="",
-            discharge_char="",
-            empty_char="",
-            unknown_char="",
+            full_char="󰁹",
+            charge_char="󰂏",
+            discharge_char="󰂌",
+            empty_char="󰂎",
+            unknown_char="󰂑",
             format="{char} {percent:2.0%}",
             foreground=colors[5],
             low_foreground=colors[3],
@@ -773,7 +772,7 @@ def bars(monitor):
         template(" "),
         template("l"),
         widget.TextBox(
-            text=" ",
+            text="󱛡 ",
             foreground=colors[4],  # fontsize=38
             background=colors[14],
         ),

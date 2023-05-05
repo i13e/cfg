@@ -16,13 +16,13 @@ volume)
 	vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | cut -d% -f1)
 	muted=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
 	if [ "$muted" = yes ]; then
-		notify-send -h string:x-dunst-stack-tag:audio "婢 Muted: " -h int:value:"$vol"
+		notify-send -h string:x-dunst-stack-tag:audio "󰝟 Muted: " -h int:value:"$vol"
 	elif [ "$vol" -le 25 ]; then
-		notify-send -h string:x-dunst-stack-tag:audio "奄 Volume: " -h int:value:"$vol"
+		notify-send -h string:x-dunst-stack-tag:audio "󰕿 Volume: " -h int:value:"$vol"
 	elif [ "$vol" -le 75 ]; then
-		notify-send -h string:x-dunst-stack-tag:audio "奔 Volume: " -h int:value:"$vol"
+		notify-send -h string:x-dunst-stack-tag:audio "󰖀 Volume: " -h int:value:"$vol"
 	else
-		notify-send -h string:x-dunst-stack-tag:audio "墳 Volume: " -h int:value:"$vol"
+		notify-send -h string:x-dunst-stack-tag:audio "󰕾 Volume: " -h int:value:"$vol"
 	fi
 	exit 0
 	;;
@@ -39,9 +39,9 @@ mic)
 	vol=$(pactl get-source-volume @DEFAULT_SOURCE@ | awk '{print $5}' | cut -d% -f1)
 	muted=$(pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}')
 	if [ "$muted" = yes ]; then
-		notify-send -h string:x-dunst-stack-tag:mic " Mic Muted: " -h int:value:"$vol"
+		notify-send -h string:x-dunst-stack-tag:mic "󰍭 Mic Muted: " -h int:value:"$vol"
 	else
-		notify-send -h string:x-dunst-stack-tag:mic " Mic Volume: " -h int:value:"$vol"
+		notify-send -h string:x-dunst-stack-tag:mic "󰍬 Mic Volume: " -h int:value:"$vol"
 	fi
 	exit 0
 	;;
@@ -55,11 +55,11 @@ brightness)
 	esac
 	bright=$(light | cut -d. -f1)
 	if [ "$bright" -le 25 ]; then
-		notify-send -h string:x-dunst-stack-tag:light " Brightness: " -h int:value:"$bright"
+		notify-send -h string:x-dunst-stack-tag:light "󰃞 Brightness: " -h int:value:"$bright"
 	elif [ "$bright" -le 75 ]; then
-		notify-send -h string:x-dunst-stack-tag:light " Brightness: " -h int:value:"$bright"
+		notify-send -h string:x-dunst-stack-tag:light "󰃟 Brightness: " -h int:value:"$bright"
 	else
-		notify-send -h string:x-dunst-stack-tag:light " Brightness: " -h int:value:"$bright"
+		notify-send -h string:x-dunst-stack-tag:light "󰃠 Brightness: " -h int:value:"$bright"
 	fi
 	exit 0
 	;;
