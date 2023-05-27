@@ -1,26 +1,23 @@
 """
 Qtile main config file
 ======================
-Requires: dbus-next, psutil, mypy, jq,
-ttf-nerd-fonts-symbols,
+Requires: dbus-next, psutil, mypy?,
+ttf-nerd-fonts-symbols-mono, requests
 """
 
+import json
 import os
-import psutil
-
 # import socket
 import subprocess
+
+import psutil
 import requests
-import json
 
 from libqtile import bar, hook, layout, qtile, widget
-
 from libqtile.dgroups import simple_key_binder
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
-# from custom import battery
-# import traverse
 from libqtile.config import (
     EzClick as Click,
     EzDrag as Drag,
@@ -33,8 +30,8 @@ from libqtile.config import (
     Screen,
 )
 
-TERM = guess_terminal()  # let qtile guess your terminal
-
+# Let Qtile guess your terminal
+TERM = guess_terminal()
 
 # def focus_previous_group(qtile):
 #     group = qtile.current_screen.group
@@ -254,7 +251,8 @@ groups = [
         "1",
         label="一",
         matches=[
-            Match(wm_class=["brave", "librewolf"]),
+            Match(wm_class="brave"),
+            Match(wm_class="librewolf"),
         ],
         layout="stack",
     ),
@@ -262,7 +260,8 @@ groups = [
         "2",
         label="二",
         matches=[
-            Match(wm_class=["code", "emacs"]),
+            Match(wm_class="code"),
+            Match(wm_class="emacs"),
         ],
         layout="bsp",
     ),
@@ -270,7 +269,7 @@ groups = [
         "3",
         label="三",
         matches=[
-            Match(wm_class=["pcmanfm"]),
+            Match(wm_class="pcmanfm"),
         ],
         layout="bsp",
     ),
@@ -278,7 +277,9 @@ groups = [
         "4",
         label="四",
         matches=[
-            Match(wm_class=["geary", "ptask", "thunderbird"]),
+            Match(wm_class="geary"),
+            Match(wm_class="ptask"),
+            Match(wm_class="thunderbird"),
         ],
         layout="bsp",
     ),
@@ -286,7 +287,9 @@ groups = [
         "5",
         label="五",
         matches=[
-            Match(wm_class=["joplin", "libreoffice", "zathura"]),
+            Match(wm_class="joplin"),
+            Match(wm_class="libreoffice"),
+            Match(wm_class="zathura"),
         ],
         layout="bsp",
     ),
@@ -294,7 +297,8 @@ groups = [
         "6",
         label="六",
         matches=[
-            Match(wm_class=["ferdium", "signal"]),
+            Match(wm_class="ferdium"),
+            Match(wm_class="signal")
         ],
         layout="bsp",  # max
     ),
@@ -302,7 +306,8 @@ groups = [
         "7",
         label="七",
         matches=[
-            Match(wm_class=["spotify", "lollypop", "cmus"]),
+            Match(wm_class="spotify"),
+            Match(wm_class="cmus"),
         ],
         layout="bsp",
     ),
@@ -310,7 +315,10 @@ groups = [
         "8",
         label="八",
         matches=[
-            Match(wm_class=["gimp", "obs", "steam", "lutris"]),
+            Match(wm_class="gimp"),
+            Match(wm_class="obs"),
+            Match(wm_class="steam"),
+            Match(wm_class="lutris"),
         ],
         layout="bsp",
     ),
@@ -325,9 +333,7 @@ groups = [
     Group(
         "10",
         label="十",
-        matches=[
-            Match(wm_class=["..."]),
-        ],
+        matches=[],
         layout="floating",
     ),
 ]
@@ -423,20 +429,21 @@ focus_on_window_activation = "focus"  # "smart"
 follow_mouse_focus = True
 reconfigure_screens = True
 auto_minimize = True
-wmname = "qtile"  # "LG3D"
+wmname = "LG3D"
 
 floating_layout = layout.Floating(
     **layout_defaults,
     float_rules=[
-        # Run $(xprop) to see the class and name of a window.
+        # Run `xprop` to see the class and name of a window.
         *layout.Floating.default_float_rules,
         # From default config file
-        Match(wm_class="confirmreset"),  # gitk
-        Match(wm_class="makebranch"),  # gitk
-        Match(wm_class="maketag"),  # gitk
-        Match(wm_class="ssh-askpass"),  # ssh-askpass
-        Match(title="branchdialog"),  # gitk
-        Match(title="pinentry"),  # GPG key password entry
+        Match(wm_class='confirmreset'),  # gitk
+        Match(wm_class='dialog'),  # Dialogs stuff
+        Match(wm_class='makebranch'),  # gitk
+        Match(wm_class='maketag'),  # gitk
+        Match(wm_class='ssh-askpass'),  # ssh-askpass
+        Match(title='branchdialog'),  # gitk
+        Match(title='pinentry'),  # GPG key password entry
         # Added
         Match(title="Qalculate!"),
         Match(wm_class="lutris"),
@@ -457,6 +464,7 @@ mouse = [
     # Click("M-2", lazy.window.kill())]
     Click("M-C-3", lazy.spawn("jgmenu --csv-file=~/.config/jgmenu/qtile.csv")),
     Click("M-A-3", lazy.spawn("jgmenu_run")),
+    # Drag("M-S-1", lazy.screen.group_slide(), start=lazy.screen.start_group_slide(scale=2.5))
 ]
 
 
@@ -522,14 +530,6 @@ def taskwarrior():
     return subprocess.check_output(["taskbar.sh"]).decode("utf-8").strip()
 
 
-zipcode = subprocess.run(
-    ["curl -s ipinfo.io | jq -r '[.postal,.country] | @csv' | tr -d '\"'"],
-    capture_output=True,
-    shell=True,
-    check=True,
-).stdout.strip()
-
-
 def long_name_parse(text):
     "Shorten long application names"
     for string in [
@@ -544,7 +544,8 @@ def long_name_parse(text):
     return text
 
 
-def get_location():
+# Get your current latitude and longitude using Mozilla's Geoclue API
+def get_location() -> dict[str, float]:
     url = "https://location.services.mozilla.com/v1/geolocate?key=geoclue"
 
     try:
@@ -558,7 +559,7 @@ def get_location():
     except Exception:
         return {"latitude": 0, "longitude": 0}
 
-
+# Only query the API once
 location = get_location()
 
 
@@ -572,21 +573,22 @@ def finish_task():
 def todays_date():
     qtile.cmd_spawn("./.config/qtile/calendar.sh")
 
-
-def template(position):
+# Write some handy templates to reduce LOC
+def template(pos: str) -> widget.Sep | widget.TextBox:
     "widget templates"
-    if position == "r":
+    if pos.lower() == "r":
         return widget.TextBox(
             text="",
             foreground=colors[14],
             fontsize=28,
         )
-    if position == "l":
+    if pos.lower() == "l":
         return widget.TextBox(
             text="",
             foreground=colors[14],
             fontsize=28,
         )
+    # This isn't needed with NerdFonts Mono
     return widget.Sep(
         padding=0,
         foreground=colors[2],
@@ -595,7 +597,7 @@ def template(position):
     )
 
 
-def bars(monitor):
+def init_widgets(monitor: str) -> list:
     widgets = [
         widget.TextBox(
             text="󰚄",
@@ -624,7 +626,7 @@ def bars(monitor):
             urgent_border=colors[3],
         ),
         template("r"),
-        template(" "),
+        # template(" "),
         template("l"),
         widget.CurrentLayoutIcon(
             custom_icon_paths=[os.path.expanduser("~/.config/qtile/icons")],
@@ -634,7 +636,7 @@ def bars(monitor):
             scale=0.70,
         ),
         template("r"),
-        template(" "),
+        # template(" "),
         template("l"),
         widget.GenPollText(
             func=taskwarrior,
@@ -699,7 +701,7 @@ def bars(monitor):
             prefix_paused=" ",
         ),
         template("r"),
-        template(" "),
+        # template(" "),
         template("l"),
         widget.TextBox(
             text="󰕾 ",
@@ -716,7 +718,7 @@ def bars(monitor):
             update_interval=1,
         ),
         template("r"),
-        template(" "),
+        # template(" "),
         template("l"),
         widget.OpenWeather(
             background=colors[14],
@@ -727,6 +729,7 @@ def bars(monitor):
             metric=False,
             format="{icon} {temp:.0f}°{units_temperature}",
             # https://github.com/sffjunkie/qtile-openweathermap/blob/master/owm.py#L37
+            # Needs to be set otherwise defaults to emoji
             weather_symbols={
                 "01d": "\U000F0599",  # Clear sky 󰖙 󰖔
                 "01n": "\U000F0594",
@@ -747,11 +750,11 @@ def bars(monitor):
                 "50d": "\U000F0591",  # Mist 󰖑
                 "50n": "\U000F0591",
                 "sleetd": "\U000F0596",  # Sleet 󰖖
-                "sleetn": "\U000F0596"
+                "sleetn": "\U000F0596",
             },
         ),
         template("r"),
-        template(" "),
+        # template(" "),
         template("l"),
         widget.Battery(
             fontsize=18,
@@ -766,10 +769,10 @@ def bars(monitor):
             low_percentage=0.25,
             background=colors[14],
             notify_below=0.1,
-            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn(TERM + " -e btm")},
+            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn(f"{TERM} -e btm")},
         ),
         template("r"),
-        template(" "),
+        # template(" "),
         template("l"),
         widget.TextBox(
             text="󱛡 ",
@@ -794,14 +797,14 @@ def bars(monitor):
     # Systray can only be displayed on one monitor
     if monitor == "primary":
         return widgets
-    del widgets[18]
+    del widgets[15:19]
     return widgets
 
-
+# Define each of your screens here
 screens = [
     Screen(
         top=bar.Bar(
-            bars("primary"),
+            init_widgets("primary"),
             # opacity=0.85,
             size=25,
             margin=[0, 0, 5, 0],
@@ -814,7 +817,7 @@ screens = [
     ),
     Screen(
         top=bar.Bar(
-            bars("secondary"),
+            init_widgets("secondary"),
             # opacity=0.85,
             size=25,
             margin=[0, 0, 5, 0],
@@ -825,7 +828,6 @@ screens = [
         left=bar.Gap(10),
         right=bar.Gap(10),
     ),
-    # etc...
 ]
 
 

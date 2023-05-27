@@ -2,6 +2,7 @@
 # https://my-take-on.tech/2020/07/03/some-tricks-for-sxhkd-and-bspwm/
 # https://github.com/rcarrerah/dotfiles/blob/master/sxhkdrc
 # Requires: xdotool, playerctl, sysact, levels
+errorHandler = ignore
 
 # TODO The keys NOT bound here by sxhkd are (+ shift):
 # Q W E R T Y U I O
@@ -45,7 +46,7 @@ super + {_,shift +} BackSpace
 # # Address book ($TERMINAL -e abook)
 # super + q ; a
 #     abook
-# Web browser (Librewolf)
+# Web browser
 super + q ; b
     $BROWSER
 # Chat client ($TERMINAL -e irssi)
@@ -72,7 +73,7 @@ super + q ; m
 # # Password manager ($TERMINAL -e passmenu)
 # super + q ; p
 #     rbw
-# Toggle color temperature (redshift)
+# Toggle color temperature (gammastep)
 super + q ; r
     pkill -USR1 '^gammastep$'
 # System monitor (htop)
@@ -87,19 +88,22 @@ super + q ; s
 # # Launch Emacs
 # super + e ; e
 #     emacsclient -c -a 'emacs'
+# # Launch EMMS (music) inside emacs
+# super + e ; a
+#     emacsclient -c -a 'emacs' --eval '(emms)' --eval '(emms-play-directory-tree \"~/music/\")'
 # # Launch ibuffer inside Emacs
 # super + e ; b
 #     emacsclient -c -a 'emacs' --eval '(ibuffer)'
 # # Launch dired inside Emacs
 # super + e ; d
 #     emacsclient -c -a 'emacs' --eval '(dired nil)'
-# # Launch erc inside Emacs
+# # Launch erc (IRC) inside Emacs
 # super + e ; i
 #     emacsclient -c -a 'emacs' --eval '(erc)'
 # # Launch mu4e inside Emacs
 # super + e ; m
 #     emacsclient -c -a 'emacs' --eval '(mu4e)'
-# # Launch elfeed inside Emacs
+# # Launch elfeed (RSS) inside Emacs
 # super + e ; n
 #     emacsclient -c -a 'emacs' --eval '(elfeed)'
 # # Launch eshell inside Emacs
@@ -122,7 +126,7 @@ super + F4
     $TERMINAL -e pulsemixer
 # Control playback
 super + {F6,F7,F8,F9}
-	playerctl {-a pause,previous,play-pause,next}
+    playerctl {-a pause,previous,play-pause,next}
 # TODO
 # super + F10
 #     command
@@ -144,7 +148,7 @@ super + F11
     --profile=low-latency --no-input-default-bindings /dev/video0
 # Rerun keyboard mapping scripts if new keyboard is attached
 super + F12
-    remaps & notify-send " Keyboard remapping…" #"Re-running mapping script"
+    remaps & notify-send "󰌌 Keyboard remapping…"
 # # Select an emoji to copy to clipboard
 # super + apostrophe
 #     dmenuunicode
@@ -226,7 +230,7 @@ XF86Display
 # TODO XF86Bluetooth
 # Re-run keyboard mapping script
 XF86Favorites
-    remaps & notify-send " Keyboard remapping…"
+    remaps & notify-send "󰌌 Keyboard remapping…"
 
 
 ## Extras (not found on my keyboard)
