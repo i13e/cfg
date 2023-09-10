@@ -1,37 +1,35 @@
 #!/bin/zsh
-# Reference: https://ebzzry.com/en/git/
-
-# Base function
+# https://ebzzry.com/en/git/
 local git= self= op=
 
 if [[ -n "${BASH}" ]]; then
-    git=$(which git)
-    self=${FUNCNAME}
+  git=$(which git)
+  self=${FUNCNAME}
 elif [[ -n "${ZSH_NAME}" ]]; then
-    git=$(whence -p git)
-    self=$0
+  git=$(whence -p git)
+  self=$0
 else
-    echo "Meh"
-    return 1
+  echo "Ve."
+  return 1
 fi
 
 if [[ $# -eq 0 ]]; then
-    if [[ -n "${BASH}" ]]; then
-        type "${self}" | less
-    elif [[ -n "${ZSH_NAME}" ]]; then
-        which "${self}" | less
-    else
-        echo "Meh"
-        return 1
-    fi
+  if [[ -n "${BASH}" ]]; then
+    type "${self}" | less
+  elif [[ -n "${ZSH_NAME}" ]]; then
+    which "${self}" | less
+  else
+    echo "Meh"
+    return 1
+  fi
 else
-    op="$1"
-    shift
+  op="$1"
+  shift
 
-# Important commands
-case "${op}" in
+  case "${op}" in
+    # Initialization and push helpers
     (i) touch .gitignore; "${git}" init; "${self}" a.; "${self}" cim "$@" ;;
-    (i!) "${self}" i "Pravaloriziĝu" ;;
+    (i!) "${self}" i "[top-level] make initial commit" ;;
 
     # Main operations
     (s) "${git}" status ;;
@@ -43,6 +41,17 @@ case "${op}" in
     (ta) "${git}" tag "$@" ;;
     (bl) "${git}" blame "$@" ;;
 
+    (a) "${git}" add "$@" ;;
+    (au) "${self}" a -u ;;
+    (a.) "${self}" a . ;;
+    (aum) "${self}" au; "${self}" cim "$@" ;;
+    (a.m) "${self}" a.; "${self}" cim "$@" ;;
+    (a.x) "${self}" a.m "x" ;;
+    (aux) "${self}" aum "x" ;;
+    (auxx) "${self}" aux; "${self}" rs 2 ;;
+    (au.x) "${self}" a.x; "${self}" rs 2 ;;
+    (auxx!) "${self}" auxx; "${self}" oo! ;;
+
     (cl) "${git}" clean "$@" ;;
     (cl!) "${self}" cl -f ;;
 
@@ -51,7 +60,7 @@ case "${op}" in
     (cim) "${self}" ci --message "$@" ;;
 
     (co) "${git}" checkout "$@" ;;
-    (com) "${self}" co master ;;
+    (com) "${self}" co main ;;
     (cot) "${self}" co trunk ;;
     (co!) "${self}" co --force "$@" ;;
     (cob) "${self}" co -b "$@" ;;
@@ -92,8 +101,9 @@ case "${op}" in
     (phu) "${self}" ph -u "$@" ;;
     (ph!) "${self}" ph --force "$@" ;;
     (pho) "${self}" phu origin "$@" ;;
-    (phom) "${self}" pho master "$@" ;;
-
+    (phoo) "${self}" phu origin "$(git brh)" ;;
+    (phd) "${self}" ph --delete "$@" ;;
+    (phdo) "${self}" phd origin "$(git brh)" ;;
     (oo) "${self}" ph origin "$(git brh)" ;;
     (oo!) "${self}" ph! origin "$(git brh)" ;;
 
@@ -101,25 +111,9 @@ case "${op}" in
     (pl!) "${self}" pl --force "$@" ;;
     (plr) "${self}" pl --rebase "$@" ;;
     (plro) "${self}" plr origin "$@" ;;
+    (plroo) "${self}" plr origin "$(git brh)" ;;
     (plru) "${self}" plr upstream "$@" ;;
-    (plrom) "${self}" plro master ;;
-    (plrum) "${self}" plru master ;;
-    (plrot) "${self}" plro trunk ;;
-    (plrut) "${self}" plru trunk ;;
-
-    # Adding
-    (a) "${git}" add "$@" ;;
-    (au) "${self}" a -u ;;
-    (a.) "${self}" a . ;;
-
-    (aum) "${self}" au; "${self}" cim "$@" ;;
-    (aux) "${self}" aum "x" ;;
-    (a.m) "${self}" a.; "${self}" cim "$@" ;;
-    (a.x) "${self}" a.m "x" ;;
-
-    (auxx) "${self}" aux; "${self}" rs 2 ;;
-    (au.x) "${self}" a.x; "${self}" rs 2 ;;
-    (auxx!) "${self}" auxx; "${self}" oo! ;;
+    (plruo) "${self}" plr upstream "$(git brh)" ;;
 
     # Logs
     (l) "${git}" log "$@" ;;
@@ -165,7 +159,7 @@ case "${op}" in
     (cpc) "${self}" cp --continue "$@" ;;
     (cpa) "${self}" cp --abort "$@" ;;
 
-    (fb) "${git}" filter-branch "$@" ;;
+    (fb) FILTER_BRANCH_SQUELCH_WARNING=1 "${git}" filter-branch "$@" ;;
     (fb!) "${self}" fb -f "$@" ;;
     (fbm) "${self}" fb! --msg-filter "$@" ;;
     (fbi) "${self}" fb! --index-filter "$@" ;;
@@ -192,11 +186,10 @@ case "${op}" in
 
     (ref) "${git}" reflog "$@" ;;
 
-
     # Descriptions
     (de) "${git}" describe "$@" ;;
     (det) "${self}" de --tags "$@" ;;
 
     (*) "${git}" "${op}" "$@" ;;
-esac
+  esac
 fi
