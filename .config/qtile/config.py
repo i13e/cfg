@@ -458,7 +458,8 @@ floating_layout = layout.Floating(
 )
 # Drag floating layouts.
 mouse = [
-    Drag("M-1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag("M-1", lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
     Drag("M-3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click("M-2", lazy.window.bring_to_front()),
     # Click("M-2", lazy.window.kill())]
@@ -559,6 +560,7 @@ def get_location() -> dict[str, float]:
     except Exception:
         return {"latitude": 0, "longitude": 0}
 
+
 # Only query the API once
 location = get_location()
 
@@ -574,6 +576,8 @@ def todays_date():
     qtile.cmd_spawn("./.config/qtile/calendar.sh")
 
 # Write some handy templates to reduce LOC
+
+
 def template(pos: str) -> widget.Sep | widget.TextBox:
     "widget templates"
     if pos.lower() == "r":
@@ -714,7 +718,8 @@ def init_widgets(monitor: str) -> list:
             # get_volume_command=get_volume,
             background=colors[14],
             limit_max_volume="True",
-            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("pavucontrol")},
+            mouse_callbacks={
+                "Button3": lambda: qtile.cmd_spawn("pavucontrol")},
             update_interval=1,
         ),
         template("r"),
@@ -769,7 +774,8 @@ def init_widgets(monitor: str) -> list:
             low_percentage=0.25,
             background=colors[14],
             notify_below=0.1,
-            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn(f"{TERM} -e btm")},
+            mouse_callbacks={
+                "Button3": lambda: qtile.cmd_spawn(f"{TERM} -e btm")},
         ),
         template("r"),
         # template(" "),
@@ -799,6 +805,7 @@ def init_widgets(monitor: str) -> list:
         return widgets
     del widgets[15:19]
     return widgets
+
 
 # Define each of your screens here
 screens = [
