@@ -1,38 +1,32 @@
-#!/bin/sh
-#
+#!/bin/bash
 # Install config in your $HOME by running:
 # curl -FsSL https://raw.github.com/i13e/cfg/master/.local/bin/install.sh | /bin/sh
 
-## Confirmation Dialog.
-# while true; do
-# 	printf '%b ' "\033[1m":: Do not run this script unless you know EXACTLY what you are doing. It is recommended to be run only on a fresh install of Arch Linux as a non-root, wheel user. Do you wish to continue? [Y/n]"\033[0m"
-# 	read -r yn
-# 	case $yn in
-# 	[Yy]*) break ;;
-# 	[Nn]*) exit ;;
-# 	*) echo "Please answer y or n." ;;
-# 	esac
-# done
+# Confirmation prompt
+read -p "This script will install my dotfiles. Continue? [Y/n] " confirm
+if [[ "$confirm" != [yY] ]]; then
+	exit 1
+fi
 
-## Safety Checks.
+# Safety checks
 
-# check if user is root
-[ "$UUID" = 0 ] && echo "This script should not be run as root." && exit 1
+if [ "$UID" -eq 0 ]; then
+	echo "This script should not be run as root"
+	exit 1
+fi
 
-# check if user is running Arch
-if command -v pacman >/dev/null 2>&1; then
-	# Install dependencies
-	sudo pacman -S --needed --noconfirm base-devel git
-	# Install paru
-	if ! command -v paru >/dev/null 2>&1; then
-		git clone https://aur.archlinux.org/paru-bin.git "/tmp/paru-bin"
-		cd "/tmp/paru-bin" || exit # exit in case cd fails
-		makepkg -si --noconfirm
-		cd "$HOME" && rm -rf "/tmp/paru-bin"
-	fi
-else
+if ! command -v pacman &>/dev/null; then
 	echo "This script is only compatible with Arch Linux."
 	exit 1
+fi
+
+# Install dependencies
+sudo pacman -S --needed --noconfirm base-devel git
+
+# Install paru if not installed
+if ! command -v paru &>/dev/null; then
+	git clone https://aur.archlinux.org/paru-bin.git /tmp/paru-bin
+	(cd /tmp/paru-bin && makepkg -si --noconfirm)
 fi
 
 ## Install Dotfiles.
@@ -41,33 +35,31 @@ fi
 [ ! -d "$HOME/.config" ] && mkdir -p "$HOME/.config"
 
 # Clone repo
-git clone --bare --branch master --depth 1 https://github.com/i13e/cfg.git "$HOME/.config/cfg"
-#--recursive?
+git clone --bare --branch master --depth 1 --recursive https://github.com/i13e/cfg.git "$HOME/.config/cfg"
 
-cfg() { /usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@"; }
-
-mkdir -p "$HOME/.cfg-backup/"
+function cfg {
+	/usr/bin/git --git-dir="$HOME/.config/cfg/" --work-tree="$HOME" "$@"
+}
 
 if cfg checkout; then
 	echo "Successfully checked out dotfiles."
 else
 	echo "Backing up pre-existing dotfiles."
+	mkdir -p "$HOME/.cfg-backup/"
 	cfg checkout 2>&1 | grep -E "\s+\." | awk "{print $1}" | xargs -I{} mv {} "$HOME/.cfg-backup/"
 	cfg checkout && echo "Successfully checked out dotfiles."
 fi
 
-cfg config status.showUntrackedFiles no
+# Set up repo
+cfg config --local status.showUntrackedFiles no
 
-# are you planning to push to this repository?
-# if yes
-# cfg remote set-url origin git@github.com:i13e/cfg.git
-# git push -u origin/master
-# cfg branch --set-upstream-to=origin/master
+# Offer to set remote origin
+read -p "Set git remote origin to push commits? [Y/n] " setremote
+if [[ "$setremote" =~ [Yy] ]]; then
+	cfg remote set-url origin git@github.com:i13e/cfg.git
+fi
 
 # make folders mkdir ~/vids dl ?
-
-# update submodules
-cfg submodule update --init
 
 ## Install Repo's Package List.
 
