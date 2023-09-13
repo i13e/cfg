@@ -4,7 +4,9 @@ These are my personal dotfiles, which I use to customize my terminal and shell s
 
 > A dotfiles directory is a common way for users to store configuration files for their terminal and shell setup. These files typically have names that start with a . (hence the name "dotfiles"), and they can include settings for tools such as bash, vim, git, and others.
 
-## Installation (not recommended yet)
+## Installation (alpha)
+
+**The install script is currently **unfinished** and will break your system if you attempt to use it.**
 
 To install these dotfiles to your home directory, run this command in any 
 POSIX-compliant shell:
@@ -21,29 +23,29 @@ The installer backs up existing config files, ... and asks for confirmation on e
 
 ## Info
 
-| Component           | Application                                                   |
-| ------------------- | ------------------------------------------------------------- |
-| OS                  | [Arch Linux](https://archlinux.org)                           |
-| WM                  | [Qtile](https://qtile.org)                                    |
-| Shell               | [Zsh](https://zsh.org)                                        |
-| Terminal            | alacritty                                                     |
-| Launcher            | dmenu                                                         |
-| Compositor          | picom                                                         |
-| File Manager        | lf, pcmanfm                                                   |
-| Media Player        | cmus, mpv                                                     |
-| Image Viewer        | imv (alt: nsxiv)                                              |
-| PDF Reader          | zathura                                                       |
-| Text Editor         | neovim                                                        |
-| Browser             | firefox, w3m                                                  |
-| RSS                 | newsboat                                                      |
-| Process Viewer      | btm                                                           |
-| Fetch               | pfetch                                                        |
-| Notification Daemon | dunst                                                         |
-| Color Scheme        | [Nord](https://nordtheme.com) with extra dark color `#242831` |
+- OS: [Arch Linux](https://archlinux.org)
+- WM: [Qtile](https://qtile.org)
+- Shell: [Zsh](https://zsh.org)
+- Terminal: alacritty
+- Launcher: dmenu
+- Bar: Qtile's internal bar
+- Compositor: picom
+- Gtk: [Nordic Darker](https://github.com/EliverLara/Nordic/tree/darker)
+- Fonts: Jetbrains Mono and Nerd Font for icons
+- Media player: spotify, cmus, and mpv
+- Image viewer: imv
+- Browser: Brave
+- RSS: newsboat
+- Process Viewer: btm
+- Text Editor: neovim
+- PDF Reader: zathura
+- File Manager: lf, pcmanfm
+- Fetch: pfetch
+- Notification Daemon: dunst
+- Colorscheme: [Nord](https://nordtheme.com) with extra dark color `#242831
 
 ## Notes
 
-- The install script is currently **unfinished** and will break your system if you attempt to use it.
 - Update zsh/mpv plugins as submodules with: `cfg submodule update --remote`
 
 ## Customization
