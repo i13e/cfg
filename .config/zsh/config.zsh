@@ -7,26 +7,13 @@ if [[ $TERM == dumb || -n $INSIDE_EMACS ]]; then
         0) prompt="#" ;;
         *) prompt="$" ;;
     esac
-
 fi
 
+# Dotfiles management
+# alias cfg='git --git-dir=$HOME/.config/cfg/ --work-tree=$HOME'
+alias cfg="dotbare"
 export DOTBARE_DIR="$XDG_CONFIG_HOME/cfg"
-export DOTBARE_HOME="$HOME"
-
-# Personal aliases & functions.
-if (( USER == ianb )) ; then
-    alias cfg='/usr/bin/git --git-dir=$HOME/.config/cfg/ --work-tree=$HOME'
-    alias moshlax='mosh munchlax -- tmux a'
-    function build() {
-        rm -f ~/docs/code/sites/ianb/dst/.files
-        ssg6 ~/docs/code/sites/ianb/src ~/docs/code/sites/ianb/dst \
-        "Ian B." "https://ianb.io/"
-    }
-    function deploy() {
-        rsync -avzhP --delete-after --chmod=755 \
-        ~/docs/code/sites/ianb/dst/ munchlax:/var/www/ianb
-    }
-fi
+export DOTBARE_TREE="$HOME"
 
 # https://superuser.com/q/480928
 autoload -Uz colors && colors
