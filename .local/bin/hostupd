@@ -3,15 +3,13 @@
 # with your own custom hosts file, saved and controlled locally.
 #
 # Recommended hosts file here: https://github.com/StevenBlack/hosts
-# or from anywhere you'd like.
-sudo wget -qO /etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts
-sudo chmod 644 /etc/hosts
-while true; do
-    printf '%b ' "\033[1m":: Do you wish to use a custom hosts file? [Y/n]"\033[0m"
-    read -r yn
-    case $yn in
-        [Yy]* ) sudo tee -a /etc/hosts < "$XDG_DATA_HOME/hosts" > /dev/null; exit;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer y or n.";;
-    esac
-done
+
+hosts_url="http://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts"
+custom_hosts="${XDG_DATA_HOME:-$HOME/.config}/hosts"
+system_hosts="/etc/hosts"
+
+# Update system hosts file
+sudo wget -qO "$system_hosts" "$hosts_url" && sudo chmod 644 "$system_hosts"
+
+# Add custom hosts file to system hosts file
+[ -f "$custom_hosts" ] && sudo tee -a "$system_hosts" <"$custom_hosts" >/dev/null
