@@ -7,6 +7,7 @@ ttf-nerd-fonts-symbols-mono, requests
 
 import json
 import os
+
 # import socket
 import subprocess
 
@@ -296,10 +297,7 @@ groups = [
     Group(
         "6",
         label="六",
-        matches=[
-            Match(wm_class="ferdium"),
-            Match(wm_class="signal")
-        ],
+        matches=[Match(wm_class="ferdium"), Match(wm_class="signal")],
         layout="bsp",  # max
     ),
     Group(
@@ -437,13 +435,13 @@ floating_layout = layout.Floating(
         # Run `xprop` to see the class and name of a window.
         *layout.Floating.default_float_rules,
         # From default config file
-        Match(wm_class='confirmreset'),  # gitk
-        Match(wm_class='dialog'),  # Dialogs stuff
-        Match(wm_class='makebranch'),  # gitk
-        Match(wm_class='maketag'),  # gitk
-        Match(wm_class='ssh-askpass'),  # ssh-askpass
-        Match(title='branchdialog'),  # gitk
-        Match(title='pinentry'),  # GPG key password entry
+        Match(wm_class="confirmreset"),  # gitk
+        Match(wm_class="dialog"),  # Dialogs stuff
+        Match(wm_class="makebranch"),  # gitk
+        Match(wm_class="maketag"),  # gitk
+        Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(title="branchdialog"),  # gitk
+        Match(title="pinentry"),  # GPG key password entry
         # Added
         Match(title="Qalculate!"),
         Match(wm_class="lutris"),
@@ -458,8 +456,7 @@ floating_layout = layout.Floating(
 )
 # Drag floating layouts.
 mouse = [
-    Drag("M-1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
+    Drag("M-1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag("M-3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click("M-2", lazy.window.bring_to_front()),
     # Click("M-2", lazy.window.kill())]
@@ -574,6 +571,7 @@ def finish_task():
 # TODO remove?
 def todays_date():
     qtile.cmd_spawn("./.config/qtile/calendar.sh")
+
 
 # Write some handy templates to reduce LOC
 
@@ -718,8 +716,7 @@ def init_widgets(monitor: str) -> list:
             # get_volume_command=get_volume,
             background=colors[14],
             limit_max_volume="True",
-            mouse_callbacks={
-                "Button3": lambda: qtile.cmd_spawn("pavucontrol")},
+            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("pavucontrol")},
             update_interval=1,
         ),
         template("r"),
@@ -774,8 +771,7 @@ def init_widgets(monitor: str) -> list:
             low_percentage=0.25,
             background=colors[14],
             notify_below=0.1,
-            mouse_callbacks={
-                "Button3": lambda: qtile.cmd_spawn(f"{TERM} -e btm")},
+            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn(f"{TERM} -e btm")},
         ),
         template("r"),
         # template(" "),
