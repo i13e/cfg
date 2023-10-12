@@ -42,7 +42,7 @@ The installer backs up existing config files, ... and asks for confirmation on e
 - File Manager: lf, pcmanfm
 - Fetch: pfetch
 - Notification Daemon: dunst
-- Colorscheme: [Nord](https://nordtheme.com) with extra dark color `#242831
+- Colorscheme: [Nord](https://nordtheme.com) with extra dark color `#242831`
 
 ## Notes
 
