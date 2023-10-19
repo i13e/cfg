@@ -29,7 +29,7 @@ fi
 
 ## CONFIGURATION ##############################################################
 
-STATUS=$(playerctl status >/dev/null 2>&1 || true)
+STATUS=$(playerctl status || true)
 
 ## Run before starting the locker
 pre_lock() {
