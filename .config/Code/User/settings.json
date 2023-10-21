@@ -22,5 +22,10 @@
   "workbench.iconTheme": "material-icon-theme",
   "editor.guides.bracketPairs": "active",
   "js/ts.implicitProjectConfig.checkJs": true,
-  "python.defaultInterpreterPath": "/usr/bin/python"
+  "python.defaultInterpreterPath": "/usr/bin/python",
+  "terminal.integrated.automationProfile.linux": {},
+  "window.density.editorTabHeight": "compact",
+  "editor.fontFamily": "monospace",
+  "editor.defaultColorDecorators": true,
+  "editor.fontLigatures": true,
 }

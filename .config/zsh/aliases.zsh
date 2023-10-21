@@ -174,8 +174,12 @@ alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 
 
+# Bat
+# From: https://github.com/sharkdp/bat
+alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
+alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
 
-# DESC: Colorized man pages.
+# DESC: Colorize man pages.
 function man() {
 	env \
         LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
@@ -305,4 +309,9 @@ function lie {
 # https://news.ycombinator.com/item?id=18898898
 function pycd() {
     pushd `python -c "import os.path, $1; print(os.path.dirname($1.__file__))"`
+}
+
+# Fix NTFS drive that can't be recognized due to unknown error
+function fix_drive() {
+  sudo ntfsfix /dev/$1
 }

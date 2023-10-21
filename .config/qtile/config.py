@@ -191,7 +191,7 @@ keys = [
     # Window controls
     # Key("M-<space>", lazy.layout.next()),
     # Key("M-k", lazy.layout.previous()),
-    # TODO old
+    # TODO: old
     # # Flip layouts
     # Key(
     #     "M-C-j",
@@ -224,7 +224,7 @@ keys = [
     # Key("M-m", lazy.window.toggle_maximize()),
     # Key("M-h", lazy.window.toggle_minimize()),
     # Key("M-S-h", lazy.group.unminimize_all()),
-    # TODO, Adjust paddings/margins
+    # TODO: Adjust paddings/margins
     # Plasma controls
     # Key("M-o", lazy.layout.mode_horizontal().when(layout="plasma")),
     # Key("M-u", lazy.layout.mode_vertical().when(layout="plasma")),
@@ -519,7 +519,7 @@ layouts = [
 ]
 
 
-# TODO remove?
+# TODO: remove?
 # prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
 
 
@@ -568,7 +568,7 @@ def finish_task():
     qtile.cmd_spawn('task "$((`cat /tmp/tw_polybar_id`))" done')
 
 
-# TODO remove?
+# TODO: remove?
 def todays_date():
     qtile.cmd_spawn("./.config/qtile/calendar.sh")
 

@@ -18,6 +18,9 @@ esac
 #   export DISPLAY="$remote:0.0"
 # fi
 
+# BUG: https://superuser.com/a/1757888
+export HISTFILE="$XDG_DATA_HOME/history"
+
 export GHCUP_USE_XDG_DIRS=true
 
 # If not in tmux, start tmux.

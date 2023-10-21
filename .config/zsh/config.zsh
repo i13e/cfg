@@ -10,10 +10,15 @@ if [[ $TERM == dumb || -n $INSIDE_EMACS ]]; then
 fi
 
 # Dotfiles management
-# alias cfg='git --git-dir=$HOME/.config/cfg/ --work-tree=$HOME'
-alias cfg="dotbare"
 export DOTBARE_DIR="$XDG_CONFIG_HOME/cfg"
 export DOTBARE_TREE="$HOME"
+function cfg {
+  if (( $+commands[dotbare] )); then
+    dotbare "$@"
+  else
+    git --git-dir="$DOTBARE_DIR" --work-tree="$DOTBARE_TREE" "$@"
+  fi
+}
 
 # https://superuser.com/q/480928
 autoload -Uz colors && colors
