@@ -442,7 +442,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-        Match(wm_class="crx_nngceckbapebfimnlniiiahkandclblb"), # Bitwarden
+        Match(wm_class="crx_nngceckbapebfimnlniiiahkandclblb"),  # Bitwarden
         # Added
         Match(title="Qalculate!"),
         Match(wm_class="lutris"),
@@ -543,18 +543,19 @@ def long_name_parse(text):
     return text
 
 
-# Get your current latitude and longitude using Mozilla's Geoclue API
+# TODO: open source alternative?
 def get_location() -> dict[str, float]:
-    url = "https://location.services.mozilla.com/v1/geolocate?key=geoclue"
+    """Get your current latitude and longitude using IPInfo"""
+
+    url = "https://ipinfo.io"
 
     try:
         response = requests.get(url, timeout=5)
         data = json.loads(response.content.decode())
 
-        latitude = data["location"]["lat"]
-        longitude = data["location"]["lng"]
+        lat, lon = data["loc"].split(",")
 
-        return {"latitude": latitude, "longitude": longitude}
+        return {"latitude": lat, "longitude": lon}
     except Exception:
         return {"latitude": 0, "longitude": 0}
 
@@ -705,22 +706,22 @@ def init_widgets(monitor: str) -> list:
         ),
         template("r"),
         # template(" "),
-        template("l"),
-        widget.TextBox(
-            text="󰕾 ",
-            foreground=colors[8],
-            background=colors[14],
-        ),
-        widget.PulseVolume(
-            foreground=colors[8],
-            # emoji=True,
-            # get_volume_command=get_volume,
-            background=colors[14],
-            limit_max_volume="True",
-            mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("pavucontrol")},
-            update_interval=1,
-        ),
-        template("r"),
+        # template("l"),
+        # widget.TextBox(
+        #     text="󰕾 ",
+        #     foreground=colors[8],
+        #     background=colors[14],
+        # ),
+        # widget.PulseVolume(
+        #     foreground=colors[8],
+        #     # emoji=True,
+        #     # get_volume_command=get_volume,
+        #     background=colors[14],
+        #     limit_max_volume="True",
+        #     mouse_callbacks={"Button3": lambda: qtile.cmd_spawn("pavucontrol")},
+        #     update_interval=1,
+        # ),
+        # template("r"),
         # template(" "),
         template("l"),
         widget.OpenWeather(
