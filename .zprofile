@@ -1,5 +1,5 @@
 #!/bin/sh
-# Profile file, runs on login. Environment variables are set here.
+# Description: Runs on login. Static environment variables are set here.
 
 # adds "~/.local/bin" to $PATH
 export PATH="$HOME/.local/bin:$PATH"
@@ -15,7 +15,7 @@ export PATH="$HOME/.local/bin:$PATH"
 #mkdir -p "$HOME/.local/share/keyrings"
 
 ## Default programs.
-#export VISUAL="emacsclient -nw -c -a ''"
+# export VISUAL="emacsclient -nw -c -a ''"
 export VISUAL="nvim"
 export EDITOR="$VISUAL"
 export TERMINAL="$HOME/.local/bin/alacritty.sh"
@@ -41,7 +41,7 @@ export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
 # export KODI_DATA="$XDG_DATA_HOME/kodi"
 # export PASSWORD_STORE_DIR="XDG_DATA_HOME/password-store"
 # export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
-# TODO export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
+# TODO: export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
 export GHCUP_USE_XDG_DIRS=true
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
@@ -54,6 +54,9 @@ export HISTFILE="$XDG_DATA_HOME/history"
 # export ELECTRUMDIR="$XDG_DATA_HOME/electrum"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/config.py"
+# TODO: Supported in Python 3.13
+# https://github.com/python/cpython/pull/13208#issuecomment-1877159768
+export PYTHONHISTORY="$XDG_CACHE_HOME/python_history"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 
 ## AWS
@@ -64,6 +67,8 @@ export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
 # export DICS="/usr/share/stardict/dic/"
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export LESS='-isRFMx4 --mouse --wheel-lines=5' # giMRSwz-4
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT='-c'
 # export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 # export MANPAGER='nvim +Man!'
 export LIBVA_DRIVER_NAME=iHD

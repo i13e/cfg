@@ -9,7 +9,7 @@
   "git.confirmSync": false,
   "git.autofetch": true,
   "github.copilot.enable": {
-    "*": true,
+    "*": false,
     "plaintext": false,
     "markdown": true,
     "scminput": false,
@@ -28,4 +28,6 @@
   "editor.fontFamily": "monospace",
   "editor.defaultColorDecorators": true,
   "editor.fontLigatures": true,
+  "prettier.singleQuote": true,
+  "github.copilot.editor.enableAutoCompletions": true
 }

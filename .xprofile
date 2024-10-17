@@ -1,4 +1,6 @@
 #!/bin/sh
+# Description: Runs on X11 DM login, also sourced by my xinitrc on `startx`.
+# Autostart programs are set here.
 
 # This file runs when a DM logs you into a graphical session.
 # If you use startx/xinit, this file will also be sourced.
@@ -7,11 +9,11 @@
 [ -z "$XDG_CONFIG_HOME" ] && . "$HOME/.zprofile"
 
 # https://wiki.archlinux.org/title/GNOME/Keyring#Launching_gnome-keyring-daemon_outside_desktop_environments_(KDE,_GNOME,_XFCE,_...)
-#dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
-#dbus-update-activation-environment --all
+# dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
+# dbus-update-activation-environment --all
 
 # Run startup scripts.
-xrdb "$XDG_CONFIG_HOME/x11/xresources" #& xrdbpid=$!
+xrdb "$XDG_CONFIG_HOME/x11/xresources" # & xrdbpid=$!
 layout                                 # set the layout & background of the screen
 remaps                                 # run the remaps script (switching caps/esc)
 
@@ -32,7 +34,7 @@ dunst
 
 printf "%s" "$autostart" | while IFS="" read -r program; do
 	pgrep -fl "$program" || $program &
-done #>/dev/null 2>&1
+done # >/dev/null 2>&1
 
 # As a bash array.
 # startup=("list programs" "to" "run here")
@@ -41,4 +43,4 @@ done #>/dev/null 2>&1
 # done >/dev/null 2>&1
 
 ## Ensure that xrdb has finished.
-#[ -n "$xrdbpid" ] && wait "$xrdbpid"
+# [ -n "$xrdbpid" ] && wait "$xrdbpid"
