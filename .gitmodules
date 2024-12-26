@@ -22,10 +22,6 @@
     path = .local/share/zsh/plugins/zsh-vi-mode
     url = https://github.com/jeffreytse/zsh-vi-mode.git
     shallow = true
-[submodule ".local/share/zsh/plugins/powerlevel10k"]
-    path = .local/share/zsh/plugins/powerlevel10k
-    url = https://github.com/romkatv/powerlevel10k.git
-    shallow = true
 [submodule ".local/share/zsh/plugins/fast-syntax-highlighting"]
     path = .local/share/zsh/plugins/fast-syntax-highlighting
     url = https://github.com/zdharma-continuum/fast-syntax-highlighting.git

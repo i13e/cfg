@@ -75,7 +75,7 @@ repos=(
   "https://github.com/zsh-users/zsh-completions.git"
   "https://github.com/zsh-users/zsh-autosuggestions.git"
   "https://github.com/zsh-users/zsh-history-substring-search.git"
-  "https://github.com/romkatv/powerlevel10k.git"
+  # "https://github.com/romkatv/powerlevel10k.git"
   "https://github.com/hlissner/zsh-autopair.git"
   "https://github.com/kazhala/dotbare.git"
 )
@@ -92,7 +92,7 @@ for (( i = 1; i <= $#repos; i++ )); do
 done
 
 # Activate Powerlevel10k Instant Prompt.
-zsource "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
+# zsource "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
 
 # Enable the "new" completion system (compsys).
 fpath=("$ZDOTDIR"/fn "$ZPLUGDIR"/zsh-completions/src $fpath)
@@ -122,5 +122,6 @@ zsource "$ZDOTDIR"/{p10k,aliases,completion,keybinds}.zsh
 (( $+commands[fzf] )) && source "$ZDOTDIR/fzf.zsh"
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 (( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
+(( $+commands[starship] )) && eval "$(starship init zsh)"
 
 unfunction zcompare zload zsource
