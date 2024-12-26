@@ -33,7 +33,10 @@ export ERRFILE="$XDG_DATA_HOME/x11/xsession-errors"
 export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
 # export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch-config"
 # export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
-export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+
+# export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
+
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 # export GNUPGHOME="$XDG_DATA_HOME/gnupg"
