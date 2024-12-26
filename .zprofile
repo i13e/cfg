@@ -18,7 +18,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # export VISUAL="emacsclient -nw -c -a ''"
 export VISUAL="nvim"
 export EDITOR="$VISUAL"
-export TERMINAL="$HOME/.local/bin/alacritty.sh"
+export TERMINAL="/usr/bin/wezterm"
 export BROWSER="brave"
 export PAGER="less"
 
@@ -54,14 +54,19 @@ export HISTFILE="$XDG_DATA_HOME/history"
 # export ELECTRUMDIR="$XDG_DATA_HOME/electrum"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/config.py"
-# TODO: Supported in Python 3.13
+
 # https://github.com/python/cpython/pull/13208#issuecomment-1877159768
-export PYTHONHISTORY="$XDG_CACHE_HOME/python_history"
+export PYTHONHISTORY="$XDG_STATE_HOME/python/history"
+
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+
+export KUBECONFIG="$XDG_CONFIG_HOME/kube"
+export KUBECACHEDIR="$XDG_CACHE_HOME/kube"
 
 ## AWS
 export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME/aws/credentials"
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
+
 
 ## Other program settings.
 # export DICS="/usr/share/stardict/dic/"

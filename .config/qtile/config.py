@@ -343,7 +343,7 @@ groups.append(
         [
             DropDown(
                 "term",
-                "alacritty --class dropdown",
+                "wezterm start --class dropdown",
                 height=0.6,
                 # x=0.3,
                 # y=0.1,
