@@ -89,57 +89,50 @@ for key val in "${(@kv)global_aliases}"; do
 done
 
 
-zsource /usr/share/doc/pkgfile/command-not-found.zsh
 alias -s {ape,avi,flv,m4a,mkv,mov,mp3,mp4,mpeg,mpg,ogg,ogm,wav,webm}=mpv
-alias -s git="git clone"
-# Pass aliases with sudo
-# TODO move? https://wiki.archlinux.org/index.php/Sudo#Passing_aliases
+alias -s {pdf}=zathura
+zsource /usr/share/doc/pkgfile/command-not-found.zsh
+# alias -s git="git clone"
+
+# https://wiki.archlinux.org/index.php/Sudo#Passing_aliases
 alias sudo='sudo '
-#alias sudo='sudo -v; sudo '
+
+# https://wiki.archlinux.org/title/sudo#Reduce_the_number_of_times_you_have_to_type_a_password
+# alias sudo='sudo -v; sudo '
 
 #${${commands[nvim]:t}:-vi}
 # Use $XINITRC variable if file exists.
 [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
 
 (( $+commands[nvim] )) && alias {vim,vi}='nvim' vi{diff,mdiff}='nvim -d'
-(( $+commands[exa] )) && alias exa='exa --icons --git --group-directories-first --color-scale'
+(( $+commands[eza] )) && alias eza='eza --icons --git --group-directories-first --color-scale=all'
 (( $+commands[prettyping] )) && alias ping='prettyping -nolegend'
 
-# Call sudo for some system commands.
-for command in ss mount umount sv pacman updatedb su shutdown poweroff reboot ufw sctl jctl; do
-	alias $command="sudo $command"
-done; unset command
+# Define an array of system commands
+cmds=(
+    "journalctl"
+    "mount"
+    "pacman"
+    "poweroff"
+    "reboot"
+    "shutdown"
+    "ss"
+    "su"
+    "sv"
+    "systemctl"
+    "ufw"
+    "umount"
+    "updatedb"
+)
 
-# Git aliases
-    # cdg='cd `git rev-parse --show-toplevel`'
-    # git='noglob git'
-    # gb='git branch -av'
-    # gop='git open'
-    # gbl='git blame'
-    # fixpush='killall ssh-agent; eval `ssh-agent`'
-    # gc='git commit'
-    # gcm='git commit -m'
-    # gca='git commit --amend'
-    # gcf='git commit --fixup'
-    # gcl='git clone'
-    # gco='git checkout'
-    # gcoo='git checkout --'
-    # gf='git fetch'
-    # gi='git init'
-    # gL='gl --stat'
-    # gp='git push'
-    # gpl='git pull --rebase --autostash'
-    # gss='git status --short .'
-    # gs='git status'
-    # gst='git stash'
-    # gr='git reset HEAD'
-    # gv='git rev-parse'
-    # gd='git diff'
-    # gds='git diff --staged'
-    # ga='git add --patch'
-    # gc='git commit --verbose'
-    # gpf='git push --force-with-lease'
-    # gpu='git push --set-upstream-origin \`git rev-parse --abbrev-ref HEAD\`'
+# Create aliases for each command with sudo
+for cmd in "${cmds[@]}"; do
+    alias "$cmd"="sudo $cmd"
+done; unset cmd
+
+# python virtual env alias
+alias activate="source env/bin/activate"
+
 
 alias xpropc='xprop | grep WM_CLASS' # display xprop class
 alias spotify="/usr/bin/spotify --force-device-scale-factor=1.3"
@@ -147,7 +140,7 @@ alias spotify="/usr/bin/spotify --force-device-scale-factor=1.3"
 alias pacfind='pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S'
 alias gurl='curl --compressed'
 alias sync='syncthing -browser-only'
-alias mount='mount |column -t'
+# alias mount='mount |column -t'
 #alias em='/usr/bin/emacs -nw'
 #alias e="emacsclient -c -a 'emacs'"
 #alias em='devour emacsclient -c -a emacs'
@@ -244,26 +237,23 @@ if (( $+commands[devour] )); then
     }
 fi
 
-# When present, use exa instead of ls
-[ -x /usr/bin/exa ] && alias \
-    ls='exa -al' \
-    ll='exa -l' \
-    la='exa -a' \
-    lx='ll -sextension' \
-    lk='ll -ssize' \
-    lt='ll -smodified' \
-    lc='ll -schanged' \
-    tree='exa -Tl --git-ignore'
+# When present, use eza instead of ls
+if [ -x /usr/bin/eza ]; then
+  alias ls='eza -la'
+  alias ll='eza -l'
+  alias la='eza -a'
+  alias lx='ll -sextension'
+  alias lk='ll -ssize'
+  alias lt='ll -smodified'
+  alias lc='ll -schanged'
+  alias tree='eza -Tl --git-ignore'
+fi
 
 if [ -x /usr/bin/paru ]; then
     # Alias for update scripts
     alias upd='checkupd && autosnap-wrapper && hostupd'
 fi
 
-# DESC: make directory and enter it
-function take() {
-  mkdir -p $@ && cd ${@:$#}
-} ; compdef take=mkdir
 
 function chmod_calc() {
     local -a permission=(${(s::)${_PMS:-"rwxrwxrwx"}})
@@ -294,6 +284,14 @@ function cheat {
     curl -s "cheat.sh/$(echo -n "$*" | jq -sRr @uri)"
 }
 
+# Mind the Gap
+# Clean up filenames by replacing spaces and non-ascii characters with underscores
+function mtg { 
+  for f in "$@"; do
+    mv "$f" "${f//[^a-zA-Z0-9\.\-]/_}"
+  done
+}
+
 function lie {
     if [[ "$1" == "not" ]]
     then
@@ -314,4 +312,77 @@ function pycd() {
 # Fix NTFS drive that can't be recognized due to unknown error
 function fix_drive() {
   sudo ntfsfix /dev/$1
+}
+
+
+# systemd stuff
+alias jc='journalctl -xe'
+alias jcu='journalctl -xe -u'
+alias sc=systemctl
+alias scu='systemctl --user'
+alias scur='systemctl --user restart'
+alias scus='systemctl --user status'
+alias ssc='sudo systemctl'
+alias sscr='sudo systemctl restart'
+alias sscs='sudo systemctl status'
+alias rctl='sudo resolvectl'
+alias nctl='sudo networkctl'
+
+if (( $+commands[udisksctl] )); then
+  alias ud='udisksctl'
+  alias udm='udisksctl mount -b'
+  alias udu='udisksctl unmount -b'
+fi
+
+# if (( $+commands[swayimg] )); then
+#   alias -s {jpg,jpeg,gif,png,svg}=swayimg
+# elif (( $+commands[feh] )); then
+#   alias -s {jpg,jpeg,gif,png,svg}=feh
+# fi
+
+if (( $+commands[mpv] )); then
+  alias -s {mp4,avi,mkv,mov}=mpv
+fi
+
+if (( $+commands[xdg-open] )); then
+  alias open=xdg-open
+fi
+
+if (( $+commands[img2sixel] )); then
+  alias six=img2sixel
+fi
+
+
+autoload -U zmv
+
+# DESC: make directory and enter it
+function take() {
+  mkdir -p $@ && cd ${@:$#}
+} ; compdef take=mkdir
+
+function zman { PAGER="less -g -I -s '+/^       "$1"'" man zshall; }
+
+if (( $+commands[nix] )); then
+  alias n=nix
+  alias ne=nix-env
+  alias nf='nix flake'
+  alias nfm='nix flake metadata'
+  alias nfs='nix flake show'
+  alias nr='nix repl'
+  alias nrp='nix repl "<nixpkgs>"'
+  alias ns='nix search'
+  alias nsp='nix search nixpkgs'
+fi
+
+# https://unix.stackexchange.com/a/314975
+alias delb="find . -xtype l -print -delete"
+
+function toggle_dns {
+  dns_config="$XDG_CONFIG_HOME/etc/resolv.conf"
+
+  if [[ -f $dns_config ]]; then
+    mv $dns_config new_dns
+  else
+    mv $dns_config
+  fi
 }

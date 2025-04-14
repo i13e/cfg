@@ -1,6 +1,6 @@
 #!/usr/bin/zsh
-# DESC: TODO
-# Requires: fzf, fd, eza, git, vivid, and zoxide
+# Description: Put basic settings for zsh here.
+# Requiresments: fzf, fd, eza, git, vivid, and zoxide
 
 # FIXME
 zstyle ':completion:*:default' menu cache-path '$ZSH_CACHE'
@@ -36,7 +36,9 @@ ZPLUGDIR="$XDG_DATA_HOME/${SHELL##*/}/plugins"
 #export COLORTERM=${COLORTERM:=truecolor}
 #export LC_ALL=en_IN.UTF-8
 #export LANG=en_IN.UTF-8
-#export BRAVE_FLAGS=$(cat $XDG_CONFIG_HOME/brave-flags.conf | sed 's/#.*//')
+
+# NOTE: this was needed before brave had a config file
+# export BRAVE_FLAGS=$(cat $XDG_CONFIG_HOME/brave-flags.conf | sed 's/#.*//')
 
 # Make zsh directories if needed.
 mkdir -p "$ZSH_CACHE" "$ZPLUGDIR"
@@ -76,6 +78,7 @@ repos=(
   "https://github.com/zsh-users/zsh-autosuggestions.git"
   "https://github.com/zsh-users/zsh-history-substring-search.git"
   # "https://github.com/romkatv/powerlevel10k.git"
+  "https://github.com/andydecleyre/zpy"
   "https://github.com/hlissner/zsh-autopair.git"
   "https://github.com/kazhala/dotbare.git"
 )
@@ -95,13 +98,16 @@ done
 # zsource "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
 
 # Enable the "new" completion system (compsys).
-fpath=("$ZDOTDIR"/fn "$ZPLUGDIR"/zsh-completions/src $fpath)
-autoload -Uz "$ZDOTDIR"/fn/*(:t) zmv zargs
-autoload -Uz compinit && compinit -d "$ZSH_CACHE"/zcompdump
-zcompare "$ZSH_CACHE"/zcompdump "$ZDOTDIR"/*.zsh
-mv -- "$ZPLUGDIR"/fast-syntax-highlighting/{"→chroma","tmp"}
-zcompare $(find "$ZPLUGDIR" -type f -regex ".*\.\(zsh\|zsh-theme\|ch\)")
-mv -- "$ZPLUGDIR"/fast-syntax-highlighting/{"tmp","→chroma"}
+fpath=($ZDOTDIR/fn $ZPLUGDIR/zsh-completions/src $fpath)
+
+autoload -Uz - $ZDOTDIR/fn/*(D:t)
+autoload -Uz $ZDOTDIR/fn/*(:t) zmv zargs add-zsh-hook
+
+autoload -Uz compinit && compinit -d $ZSH_CACHE/zcompdump
+zcompare $ZSH_CACHE/zcompdump $ZDOTDIR/*.zsh
+mv -- $ZPLUGDIR/fast-syntax-highlighting/{"→chroma","tmp"}
+zcompare $(find $ZPLUGDIR -type f -regex ".*\.\(zsh\|zsh-theme\|ch\)")
+mv -- $ZPLUGDIR/fast-syntax-highlighting/{"tmp","→chroma"}
 
 # Don't use any plugins for root.
 [[ "$EUID" == 0 || "$TERM" == dumb ]] && return
@@ -111,6 +117,13 @@ for f in "${plugins[@]}"; do
     zsource "$ZPLUGDIR/$f/$f".{plugin.zsh,zsh-theme}
 done
 
+# add to hooks
+function fire_ls() {
+  ls
+}
+# add-zsh-hook chpwd get_py_venv
+# add-zsh-hook chpwd zsh-dirprofiles
+# add-zsh-hook chpwd fire_ls
 # pwd in terminal title and currently running command.
 function precmd() { printf "\e]2;%s\a" "${(V)${(%):-%1~}}" >"$TTY"; }
 function preexec() { printf "\e]0;$1\a" >"$TTY"; }
@@ -124,4 +137,7 @@ zsource "$ZDOTDIR"/{p10k,aliases,completion,keybinds}.zsh
 (( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
 (( $+commands[starship] )) && eval "$(starship init zsh)"
 
+
 unfunction zcompare zload zsource
+eval "$(mise activate zsh)"
+zstyle ":zpy:*" exposed-funcs pipz zpy
