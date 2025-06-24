@@ -1,8 +1,9 @@
 [Desktop Entry]
+Name=imv
+Exec=devour imv %F
 Type=Application
-Name=nsxiv
+Icon=multimedia-photo-viewer
 GenericName=Image Viewer
-Exec=/usr/bin/nsxiv -a %F
+Categories=Graphics;2DGraphics;Viewer;
+MimeType=image/bmp;image/gif;image/jpeg;image/jpg;image/pjpeg;image/png;image/tiff;image/x-bmp;image/x-pcx;image/x-png;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-tga;image/x-xbitmap;image/heif
 NoDisplay=true
-Icon=nsxiv
-MimeType=image/bmp;image/gif;image/jpeg;image/jpg;image/png;image/tiff;image/x-bmp;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-tga;image/x-xpixmap;image/webp;

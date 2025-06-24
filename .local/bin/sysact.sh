@@ -10,10 +10,10 @@ esac
 
 # Background xss-lock if not already running
 if ! pgrep -x "xss-lock" >/dev/null; then
-	[ "$XDG_SESSION_TYPE" = x11 ] && xset s 300
-	xset dpms 0 0 0
-	# xss-lock -n /usr/lib/xsecurelock/dimmer -l -- lock.sh &
-	xss-lock -v lock.sh &
+  [ "$XDG_SESSION_TYPE" = x11 ] && xset s 300
+  xset dpms 0 0 0
+  # xss-lock -n /usr/lib/xsecurelock/dimmer -l -- lock.sh &
+  xss-lock -v lock.sh &
 fi
 
 options=" Lock
@@ -27,7 +27,7 @@ options=" Lock
 choice=$(printf "%s" "$options" | dmenu -i -p "Action:")
 case "$choice" in
 *Lock*) loginctl lock-session ;;
-*Logout*) pkill -15 -t tty"$XDG_VTNR" ;; # kill -9 -1
+*Logout*) killall -u $USER ;; # equivalent to kill -9 -1 scoped to $USER
 *Suspend*) $ctl suspend ;;
 *Hibernate*) $ctl suspend-then-hibernate ;;
 *Reboot*) $ctl reboot -i ;;

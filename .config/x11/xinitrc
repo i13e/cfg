@@ -1,5 +1,7 @@
 #!/bin/sh
-# startx 2> ~/.xsession-errors
+# Description: startx wrapper, loads settings and WM/DE.
+# Mostly from lightdm: /etc/lightdm/Xsession
+# TODO: collect errors with: startx 2> ~/.xsession-errors
 
 export XDG_SESSION_TYPE="x11"
 # ERRFILE="$XDG_CACHE_HOME/x11/xsession-errors"

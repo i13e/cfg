@@ -82,6 +82,9 @@ super + q ; s
 # # Task manager (task/ptask)
 # super + q ; t
 #     task
+# Code
+super + q ; v
+    code
 
 
 # ## Emacs Programs

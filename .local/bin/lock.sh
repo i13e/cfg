@@ -183,9 +183,9 @@ pre_lock
 
 if [ "$XDG_SESSION_TYPE" = wayland ]; then
   wl-copy -c
-
   swaylock
 elif [ "$XDG_SESSION_TYPE" = x11 ]; then
+  xset dpms force off &
   xsel -cbps --logfile /dev/null
 
   case ${1:-} in

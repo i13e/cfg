@@ -525,8 +525,8 @@ layouts = [
 
 
 # Define functions for bar
-def taskwarrior():
-    return subprocess.check_output(["taskbar.sh"]).decode("utf-8").strip()
+# def taskwarrior():
+# return subprocess.check_output(["taskbar.sh"]).decode("utf-8").strip()
 
 
 def long_name_parse(text):
@@ -565,9 +565,9 @@ location = get_location()
 
 
 # Mouse_callback functions
-def finish_task():
-    "mark task as completed"
-    qtile.cmd_spawn('task "$((`cat /tmp/tw_polybar_id`))" done')
+# def finish_task():
+# "mark task as completed"
+# qtile.cmd_spawn('task "$((`cat /tmp/tw_polybar_id`))" done')
 
 
 # TODO: remove?
@@ -641,15 +641,15 @@ def init_widgets(monitor: str) -> list:
         ),
         template("r"),
         # template(" "),
-        template("l"),
-        widget.GenPollText(
-            func=taskwarrior,
-            update_interval=60,
-            foreground=colors[11],
-            background=colors[14],
-            mouse_callbacks={"Button1": finish_task},
-        ),
-        template("r"),
+        # template("l"),
+        # # widget.GenPollText(
+        #     func=taskwarrior,
+        #     update_interval=60,
+        #     foreground=colors[11],
+        #     background=colors[14],
+        #     mouse_callbacks={"Button1": finish_task},
+        # ),
+        # template("r"),
         widget.Spacer(),
         widget.TextBox(
             text=" ",

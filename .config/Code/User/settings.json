@@ -26,8 +26,14 @@
   "terminal.integrated.automationProfile.linux": {},
   "window.density.editorTabHeight": "compact",
   "editor.fontFamily": "monospace",
-  "editor.defaultColorDecorators": true,
+  "editor.defaultColorDecorators": "auto",
   "editor.fontLigatures": true,
   "prettier.singleQuote": true,
-  "github.copilot.editor.enableAutoCompletions": true
+  "github.copilot.editor.enableAutoCompletions": true,
+  "[dockercompose]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

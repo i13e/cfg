@@ -17,7 +17,7 @@ fi
 export __AUTOSNAP_LOCK="$(mktemp -ut "aur-helper-autosnap.lock-XXXXXXX")"
 
 # shellcheck disable=SC2064
-trap "[[ -f $__AUTOSNAP_LOCK ]] && rm -f -- $__AUTOSNAP_LOCK" EXIT
+trap "rm -f $__AUTOSNAP_LOCK >/dev/null 2>&1" HUP INT QUIT TERM PWR EXIT
 
 # see hook /etc/pacman.d/hooks/00-timeshift-autosnap.hook for reference
 exec "$(type -P $AUR_HELPER)" --sudoflags="--preserve-env=__AUTOSNAP_LOCK" "${@:--Syu}"
